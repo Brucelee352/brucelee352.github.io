@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <!--Description-->
+
+    
+
+    
+        <meta name="description" content="Table of Contents
+
+Intro
+Common Table Expression (CTE)
+Subquery example
+Aggregate Functions with SUM
+Show the provinces that has more patients identif"/>
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Bruce Lee"/>
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Sample SQL Scripts"/>
+    
+
+    <!--Open Graph Description-->
+    
+        <meta property="og:description" content="Table of Contents
+
+Intro
+Common Table Expression (CTE)
+Subquery example
+Aggregate Functions with SUM
+Show the provinces that has more patients identif"/>
+    
+
+    <!--Open Graph Site Name-->
+        <meta property="og:site_name" content="Bruce A. Lee"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article"/>
+    
+
+    <!--Page Cover-->
+    
+    
+        <meta property="og:image" content="https://brucelee352.github.io/img/star-night-space-blue-galaxy-flare.jpg"/>
+    
+
+        <meta name="twitter:card" content="summary_large_image"/>
+
+    
+
+    
+        <meta name="twitter:image" content="https://brucelee352.github.io/img/star-night-space-blue-galaxy-flare.jpg"/>
+    
+
+    <!-- Title -->
+    
+    <title>Sample SQL Scripts - Bruce A. Lee</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet"/>
+
+    <!-- Google Analytics -->
+    
+
+
+    <!-- favicon -->
+    
+    <link rel="icon" href="/brucelee352.github.io/img/favicon.ico"/>
+    
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+          <!--  <a class="navbar-brand" href="/">Bruce A. Lee</a>>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/about">
+                            
+                                About
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/resume">
+                            
+                                Resume
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/categories/Projects/">
+                            
+                                Projects
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/brucealee/">
+                            
+                                <i class="fa fa-linkedin fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://github.com/brucelee352/">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://medium.com/@mrbrucelee">
+                            
+                                <i class="fa fa-medium fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/img/star-night-space-blue-galaxy-flare.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1>Sample SQL Scripts</h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        
+                            2023-01-09
+                        
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+                <div class="col-lg-4 col-lg-offset-2 col-md-5 col-md-offset-1 post-tags">
+                    
+                        
+
+<a href="/categories/Projects/">Projects</a>
+
+                    
+                </div>
+                <div class="col-lg-4 col-md-5 post-categories">
+                    
+                </div>
+            
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p><strong>Table of Contents</strong></p>
+<ul>
+<li><a href="#intro">Intro</a><ul>
+<li><a href="#common-table-expression-cte">Common Table Expression (CTE)</a></li>
+<li><a href="#subquery-example">Subquery example</a></li>
+<li><a href="#aggregate-functions-with-sum">Aggregate Functions with SUM</a><ul>
+<li><a href="#show-the-provinces-that-has-more-patients-identified-as-m-than-f"><em>Show the provinces that has more patients identified as ‘M’ than ‘F’…</em></a></li>
+</ul>
+</li>
+<li><a href="#aggregate-and-then-display-as-a-percentage">Aggregate and then display as a percentage</a></li>
+<li><a href="#window-function-example-rank">Window function example RANK()</a></li>
+<li><a href="#sending-vs-opening-snaps-cte-case-when-aggregates">Sending vs. Opening Snaps (CTE, CASE WHEN, Aggregates)</a></li>
+<li><a href="#window-functions-for-calculating-rolling-averages-based-on-tweets">Window functions for calculating rolling averages based on tweets</a></li>
+<li><a href="#compensation-outliers">Compensation Outliers</a></li>
+<li><a href="#photoshop-revenue-analysis">Photoshop Revenue Analysis</a></li>
+<li><a href="#unique-money-transfer-relationships">Unique Money Transfer Relationships</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h1><p>Hello! This is a set of sample SQL queries that I made for practice in learning the language. The sources listed before the queries link to the direct place the content came from. </p>
+<p><em><strong>Sources</strong></em><br><a target="_blank" rel="noopener" href="https://datalemur.com/">DataLemur</a> by Nick Singh<br><a target="_blank" rel="noopener" href="https://www.sql-practice.com/">SQL-practice.com</a> by Boolean-algebra</p>
+<h2 id="Common-Table-Expression-CTE"><a href="#Common-Table-Expression-CTE" class="headerlink" title="Common Table Expression (CTE)"></a>Common Table Expression (CTE)</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/sql-spare-server-capacity">https://datalemur.com/questions/sql-spare-server-capacity</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">WITH demands AS (</span><br><span class="line">  SELECT </span><br><span class="line">    datacenter_id,</span><br><span class="line">    SUM(monthly_demand) AS total_demand</span><br><span class="line">  FROM forecasted_demand</span><br><span class="line">  GROUP BY datacenter_id)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">SELECT demands.datacenter_id, demands.total_demand, </span><br><span class="line">        centers.name, centers.monthly_capacity AS total_capacity </span><br><span class="line">FROM demands </span><br><span class="line">  INNER JOIN datacenters AS centers ON demands.datacenter_id = centers.datacenter_id;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Subquery-example"><a href="#Subquery-example" class="headerlink" title="Subquery example"></a>Subquery example</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/sql-spare-server-capacity">https://datalemur.com/questions/sql-spare-server-capacity</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">SELECT centers.datacenter_id, (centers.monthly_capacity -</span><br><span class="line">  demands.total_demand) AS spare_capacity </span><br><span class="line">FROM ( SELECT datacenter_id,</span><br><span class="line">  SUM(monthly_demand) AS total_demand FROM forecasted_demand GROUP BY</span><br><span class="line">  datacenter_id) AS demands </span><br><span class="line">INNER JOIN datacenters AS centers ON</span><br><span class="line">  demands.datacenter_id = centers.datacenter_id </span><br><span class="line">ORDER BY centers.datacenter_id;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Aggregate-Functions-with-SUM"><a href="#Aggregate-Functions-with-SUM" class="headerlink" title="Aggregate Functions with SUM"></a>Aggregate Functions with SUM</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://www.sql-practice.com/">https://www.sql-practice.com/</a>)</em> </p>
+<p><strong>Keyword: SUM, Difficulty: HARD</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT CASE WHEN (patient_id % 2 = 0) THEN &#x27;Yes&#x27; </span><br><span class="line">            ELSE &#x27;No&#x27; </span><br><span class="line">        END AS has_insurance, </span><br><span class="line">        SUM( </span><br><span class="line">          CASE WHEN patient_id % 2 = 0 THEN 10 </span><br><span class="line">          ELSE 50 </span><br><span class="line">          END) AS cost_after_insurance </span><br><span class="line">FROM admissions </span><br><span class="line">GROUP BY has_insurance</span><br></pre></td></tr></table></figure>
+
+<h3 id="Show-the-provinces-that-has-more-patients-identified-as-‘M’-than-‘F’…"><a href="#Show-the-provinces-that-has-more-patients-identified-as-‘M’-than-‘F’…" class="headerlink" title="Show the provinces that has more patients identified as ‘M’ than ‘F’…"></a><em>Show the provinces that has more patients identified as ‘M’ than ‘F’…</em></h3><p><strong>Keyword: HAVING, Difficulty: HARD</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">--Query A</span><br><span class="line"></span><br><span class="line">SELECT pr.province_name </span><br><span class="line">FROM patients AS pa </span><br><span class="line">JOIN province_names AS pr ON pa.province_id = pr.province_id </span><br><span class="line">GROUP BY pr.province_name </span><br><span class="line">HAVING SUM(gender = &#x27;M&#x27;) \&gt; SUM(gender = &#x27;F&#x27;);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--Query B, using COUNT</span><br><span class="line"></span><br><span class="line">SELECT pr.province_name </span><br><span class="line">FROM patients AS pa </span><br><span class="line">JOIN province_names AS pr ON pa.province_id = pr.province_id </span><br><span class="line">GROUP BY pr.province_name </span><br><span class="line">HAVING COUNT(CASE WHEN gender = &#x27;M&#x27; THEN 1 END) \&gt; COUNT( CASE WHEN gender = &#x27;F&#x27; THEN 1 END);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">--Query C, using a subquery and SUM</span><br><span class="line"></span><br><span class="line">SELECT province_name </span><br><span class="line">FROM ( SELECT province_name, SUM(gender = &#x27;M&#x27;) AS n_male, SUM(gender = &#x27;F&#x27;) AS n_female </span><br><span class="line">FROM patients pa </span><br><span class="line">JOIN province_names pr ON pa.province_id = pr.province_id </span><br><span class="line">GROUP BY province_name ) </span><br><span class="line">WHERE n_male \&gt; n_female</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Aggregate-and-then-display-as-a-percentage"><a href="#Aggregate-and-then-display-as-a-percentage" class="headerlink" title="Aggregate and then display as a percentage"></a>Aggregate and then display as a percentage</h2><p><strong>Keyword: COUNT, Difficulty: HARD</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">SELECT concat( ROUND( ( SELECT COUNT(*) FROM patients WHERE gender = &#x27;M&#x27;</span><br><span class="line">) / CAST(COUNT(*) as FLOAT), 4 ) \* 100, &#x27;%&#x27; ) AS percent_of_male_patients </span><br><span class="line">FROM patients </span><br><span class="line">WHERE gender = &#x27;M&#x27; </span><br><span class="line">GROUP BY gender</span><br><span class="line"></span><br><span class="line">--or...</span><br><span class="line"></span><br><span class="line">--Query B</span><br><span class="line"></span><br><span class="line">SELECT Concat(round(100 \* avg(gender = &#x27;M&#x27;), 2),&#x27;%&#x27;) AS percent_of_male_patients </span><br><span class="line">FROM patients;</span><br><span class="line"></span><br><span class="line">--Query C</span><br><span class="line"></span><br><span class="line">SELECT round(100 \* avg(gender = &#x27;M&#x27;), 2) \|\| &#x27;%&#x27; AS percent_of_male_patients </span><br><span class="line">FROM patients;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Window-function-example-RANK"><a href="#Window-function-example-RANK" class="headerlink" title="Window function example RANK()"></a>Window function example RANK()</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/sql-third-transaction">https://datalemur.com/questions/sql-third-transaction</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">SELECT user_id, spend, transaction_date </span><br><span class="line">FROM (SELECT user_id, spend, transaction_date, RANK() OVER (PARTITION BY user_id ORDER BY</span><br><span class="line">transaction_date) AS rank_num FROM transactions) AS trans_num </span><br><span class="line">WHERE rank_num = &#x27;3&#x27; </span><br><span class="line">GROUP BY user_id, spend, transaction_date</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Sending-vs-Opening-Snaps-CTE-CASE-WHEN-Aggregates"><a href="#Sending-vs-Opening-Snaps-CTE-CASE-WHEN-Aggregates" class="headerlink" title="Sending vs. Opening Snaps (CTE, CASE WHEN, Aggregates)"></a>Sending vs. Opening Snaps (CTE, CASE WHEN, Aggregates)</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/time-spent-snaps">https://datalemur.com/questions/time-spent-snaps</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">WITH activity AS ( SELECT ab.age_bucket, </span><br><span class="line">              SUM(CASE WHEN act.activity_type = &#x27;open&#x27; THEN act.time_spent ELSE 0 END) AS time_open, </span><br><span class="line">              SUM(CASE WHEN act.activity_type = &#x27;send&#x27; THEN act.time_spent ELSE 0 END) AS time_sent,</span><br><span class="line">              SUM(act.time_spent) as total_time FROM activities act JOIN age_breakdown ab ON act.user_id = ab.user_id </span><br><span class="line">WHERE act.activity_type IN (&#x27;open&#x27;, &#x27;send&#x27;) </span><br><span class="line">GROUP BY ab.age_bucket)</span><br><span class="line"></span><br><span class="line">SELECT age_bucket, ROUND(((time_sent / total_time)\* 100.0),2) AS sent_perc, </span><br><span class="line">                    ROUND(((time_open / total_time)\* 100.0),2) AS open_perc </span><br><span class="line">FROM activity</span><br><span class="line">ORDER BY age_bucket DESC</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Window-functions-for-calculating-rolling-averages-based-on-tweets"><a href="#Window-functions-for-calculating-rolling-averages-based-on-tweets" class="headerlink" title="Window functions for calculating rolling averages based on tweets"></a>Window functions for calculating rolling averages based on tweets</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/rolling-average-tweets">https://datalemur.com/questions/rolling-average-tweets</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">SELECT user_id, tweet_date, TRUNC(AVG(tweet_count) OVER(PARTITION BY</span><br><span class="line">user_id ORDER BY tweet_date ROWS BETWEEN 2 PRECEDING AND CURRENT ROW),</span><br><span class="line">2) AS rolling_avg_3days FROM (SELECT user_id, tweet_date,</span><br><span class="line">count(tweet_date) as tweet_count FROM tweets GROUP BY user_id,</span><br><span class="line">tweet_date) AS daily_tweets GROUP BY user_id, tweet_date, tweet_count</span><br><span class="line">ORDER BY user_id ASC, tweet_date ASC;</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="Compensation-Outliers"><a href="#Compensation-Outliers" class="headerlink" title="Compensation Outliers"></a>Compensation Outliers</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/compensation-outliers">https://datalemur.com/questions/compensation-outliers</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">WITH payout </span><br><span class="line">AS </span><br><span class="line">  (SELECT</span><br><span class="line">	employee_id, </span><br><span class="line">	salary, </span><br><span class="line">	title,</span><br><span class="line">	(AVG(salary) OVER (PARTITION BY title)) * 2 AS doub_avg,</span><br><span class="line">	(AVG(salary) OVER (PARTITION BY title)) / 2 AS half_avg</span><br><span class="line">FROM employee_pay)</span><br><span class="line"></span><br><span class="line">SELECT </span><br><span class="line">    employee_id,</span><br><span class="line">    salary,</span><br><span class="line">    CASE  </span><br><span class="line">      WHEN salary &gt; doub_avg THEN &#x27;Overpaid&#x27;</span><br><span class="line">      WHEN salary &lt; half_avg THEN &#x27;Underpaid&#x27;</span><br><span class="line">    END AS status</span><br><span class="line">FROM payout</span><br><span class="line">GROUP BY</span><br><span class="line">  employee_id, salary, doub_avg, half_avg</span><br><span class="line">HAVING</span><br><span class="line">  salary &gt; doub_avg OR</span><br><span class="line">  salary &lt; half_avg</span><br><span class="line">ORDER BY </span><br><span class="line">  employee_id;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Photoshop-Revenue-Analysis"><a href="#Photoshop-Revenue-Analysis" class="headerlink" title="Photoshop Revenue Analysis"></a>Photoshop Revenue Analysis</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/photoshop-revenue-analysis">https://datalemur.com/questions/photoshop-revenue-analysis</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SELECT customer_id, </span><br><span class="line">  SUM(revenue) as revenue</span><br><span class="line">FROM adobe_transactions</span><br><span class="line">WHERE customer_id IN (SELECT customer_id FROM adobe_transactions WHERE product = &#x27;Photoshop&#x27;) </span><br><span class="line">  AND product &lt;&gt; &#x27;Photoshop&#x27;</span><br><span class="line">GROUP BY customer_id</span><br><span class="line">ORDER BY customer_id ASC</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="Unique-Money-Transfer-Relationships"><a href="#Unique-Money-Transfer-Relationships" class="headerlink" title="Unique Money Transfer Relationships"></a>Unique Money Transfer Relationships</h2><p><em>Source: (<a target="_blank" rel="noopener" href="https://datalemur.com/questions/money-transfer-relationships">https://datalemur.com/questions/money-transfer-relationships</a>)</em></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">SELECT</span><br><span class="line">  COUNT(payer_id) / 2</span><br><span class="line">FROM (SELECT</span><br><span class="line">        payer_id, recipient_id</span><br><span class="line">      FROM payments</span><br><span class="line">INTERSECT</span><br><span class="line">      SELECT</span><br><span class="line">        recipient_id, payer_id</span><br><span class="line">      FROM payments) </span><br><span class="line">      as relationships;</span><br></pre></td></tr></table></figure>
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+
+                    
+
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="mailto:brucelee352@gmail.com" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-envelope-o fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2023 Bruce Lee<br></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
