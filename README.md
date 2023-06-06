@@ -4,7 +4,7 @@ Hey guys, here's the 2nd version of my Data Analysis Portfolio!
 
 I remember being asked if I *really* knew Data Analysis while in a job interview, by the interviewer *before the job interview even started*, and I can't remember feeling so insulted in my entire life. 
 
-At least not since a few months before when I received my exit letter from my last role, which I must say was the most condescending thing I ever read that was addressed to me in a professional context. I gave so much of myself to that job, sacrificed so much, and reading it broke me. 
+At least not since a month or two before when I received my exit letter from my last role, which I must say was the most condescending thing I ever read that was addressed to me in a professional context. I gave so much of myself to that job, sacrificed so much, and reading it broke me. 
 
 Frankly, the last few months have been hard in a very interesting way, and I became very disillusioned with the idea of working anywhere, especially in the EdTech field. However, I'm here. I built this and every project featured on my portfolio and I'm moving forward. I'm not giving up. 
 
