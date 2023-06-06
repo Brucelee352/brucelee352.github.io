@@ -91,6 +91,13 @@ header_pages:
    - resume.markdown
    - categories.html
    - tags.html
+
+# Page default value
+defaults:
+   home:
+     heading: "Bruce A. Lee"
+     subheading: "Data Analyst"
+     banner: /assets/images/banners/home.jpeg
    
 
 # Excerpt size setting
