@@ -29,7 +29,7 @@ Lastly, as I find that the most successful analysts understands their audience, 
 
 ### How to reach me 
 
-(<a href="mailto:email@example.com">Send Email</a>
+<a href="mailto:brucelee352@gmail.com">Send Email</a>
 
 [LinkedIn](https://www.linkedin.com/in/brucealee/) 
 
