@@ -1,6 +1,6 @@
 # brucelee352.github.io — Data Portfolio Version 2 
 
-Hey guys, here's the 2nd version of my Data Analysis Portfolio! 
+Hey guys, here's the 2nd version of my Data Analysis Portfolio! Built with Jekyll! 
 
 I remember being asked if I *really* knew Data Analysis while in a job interview, by the interviewer *before the job interview even started*, and I can't remember feeling so insulted in my entire life. 
 
