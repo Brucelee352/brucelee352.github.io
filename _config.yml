@@ -1,0 +1,116 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely edit after that. If you find
+# yourself editing this file very often, consider using Jekyll's data files
+# feature for the data you need to update frequently.
+#
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'bundle exec jekyll serve'. If you change this file, please restart the server process.
+#
+# If you need help with YAML syntax, here are some quick references for you:
+# https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/#yaml
+# https://learnxinyminutes.com/docs/yaml/
+#
+# Site settings
+# These are used to personalize your new site. If you look in the HTML files,
+# you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
+# You can create any custom variable you would like, and they will be accessible
+# in the templates via {{ site.myvariable }}.
+
+title: "My Portfolio"
+email: brucelee352@gmail.com
+description: >- # this means to ignore newlines until "baseurl:"
+  Bruce Lee's Data Portfolio 
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
+
+
+# Build settings
+theme: jekyll-theme-yat
+plugins:
+  - jekyll-feed
+  - jekyll-spaceship
+  - jekyll-sitemap
+  - jekyll-seo-tag
+  - jekyll-paginate
+
+# Copyright setting
+current year: {currentYear}
+author: Bruce A. Lee
+copyright: (c) - ©
+copyleft: (cleft)
+sound recording copyright: (p) - ℗
+# Copyright 
+copyright: "{author} (cleft) 2022-{currentYear}"
+
+# Yat date format
+# refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this
+yat:
+  date_format: "%b %d, %Y"
+
+# If you don't want transparent header, you can set false
+header_transparent: true
+
+# If you want to change the content width, you can set to another value
+content_width: "960px"
+
+# If you want to generate website sitemap, you can set true
+sitemap: true
+
+
+# Code badge setting
+# You can enable or disable the code badge and so on
+code_badge:
+  enabled: "true"
+  color: "#fff"
+  background_color: "#28B463"
+  text_transform: "lowercase"  # ("uppercase", "lowercase", "capitalize")
+    
+
+# Night/Dark mode
+# Default mode is "auto", "auto" is for auto nightshift
+# (19:00 - 07:00), "manual" is for manual toggle, and
+# "on/off" is for default on/off.
+#
+# Whatever the user's choice is, it will supersede the
+# default setting of the site and be kept during the
+# visit (session). Only the dark mode setting is"manual",
+# it will be always kept on every visit (i.e. no matter
+# the browser is closed or not)
+#
+night_mode: "light"
+
+
+# If you want to link only specific pages in your header, uncomment
+# this and add the path to the pages in order as they should show up
+header_pages: 
+   - index.markdown
+   - about.markdown
+   - resume.markdown
+   - categories.html
+   - tags.html
+   
+
+# Excerpt size setting
+excerpt_size: 250
+
+# Exclude from processing.
+# The following items will not be processed, by default.
+# Any item listed under the `exclude:` key here will be automatically added to
+# the internal "default list".
+#
+# Excluded items can be processed by explicitly listing the directories or
+# their entries' file path in the `include:` list.
+#
+# exclude:
+#   - .sass-cache/
+#   - .jekyll-cache/
+#   - gemfiles/
+#   - Gemfile
+#   - Gemfile.lock
+#   - node_modules/
+#   - vendor/bundle/
+#   - vendor/cache/
+#   - vendor/gems/
+#   - vendor/ruby/
