@@ -19,7 +19,7 @@ This is a showcase of sample SQL queries that I made for practice in learning th
 
 ## Common Table Expression (CTE)
 
-*Source: Previous interview Assessment*
+*Source: Previous Interview Assessment*
 
 ```sql
 -- What are the total revenue across months for the organization and what are noticable changes that I can observe from the data overtime for the last calendar year? 
