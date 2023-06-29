@@ -6,14 +6,54 @@ categories: misc
 tags: [sql]
 ---
 
-This is a showcase of sample SQL queries that I made for practice in learning the language. The sources listed before each query link to the direct place the content came from. Each heading represents a concept of SQL that I touched on. 
+# Introduction: 
 
-***Sources:***
+This is a showcase of sample SQL queries that I made for practice in learning the language. The sources listed before each query link to the direct place the content came from, unless noted otherwise. Each heading represents a concept of SQL that I touched on. 
+
+**Primary Sources:**
 [DataLemur](https://datalemur.com/) by Nick Singh 
-
 [SQL-practice.com](https://www.sql-practice.com/) by Boolean-algebra
 
+------------------------------------------------------------------------
+
+
 ## Common Table Expression (CTE)
+
+*Source: Previous interview Assessment*
+
+```sql
+-- What are the total revenue across months for the organization and what are noticable changes that I can observe from the data overtime for the last calendar year? 
+WITH CTE AS(
+SELECT DATE_TRUNC('month', CURRENT_MONTH) AS month, 
+        YEAR(DATE_TRUNC('month', CURRENT_MONTH)) AS year,
+        ROUND((SUM(unit_value)) OVER (PARTITION BY DATE_TRUNC('month', CURRENT_MONTH)), 2) AS total_monthly_unit_value,
+        ROUND((SUM(mrr_value)) OVER (PARTITION BY DATE_TRUNC('month', CURRENT_MONTH)), 2) AS total_mrr_value,
+        ROUND((SUM(transaction_value)) OVER (PARTITION BY DATE_TRUNC('month', CURRENT_MONTH)), 2) AS total_monthly_transaction_value
+FROM DATA_ANALYST_INTERVIEW.PUBLIC.HISTORICAL_MRR_TRANSACTIONS
+    WHERE CURRENT_MONTH BETWEEN '2021-01-01' AND '2022-12-01'
+GROUP BY DATE_TRUNC('month', CURRENT_MONTH)
+ORDER BY DATE_TRUNC('month', CURRENT_MONTH)
+)
+
+SELECT MONTHNAME(month) AS DATE, year, total_monthly_unit_value, 
+    ROUND(((total_monthly_unit_value/lag(total_monthly_unit_value, 1) OVER (ORDER BY DATE_TRUNC('month', month))) - 1) * 100, 1) AS UV_percentage_change,
+      total_mrr_value, 
+    ROUND(((total_mrr_value/lag(total_mrr_value, 1) OVER (ORDER BY DATE_TRUNC('month', month))) - 1) * 100, 1) AS MRR_percentage_change,
+      total_monthly_transaction_value, 
+    ROUND(((total_monthly_transaction_value/lag(total_monthly_transaction_value, 1) OVER (ORDER BY DATE_TRUNC('month', month))) - 1) * 100, 1) AS TV_percentage_change,
+    ROUND((UV_PERCENTAGE_CHANGE + MRR_PERCENTAGE_CHANGE + TV_PERCENTAGE_CHANGE)/3, 1) as AVERAGE_PERCENTAGE_CHANGE
+FROM CTE
+GROUP BY month, year, total_monthly_unit_value, total_mrr_value, total_monthly_transaction_value;
+
+-- What is the total revenue by account type? 
+SELECT  pda.account_type, ROUND(SUM(hmrr.transaction_value), 2) AS Revenue
+FROM DATA_ANALYST_INTERVIEW.PUBLIC.HISTORICAL_MRR_TRANSACTIONS AS hmrr
+    JOIN DATA_ANALYST_INTERVIEW.PUBLIC.DIM_ACCOUNTS AS pda ON pda.owner_user_id = hmrr.owner_id
+GROUP BY account_type
+ORDER BY pda.account_type;
+```
+
+...
 
 *Source: (<https://datalemur.com/questions/sql-spare-server-capacity>)*
 
