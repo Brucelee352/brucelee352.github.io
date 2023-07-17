@@ -20,7 +20,8 @@ This is a showcase of sample SQL queries that I made for practice in learning th
 ## Common Table Expression (CTE)
 
 *Source: Previous Interview Assessment* 
-**Context: A restaurant company wants to use this dataset to inform management of trends with how customer order their products**
+
+*Context: A restaurant company wants to use this dataset to inform management of trends with how customer order their products*
 
 
 **Table: Customers**
@@ -124,7 +125,8 @@ FROM porders;
 ...
 
 *Source: Previous Interview Assessment*
-**Context: What are the total revenue across months for the organization and what are noticable changes that I can observe from the data overtime for the last calendar year?**
+
+*Context: What are the total revenue across months for the organization and what are noticable changes that I can observe from the data overtime for the last calendar year?*
  
 ```sql
 WITH CTE AS(
