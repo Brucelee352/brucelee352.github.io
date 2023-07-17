@@ -8,6 +8,8 @@ tags: [python]
 
 The following is a script I made to test features in Python, using a dataset I generated from a local PostgreSQL database. 
 
+
+  
 ```python
 import pandas as pd 
 import numpy as np 
@@ -25,72 +27,30 @@ from itables import show
 hr_data = pd.read_csv('~/Documents/Projects/SQL/Generated Data/HR_employee_list_and_salaries.csv')
 hr_data = pd.DataFrame(hr_data)
 
-show(hr_data)
+print(hr_data.iloc[0:5])
 ```
 
-
-<style>.itables table td {
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-.itables table th {
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-
-.itables thead input {
-    width: 100%;
-    padding: 3px;
-    box-sizing: border-box;
-}
-
-.itables tfoot input {
-    width: 100%;
-    padding: 3px;
-    box-sizing: border-box;
-}
-</style>
-<div class="itables">
-<table id="08e15f6f-b50b-4a9b-9bb1-a1ddf450be64" class="display nowrap"style="table-layout:auto;width:auto;margin:auto;caption-side:bottom"><thead>
-    <tr style="text-align: right;">
-
-      <th>Name</th>
-      <th>Department</th>
-      <th>Email Address</th>
-      <th>Title</th>
-      <th>Salary</th>
-      <th>Min Salary</th>
-      <th>Max Salary</th>
-      <th>Hire Date</th>
-      <th>City</th>
-      <th>ZIP Code</th>
-      <th>State/Province</th>
-      <th>Country</th>
-    </tr>
-  </thead><tbody><tr><td>Loading... (need <a href=https://mwouts.github.io/itables/troubleshooting.html>help</a>?)</td></tr></tbody></table>
-<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
-<script type="module">
-    // Import jquery and DataTable
-    import 'https://code.jquery.com/jquery-3.6.0.min.js';
-    import dt from 'https://cdn.datatables.net/1.12.1/js/jquery.dataTables.mjs';
-    dt($);
-
-    // Define the table data
-    const data = [["Steven King", "Executive", "steven.king@sqltutorial.org", "President", 240000, 200000, 400000, "2007-06-12", "Seattle", "98199", "Washington", "United States of America"], ["Lex De Haan", "Executive", "lex.de haan@sqltutorial.org", "Administration Vice President", 170000, 150000, 300000, "2013-01-08", "Seattle", "98199", "Washington", "United States of America"], ["Neena Kochhar", "Executive", "neena.kochhar@sqltutorial.org", "Administration Vice President", 170000, 150000, 300000, "2009-09-16", "Seattle", "98199", "Washington", "United States of America"], ["John Russell", "Sales", "john.russell@sqltutorial.org", "Sales Manager", 140000, 100000, 200000, "2016-09-26", "Oxford", "OX9 9ZB", "Oxford", "United Kingdom"], ["Karen Partners", "Sales", "karen.partners@sqltutorial.org", "Sales Manager", 135000, 100000, 200000, "2016-12-31", "Oxford", "OX9 9ZB", "Oxford", "United Kingdom"], ["Michael Hartstein", "Marketing", "michael.hartstein@sqltutorial.org", "Marketing Manager", 130000, 90000, 150000, "2016-02-12", "Toronto", "M5V 2L7", "Ontario", "Canada"], ["Nancy Greenberg", "Finance", "nancy.greenberg@sqltutorial.org", "Finance Manager", 120000, 82000, 160000, "2014-08-12", "Seattle", "98199", "Washington", "United States of America"], ["Shelley Higgins", "Accounting", "shelley.higgins@sqltutorial.org", "Accounting Manager", 120000, 82000, 160000, "2014-06-02", "Seattle", "98199", "Washington", "United States of America"], ["Den Raphaely", "Purchasing", "den.raphaely@sqltutorial.org", "Purchasing Manager", 110000, 80000, 150000, "2014-12-02", "Seattle", "98199", "Washington", "United States of America"], ["Hermann Baer", "Public Relations", "hermann.baer@sqltutorial.org", "Public Relations Representative", 100000, 45000, 105000, "2014-06-02", "Munich", "80925", "Bavaria", "Germany"], ["Alexander Hunold", "IT", "alexander.hunold@sqltutorial.org", "Programmer", 90000, 40000, 100000, "2009-12-29", "Southlake", "26192", "Texas", "United States of America"], ["Daniel Faviet", "Finance", "daniel.faviet@sqltutorial.org", "Accountant", 90000, 42000, 90000, "2014-08-11", "Seattle", "98199", "Washington", "United States of America"], ["Jonathon Taylor", "Sales", "jonathon.taylor@sqltutorial.org", "Sales Representative", 86000, 60000, 120000, "2018-03-19", "Oxford", "OX9 9ZB", "Oxford", "United Kingdom"], ["Jack Livingston", "Sales", "jack.livingston@sqltutorial.org", "Sales Representative", 84000, 60000, 120000, "2018-04-18", "Oxford", "OX9 9ZB", "Oxford", "United Kingdom"], ["William Gietz", "Accounting", "william.gietz@sqltutorial.org", "Public Accountant", 83000, 42000, 90000, "2014-06-02", "Seattle", "98199", "Washington", "United States of America"], ["John Chen", "Finance", "john.chen@sqltutorial.org", "Accountant", 82000, 42000, 90000, "2017-09-23", "Seattle", "98199", "Washington", "United States of America"], ["Adam Fripp", "Shipping", "adam.fripp@sqltutorial.org", "Stock Manager", 82000, 55000, 85000, "2017-04-05", "South San Francisco", "99236", "California", "United States of America"], ["Matthew Weiss", "Shipping", "matthew.weiss@sqltutorial.org", "Stock Manager", 80000, 55000, 85000, "2016-07-13", "South San Francisco", "99236", "California", "United States of America"], ["Payam Kaufling", "Shipping", "payam.kaufling@sqltutorial.org", "Stock Manager", 79000, 55000, 85000, "2015-04-26", "South San Francisco", "99236", "California", "United States of America"], ["Jose Manuel Urman", "Finance", "jose manuel.urman@sqltutorial.org", "Accountant", 78000, 42000, 90000, "2018-03-02", "Seattle", "98199", "Washington", "United States of America"], ["Ismael Sciarra", "Finance", "ismael.sciarra@sqltutorial.org", "Accountant", 77000, 42000, 90000, "2017-09-25", "Seattle", "98199", "Washington", "United States of America"], ["Kimberely Grant", "Sales", "kimberely.grant@sqltutorial.org", "Sales Representative", 70000, 60000, 120000, "2019-05-19", "Oxford", "OX9 9ZB", "Oxford", "United Kingdom"], ["Luis Popp", "Finance", "luis.popp@sqltutorial.org", "Accountant", 69000, 42000, 90000, "2019-12-02", "Seattle", "98199", "Washington", "United States of America"], ["Susan Mavris", "Human Resources", "susan.mavris@sqltutorial.org", "Human Resources Representative", 65000, 40000, 90000, "2014-06-02", "London", "NaN", "NaN", "United Kingdom"], ["Shanta Vollman", "Shipping", "shanta.vollman@sqltutorial.org", "Stock Manager", 65000, 55000, 85000, "2017-10-05", "South San Francisco", "99236", "California", "United States of America"], ["Charles Johnson", "Sales", "charles.johnson@sqltutorial.org", "Sales Representative", 62000, 60000, 120000, "2019-12-30", "Oxford", "OX9 9ZB", "Oxford", "United Kingdom"], ["Pat Fay", "Marketing", "pat.fay@sqltutorial.org", "Marketing Representative", 60000, 40000, 90000, "2017-08-12", "Toronto", "M5V 2L7", "Ontario", "Canada"], ["Bruce Ernst", "IT", "bruce.ernst@sqltutorial.org", "Programmer", 60000, 40000, 100000, "2011-05-16", "Southlake", "26192", "Texas", "United States of America"], ["David Austin", "IT", "david.austin@sqltutorial.org", "Programmer", 48000, 40000, 100000, "2017-06-20", "Southlake", "26192", "Texas", "United States of America"], ["Valli Pataballa", "IT", "valli.pataballa@sqltutorial.org", "Programmer", 48000, 40000, 100000, "2018-01-31", "Southlake", "26192", "Texas", "United States of America"], ["Jennifer Whalen", "Administration", "jennifer.whalen@sqltutorial.org", "Administration Assistant", 44000, 30000, 60000, "2007-09-12", "Seattle", "98199", "Washington", "United States of America"], ["Diana Lorentz", "IT", "diana.lorentz@sqltutorial.org", "Programmer", 42000, 40000, 100000, "2019-02-02", "Southlake", "26192", "Texas", "United States of America"], ["Sarah Bell", "Shipping", "sarah.bell@sqltutorial.org", "Shipping Clerk", 40000, 25000, 55000, "2016-01-30", "South San Francisco", "99236", "California", "United States of America"]];
-
-    // Define the dt_args
-    let dt_args = {"order": []};
-    dt_args["data"] = data;
-
-    $(document).ready(function () {
-
-        $('#08e15f6f-b50b-4a9b-9bb1-a1ddf450be64').DataTable(dt_args);
-    });
-</script>
-</div>
-
-
+                 Name Department                   Email Address  \
+    0     Steven King  Executive     steven.king@sqltutorial.org   
+    1     Lex De Haan  Executive     lex.de haan@sqltutorial.org   
+    2   Neena Kochhar  Executive   neena.kochhar@sqltutorial.org   
+    3    John Russell      Sales    john.russell@sqltutorial.org   
+    4  Karen Partners      Sales  karen.partners@sqltutorial.org   
+    
+                               Title  Salary  Min Salary  Max Salary   Hire Date  \
+    0                      President  240000      200000      400000  2007-06-12   
+    1  Administration Vice President  170000      150000      300000  2013-01-08   
+    2  Administration Vice President  170000      150000      300000  2009-09-16   
+    3                  Sales Manager  140000      100000      200000  2016-09-26   
+    4                  Sales Manager  135000      100000      200000  2016-12-31   
+    
+          City ZIP Code State/Province                   Country  
+    0  Seattle    98199     Washington  United States of America  
+    1  Seattle    98199     Washington  United States of America  
+    2  Seattle    98199     Washington  United States of America  
+    3   Oxford  OX9 9ZB         Oxford            United Kingdom  
+    4   Oxford  OX9 9ZB         Oxford            United Kingdom  
+    
 
 
 ```python
@@ -139,7 +99,7 @@ hr_data.columns
 
 
 ```python
-# Info (seems to be simular to head in R)
+# Info (seems to be similar to head in R)
 hr_data.info
 ```
 
@@ -835,29 +795,17 @@ print(hr_data['Email Address'])
 
 
 ```python
-print(hr_data.iloc[0:5])
+print(hr_data.iloc[0:1])
 ```
 
-                 Name Department              Email Address  \
-    0     Steven King  Executive     steven.king@repugs.edu   
-    1     Lex De Haan  Executive     lex.de haan@repugs.edu   
-    2   Neena Kochhar  Executive   neena.kochhar@repugs.edu   
-    3    John Russell      Sales    john.russell@repugs.edu   
-    4  Karen Partners      Sales  karen.partners@repugs.edu   
+              Name Department           Email Address      Title  Salary  \
+    0  Steven King  Executive  steven.king@repugs.edu  President  240000   
     
-                               Title  Salary  Min Salary  Max Salary   Hire Date  \
-    0                      President  240000      200000      400000  2007-06-12   
-    1  Administration Vice President  170000      150000      300000  2013-01-08   
-    2  Administration Vice President  170000      150000      300000  2009-09-16   
-    3                  Sales Manager  140000      100000      200000  2016-09-26   
-    4                  Sales Manager  135000      100000      200000  2016-12-31   
+       Min Salary  Max Salary   Hire Date     City ZIP Code State/Province  \
+    0      200000      400000  2007-06-12  Seattle    98199     Washington   
     
-          City ZIP Code State/Province                   Country  
-    0  Seattle    98199     Washington  United States of America  
-    1  Seattle    98199     Washington  United States of America  
-    2  Seattle    98199     Washington  United States of America  
-    3   Oxford  OX9 9ZB         Oxford            United Kingdom  
-    4   Oxford  OX9 9ZB         Oxford            United Kingdom  
+                        Country  
+    0  United States of America  
     
 
 
