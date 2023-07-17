@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Python Test Script"
+title:  "HR Data Cleaning — A Python test script"
 date: "2023-07-17"
 categories: misc
 tags: [python]
