@@ -1,3 +1,13 @@
+---
+layout: post
+title:  "Python Test Script"
+date: "2023-07-17"
+categories: misc
+tags: [python]
+---
+
+The following is a script I made to test features in Python, using a dataset I generated from a local PostgreSQL database. 
+
 ```python
 import pandas as pd 
 import numpy as np 
