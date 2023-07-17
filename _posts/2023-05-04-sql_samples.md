@@ -19,10 +19,114 @@ This is a showcase of sample SQL queries that I made for practice in learning th
 
 ## Common Table Expression (CTE)
 
-*Source: Previous Interview Assessment*
+*Source: Previous Interview Assessment* 
+**Context: A restaurant company wants to use this dataset to inform management of trends with how customer order their products**
+
+
+**Table: Customers**
+| Index | customerOloRef | firstName | lastName | emailAddress    | phoneNumber |
+|-------|----------------|-----------|----------|-----------------|-------------|
+| 0     | 1210852832     | Ashlee    | Black    | 718798@test.com | 18539137645 |
+| 1     | 1210862959     | Karen     | Taylor   | 908278@test.com | 17118714180 |
+| 2     | 1211222409     | Rachel    | Glover   | 990342@test.com | 14160108199 |
+| 3     | 1210884227     | Kevin     | Barnett  | 816118@test.com | 16375662719 |
+| 4     | 1211205145     | Andrew    | Oneal    | 694351@test.com | 18535103663 |
+| 5     | 1210892053     | Matthew   | Cobb     | 403207@test.com | 12141628213 |
+| 6     | 1210878061     | Julie     | Rice     | 107345@test.com | 11470213737 |
+| 7     | 1210868677     | Joshua    | Williams | 922872@test.com | 10627821511 |
+| 8     | 1210850046     | Kimberly  | Miller   | 734453@test.com | 14769450538 |
+
+...
+
+**Table: Orders**
+| Index | orderOloRef | customerOloRef | storeRef | timePlaced | orderedFromFave | source     | handoff        | paymentType | zipcode |
+|-------|-------------|----------------|----------|------------|-----------------|------------|----------------|-------------|---------|
+| 0     | 1526136030  | 1212424032     | 25       | 2021-08-10 | FALSE           | CallCenter | CurbsidePickup | CreditCard  | 60134   |
+| 1     | 1636426442  | 1194539172     | 44       | 2021-08-10 | FALSE           | CallCenter | CurbsidePickup | CreditCard  | 65708   |
+| 2     | 2116129966  | 1193104823     | 22       | 2021-08-10 | FALSE           | API        | CounterPickup  | CreditCard  | 60134   |
+| 3     | 2112894463  | 1192380993     | 24       | 2021-08-10 | FALSE           | API        | Dispatch       | CreditCard  | 60543   |
+| 4     | 1513983208  | 1194885843     | 13       | 2021-08-10 | FALSE           | API        | Dispatch       | CreditCard  | 60018   |
+| 5     | 1645861726  | 1192678698     | 9        | 2021-08-10 | FALSE           | CallCenter | Dispatch       | CreditCard  | 60004   |
+| 6     | 1868589889  | 1220411684     | 27       | 2021-08-10 | FALSE           | API        | CurbsidePickup | CreditCard  | 60431   |
+| 7     | 1874887693  | 411086145      | 15       | 2021-08-10 | FALSE           | API        | Dispatch       | CreditCard  | 60107   |
+| 8     | 1917609011  | 1191607575     | 37       | 2021-08-10 | FALSE           | CallCenter | Dispatch       | CreditCard  | 60452   |
+
+...
+
+**Table: Products**
+| Index | orderOloRef | orderProduct            | quantity | cost  | orderedFromFave | source     | handoff        | paymentType | zipcode |
+|-------|-------------|-------------------------|----------|-------|-----------------|------------|----------------|-------------|---------|
+| 0     | 1332720190  | Chicken Tenders 6 Piece | 1        | 8.74  | FALSE           | CallCenter | CurbsidePickup | CreditCard  | 60134   |
+| 1     | 1377148167  | Big Beef Sandwich       | 1        | 10.86 | FALSE           | CallCenter | CurbsidePickup | CreditCard  | 65708   |
+| 2     | 1674285799  | Cheeseburger            | 1        | 0     | FALSE           | API        | CounterPickup  | CreditCard  | 60134   |
+| 3     | 1560588602  | Caesar Salad            | 1        | 0     | FALSE           | API        | Dispatch       | CreditCard  | 60543   |
+| 4     | 1514784642  | Large French Fries      | 3        | 3.74  | FALSE           | API        | Dispatch       | CreditCard  | 60018   |
+| 5     | 1731086029  | Cheese Sauce            | 2        | 1.24  | FALSE           | CallCenter | Dispatch       | CreditCard  | 60004   |
+| 6     | 1927656374  | Chocolate Cake Slice    | 2        | 4.36  | FALSE           | API        | CurbsidePickup | CreditCard  | 60431   |
+| 7     | 1621969249  | *New Classic Beef Bowl  | 1        | 8.49  | FALSE           | API        | Dispatch       | CreditCard  | 60107   |
+| 8     | 1781607712  | Italian Beef Sandwich   | 1        | 8.11  | FALSE           | CallCenter | Dispatch       | CreditCard  | 60452   |
+
+...
+
+**Step 1: Tell which customers order French Fries in their past orders.**
+
+```sql 
+SELECT *, 
+    CASE WHEN orderproduct LIKE '%French Fries%' 
+      THEN 'TRUE' ELSE 'FALSE' END AS isFrenchFry
+FROM "Products"
+GROUP BY index, orderproduct, orderoloref, quantity, cost;
+```
+**Step 2: What is the purchasing frequency of customers that order certain products?**
+
+```sql 
+SELECT DISTINCT p1.orderproduct as "product_a", 
+                p2.orderproduct as "product_b", 
+  COUNT(*) as PurchaseFrequency,
+  COUNT(*) * 100.0/ SUM(COUNT(*)) OVER () as PercentFreq
+FROM "Products" AS p1
+INNER JOIN "Products" AS p2
+ON p1.orderproduct <> p2.orderproduct
+  AND p1.orderoloref = p2.orderoloref
+GROUP BY p1.orderproduct, p2.orderproduct
+ORDER BY PurchaseFrequency DESC;
+```
+**Step 3 & 4: What customers ordered the biggest quanitity of the most popular items on the menu?**
 
 ```sql
--- What are the total revenue across months for the organization and what are noticable changes that I can observe from the data overtime for the last calendar year? 
+WITH porders AS 
+  (
+    SELECT CONCAT(cust.firstname, ' ', cust.lastname) AS name, 
+    cust.emailaddress,
+    cust.phonenumber,
+    p1.orderproduct as "product_a", 
+    p2.orderproduct as "product_b",
+    SUM(p1.quantity) as "total_quantity",
+    ROUND(SUM(p1.cost::numeric),2) as "total_cost",
+    COUNT(*) as PurchaseFrequency,
+    ROUND(COUNT(*) * 100.0/ SUM(COUNT(*)) OVER (), 3) as PercentFreq
+FROM "Products" AS p1
+INNER JOIN "Products" AS p2
+ON p1.orderproduct <> p2.orderproduct
+    AND p1.orderoloref = p2.orderoloref
+JOIN "Orders" AS ord 
+  ON ord.orderoloref = p1.orderoloref
+JOIN "Customers" AS cust 
+  ON cust.customeroloref = ord.customeroloref
+WHERE p1.orderproduct 
+  LIKE '%French Fries%'
+GROUP BY p1.orderproduct, p2.orderproduct, p1.cost, cust.firstname, cust.lastname, cust.emailaddress, cust.phonenumber
+ORDER BY PurchaseFrequency DESC
+) 
+SELECT * 
+FROM porders;
+```
+...
+
+*Source: Previous Interview Assessment*
+**Context: What are the total revenue across months for the organization and what are noticable changes that I can observe from the data overtime for the last calendar year?**
+ 
+```sql
 WITH CTE AS(
 SELECT DATE_TRUNC('month', CURRENT_MONTH) AS month, 
         YEAR(DATE_TRUNC('month', CURRENT_MONTH)) AS year,
@@ -52,7 +156,6 @@ FROM DATA_ANALYST_INTERVIEW.PUBLIC.HISTORICAL_MRR_TRANSACTIONS AS hmrr
 GROUP BY account_type
 ORDER BY pda.account_type;
 ```
-
 ...
 
 *Source: (<https://datalemur.com/questions/sql-spare-server-capacity>)*
