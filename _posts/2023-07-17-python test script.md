@@ -52,7 +52,7 @@ show(hr_data)
 }
 </style>
 <div class="itables">
-<table id="24d41167-c9ad-4529-bf38-4aaed217d945" class="display nowrap"style="table-layout:auto;width:auto;margin:auto;caption-side:bottom"><thead>
+<table id="08e15f6f-b50b-4a9b-9bb1-a1ddf450be64" class="display nowrap"style="table-layout:auto;width:auto;margin:auto;caption-side:bottom"><thead>
     <tr style="text-align: right;">
 
       <th>Name</th>
@@ -85,7 +85,7 @@ show(hr_data)
 
     $(document).ready(function () {
 
-        $('#24d41167-c9ad-4529-bf38-4aaed217d945').DataTable(dt_args);
+        $('#08e15f6f-b50b-4a9b-9bb1-a1ddf450be64').DataTable(dt_args);
     });
 </script>
 </div>
@@ -825,7 +825,7 @@ print(hr_data['Email Address'])
     Name: Email Address, dtype: object
     
 
-    C:\Users\bruce\AppData\Local\Temp\ipykernel_20952\3629824364.py:3: SettingWithCopyWarning: 
+    C:\Users\bruce\AppData\Local\Temp\ipykernel_22892\3629824364.py:3: SettingWithCopyWarning: 
     A value is trying to be set on a copy of a slice from a DataFrame.
     Try using .loc[row_indexer,col_indexer] = value instead
     
@@ -1280,6 +1280,6 @@ hr_data.plot(kind = 'line',
 
 
     
-![png](output_19_1.png)
+![png](/assets/images/output_19_1.png)
     
 
