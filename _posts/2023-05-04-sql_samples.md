@@ -25,6 +25,7 @@ This is a showcase of sample SQL queries that I made for practice in learning th
 
 
 **Table: Customers**
+
 | Index | customerOloRef | firstName | lastName | emailAddress    | phoneNumber |
 |-------|----------------|-----------|----------|-----------------|-------------|
 | 0     | 1210852832     | Ashlee    | Black    | 718798@test.com | 18539137645 |
@@ -40,6 +41,7 @@ This is a showcase of sample SQL queries that I made for practice in learning th
 ...
 
 **Table: Orders**
+
 | Index | orderOloRef | customerOloRef | storeRef | timePlaced | orderedFromFave | source     | handoff        | paymentType | zipcode |
 |-------|-------------|----------------|----------|------------|-----------------|------------|----------------|-------------|---------|
 | 0     | 1526136030  | 1212424032     | 25       | 2021-08-10 | FALSE           | CallCenter | CurbsidePickup | CreditCard  | 60134   |
@@ -55,6 +57,7 @@ This is a showcase of sample SQL queries that I made for practice in learning th
 ...
 
 **Table: Products**
+
 | Index | orderOloRef | orderProduct            | quantity | cost  | orderedFromFave | source     | handoff        | paymentType | zipcode |
 |-------|-------------|-------------------------|----------|-------|-----------------|------------|----------------|-------------|---------|
 | 0     | 1332720190  | Chicken Tenders 6 Piece | 1        | 8.74  | FALSE           | CallCenter | CurbsidePickup | CreditCard  | 60134   |
