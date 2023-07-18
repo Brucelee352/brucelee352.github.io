@@ -1,4 +1,4 @@
-# [My Portfolio](brucelee352.github.io) — Version 2 
+# brucelee352.github.io — Version 2 
 
 ## Overview
 Hey guys, here's the 2nd version of my Data Analysis Portfolio—this time, built with Jekyll! 
