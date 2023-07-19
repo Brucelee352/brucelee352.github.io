@@ -1,3 +1,15 @@
+---
+layout: post
+title:  "Youtube Top 20 Content Creators"
+date: "2023-07-17"
+categories: projects
+tags: [python]
+---
+
+
+## Introduction: 
+Hello! In this project, I'm breaking down the top content creators on Youtube over 2017-2018. The very first thing i'll do is load the libraries I'm going to use:
+
 ```python
 import pandas as pd
 import numpy as np
