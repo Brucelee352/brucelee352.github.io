@@ -1,12 +1,11 @@
 ---
 layout: post
 title:  "SQL Query Showcase"
-date: "2023-05-04"
+date: "2023-08-23"
 categories: misc
-tags: [sql]
 ---
 
-# Introduction: 
+### Introduction: 
 
 This is a showcase of sample SQL queries that I made for practice in learning the language. The sources listed before each query link to the direct place the content came from, unless noted otherwise. Each heading represents a concept of SQL that I touched on. 
 
@@ -17,7 +16,7 @@ This is a showcase of sample SQL queries that I made for practice in learning th
 ------------------------------------------------------------------------
 
 
-## Common Table Expression (CTE)
+### Common Table Expression (CTE)
 
 *Source: Previous Interview Assessment* 
 
@@ -182,7 +181,7 @@ FROM demands
 
 ------------------------------------------------------------------------
 
-## Subquery example
+### Subquery example
 
 *Source: (<https://datalemur.com/questions/sql-spare-server-capacity>)*
 
@@ -199,7 +198,7 @@ ORDER BY centers.datacenter_id;
 
 ------------------------------------------------------------------------
 
-## Aggregate Functions with SUM
+### Aggregate Functions with SUM
 
 *Source: (<https://www.sql-practice.com/>)* 
 
@@ -217,7 +216,7 @@ FROM admissions
 GROUP BY has_insurance
 ```
 
-### *Show the provinces that has more patients identified as 'M' than 'F'...* 
+#### *Show the provinces that has more patients identified as 'M' than 'F'...* 
 
 **Keyword: HAVING, Difficulty: HARD**
 
@@ -252,7 +251,7 @@ WHERE n_male \> n_female
 ```
 
 
-## Aggregate and then display as a percentage
+### Aggregate and then display as a percentage
 
 **Keyword: COUNT, Difficulty: HARD**
 
@@ -278,7 +277,7 @@ FROM patients;
 
 ------------------------------------------------------------------------
 
-## Window function example RANK()
+### Window function example RANK()
 
 *Source: (<https://datalemur.com/questions/sql-third-transaction>)*
 
@@ -291,7 +290,7 @@ GROUP BY user_id, spend, transaction_date
 ```
 ---
 
-## Sending vs. Opening Snaps (CTE, CASE WHEN, Aggregates)
+### Sending vs. Opening Snaps (CTE, CASE WHEN, Aggregates)
 
 *Source: (<https://datalemur.com/questions/time-spent-snaps>)*
 
@@ -310,7 +309,7 @@ ORDER BY age_bucket DESC
 ```
 ---
 
-## Window functions for calculating rolling averages based on tweets
+### Window functions for calculating rolling averages based on tweets
 
 *Source: (<https://datalemur.com/questions/rolling-average-tweets>)*
 
@@ -323,7 +322,7 @@ ORDER BY user_id ASC, tweet_date ASC;
 ```
 ---
 
-## Compensation Outliers 
+### Compensation Outliers 
 
 *Source: (<https://datalemur.com/questions/compensation-outliers>)*
 
@@ -357,7 +356,7 @@ ORDER BY
 
 ---
 
-## Photoshop Revenue Analysis
+### Photoshop Revenue Analysis
 
 *Source: (<https://datalemur.com/questions/photoshop-revenue-analysis>)*
 
@@ -373,7 +372,7 @@ ORDER BY customer_id ASC
 
 ---
 
-## Unique Money Transfer Relationships
+### Unique Money Transfer Relationships
 
 *Source: (<https://datalemur.com/questions/money-transfer-relationships>)*
 
