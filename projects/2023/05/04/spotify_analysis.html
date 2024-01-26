@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>Spotify Usage Breakdown | Data Engineering Portfolio</title>
+<meta name="generator" content="Jekyll v4.3.2">
+<meta property="og:title" content="Spotify Usage Breakdown">
+<meta name="author" content="Bruce A. Lee">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="Hello! Welcome to my analysis of my Spotify listening history, where I break down all the wonderful things that I’ve found in my listening history. This write-up was inspired by many of the pieces I found looking up project ideas relating to Spotifyr, and needless to say, I was amazed to see the things that I’ve been listening to.">
+<meta property="og:description" content="Hello! Welcome to my analysis of my Spotify listening history, where I break down all the wonderful things that I’ve found in my listening history. This write-up was inspired by many of the pieces I found looking up project ideas relating to Spotifyr, and needless to say, I was amazed to see the things that I’ve been listening to.">
+<link rel="canonical" href="/projects/2023/05/04/spotify_analysis.html">
+<meta property="og:url" content="/projects/2023/05/04/spotify_analysis.html">
+<meta property="og:site_name" content="Data Engineering Portfolio">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-05-04T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="Spotify Usage Breakdown">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Bruce A. Lee"},"dateModified":"2023-05-04T00:00:00+00:00","datePublished":"2023-05-04T00:00:00+00:00","description":"Hello! Welcome to my analysis of my Spotify listening history, where I break down all the wonderful things that I’ve found in my listening history. This write-up was inspired by many of the pieces I found looking up project ideas relating to Spotifyr, and needless to say, I was amazed to see the things that I’ve been listening to.","headline":"Spotify Usage Breakdown","mainEntityOfPage":{"@type":"WebPage","@id":"/projects/2023/05/04/spotify_analysis.html"},"url":"/projects/2023/05/04/spotify_analysis.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Data Engineering Portfolio">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #28B463;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: lowercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/">
+  <img class="site-favicon" title="Data Engineering Portfolio" src="" onerror="this.style.display='none'">
+  Data Engineering Portfolio
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/about/">ABOUT</a><a class="page-link" href="/resume/">RESUME</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('light' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<div id="click-to-top" class="click-to-top">
+  <i class="fa fa-arrow-up"></i>
+</div>
+<script>
+  (function () {
+    const clickToTop = document.getElementById('click-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        clickToTop.classList.add('show')
+      }else {
+        clickToTop.classList.remove('show')
+      }
+    });
+    clickToTop.addEventListener('click', () => {
+      window.smoothScrollTo(0);
+    });
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">Spotify Usage Breakdown</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2023-05-04T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> May 04, 2023
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 44 mins</span>
+  </p>
+<div class="post-tags"><a class="post-tag" href="/tags.html#r">#r</a></div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <p><strong>Hello!</strong> Welcome to my analysis of my Spotify listening history, where I
+break down all the wonderful things that I’ve found in my listening
+history. This write-up was inspired by many of the pieces I found
+looking up project ideas relating to Spotifyr, and needless to say, I
+was amazed to see the things that I’ve been listening to.</p>
+
+<p>The first thing we’ll do here is load all of the libraries we’re going
+to use!</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">jsonlite</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">lubridate</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggrepel</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">gghighlight</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">knitr</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">plotly</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">pheatmap</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">spotifyr</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The cool thing about this project is that you’ll need to first request
+that Spotify sends you your personal account data, and depending on how
+you use and listen to music on Spotify, this can take a week up to a
+month for them to give you everything via email.</p>
+
+<p>Spotifyr is the package that houses the tools needed to access the API
+that houses Spotify’s very comprehensive data on all the music we listen
+to that is attributed to our user profiles.</p>
+
+<p>You’ll then link your account to the developer.spotify.com part of their
+website to make an app in order to get your access keys to the API.
+After we can grab the access keys, we can use the spotifyr package to
+get everything we need! We’re then going to call the API in order to
+pull their data into R Studio (or your IDE of choice), so that we can
+analyze it and manipulate everything.</p>
+
+<p>The data stored in the files Spotify gives you is in JSON, so the
+jsonlite package parses everything out and sorts the data neatly into a
+data frame which we can then work with using the tidyverse.</p>
+
+<hr>
+
+<h2 id="setting-up-and-getting-the-data">Setting up and Getting the Data</h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Streaming history file from Spotify</span><span class="w">
+</span><span class="n">streamhist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fromJSON</span><span class="p">(</span><span class="s2">"StreamingHistory0.json"</span><span class="p">,</span><span class="w"> </span><span class="n">flatten</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+</span><span class="n">streamhist</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">streamhist</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">as_tibble</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">mutate_at</span><span class="p">(</span><span class="s2">"endTime"</span><span class="p">,</span><span class="w"> </span><span class="n">ymd_hm</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">endTime</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">endTime</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">hours</span><span class="p">(</span><span class="m">6</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">floor_date</span><span class="p">(</span><span class="n">endTime</span><span class="p">,</span><span class="w"> </span><span class="s2">"day"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">as_date</span><span class="p">,</span><span class="w"> </span><span class="n">minutes</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">msPlayed</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">60000</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#For these last two data frames, we're going to be referencing them later to make our plots </span><span class="w">
+</span><span class="n">num_artist_played</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">streamhist</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">artistName</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">tally</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w">
+</span><span class="n">num_tracks_played</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">streamhist</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">artistName</span><span class="p">,</span><span class="w"> </span><span class="n">trackName</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">tally</span><span class="p">()</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">list_of_top_20_artists</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">streamhist</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">count</span><span class="p">(</span><span class="n">artistName</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">slice_head</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w">
+</span><span class="n">list_of_top_20_tracks</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">streamhist</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">count</span><span class="p">(</span><span class="n">artistName</span><span class="p">,</span><span class="w"> </span><span class="n">trackName</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">slice</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">)</span><span class="w">
+
+</span><span class="n">print</span><span class="p">(</span><span class="n">list_of_top_20_artists</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 20 × 2
+##    artistName               n
+##    &lt;chr&gt;                &lt;int&gt;
+##  1 WWE                    310
+##  2 Hank Trill             129
+##  3 The Radio Dept.        124
+##  4 Kanye West             120
+##  5 SZA                    100
+##  6 Chance the Rapper       96
+##  7 Gorillaz                91
+##  8 Guru                    75
+##  9 Kendrick Lamar          70
+## 10 A Tribe Called Quest    62
+## 11 the pillows             62
+## 12 Free Nationals          61
+## 13 De La Soul              57
+## 14 Digable Planets         56
+## 15 Terrace Martin          50
+## 16 David Bowie             44
+## 17 Bodikhuu                43
+## 18 Akeem Ali               41
+## 19 Outkast                 41
+## 20 Scooter                 41
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">print</span><span class="p">(</span><span class="n">list_of_top_20_tracks</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 20 × 3
+##    artistName           trackName                                                n
+##    &lt;chr&gt;                &lt;chr&gt;                                                &lt;int&gt;
+##  1 Hank Trill           Propane Money 2                                         34
+##  2 Hank Trill           Swahili                                                 28
+##  3 The Radio Dept.      Never Follow Suit                                       26
+##  4 SZA                  Kill Bill                                               24
+##  5 Dabeull              Day &amp; Night                                             22
+##  6 Chris Crack          Hoes at Trader Joe's                                    19
+##  7 Alice Deejay         Better Off Alone                                        18
+##  8 Downstait            Kingdom                                                 18
+##  9 A Tribe Called Quest Electric Relaxation                                     17
+## 10 The Weeknd           Out of Time                                             17
+## 11 Ricky Reed           Real Magic                                              16
+## 12 Rollergirl           Dear Jessie                                             16
+## 13 gum.mp3              Seen It Before                                          16
+## 14 Akeem Ali            Keemy Casanova )                                        15
+## 15 Dungeon Family       Rollin' (feat. André 3000, Cee-Lo &amp; Society Of Soul)    15
+## 16 Kanye West           Believe What I Say                                      15
+## 17 Scooter              Nessaja                                                 15
+## 18 Butcher Brown        Gum In My Mouth                                         14
+## 19 Fugees               Nappy Heads - Remix                                     14
+## 20 G Perico             Billie Jean                                             14
+</code></pre></div></div>
+
+<p>First, we’re going to use our “streamhist” data to grab us a list of the
+top artists that we listen to that are present in our streaming history,
+then we’ll grab the name of the artists, count the number of times they
+appear each, rearrange them and them only present the top 20 rows.</p>
+
+<p>Then, I’m summoning the “abridgedtop20data”, using the script below and
+then saving it to a .csv so that the rest of the analysis can run, and I
+won’t have to call the API over and over. Along with this, you’ll also
+make two separate data frames with the number of times each artist and
+track was played.</p>
+
+<p>The json file being read in the first call is in the ‘my_spotify_data’
+file that you get from Spotify directly, titled ‘StreamHistory0.json.
+For me, this was the only file, but for others it can be several
+depending on your usage, hence the length of time it takes you to
+receive the data at hand.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">####-----------------</span><span class="w">
+
+</span><span class="c1">##Calling the API with spotifyr</span><span class="w">
+
+</span><span class="c1">#For use with your Client ID: </span><span class="w">
+</span><span class="n">Sys.setenv</span><span class="p">(</span><span class="n">SPOTIFY_CLIENT_ID</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'xxxxxxxxxxxxxxxxxxxxxxxxxx'</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#For use with your Client Secret:            </span><span class="w">
+</span><span class="n">Sys.setenv</span><span class="p">(</span><span class="n">SPOTIFY_CLIENT_SECRET</span><span class="w"> </span><span class="o">=</span><span class="s1">'xxxxxxxxxxxxxxxxxxxxxxxxxx'</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#The access token you'll need to use Spotify's API </span><span class="w">
+</span><span class="n">get_spotify_authorization_code</span><span class="p">()</span><span class="w">
+</span><span class="n">access_token</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_spotify_access_token</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">####-----------------</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Grab audio features for each artists using spotifyr </span><span class="w">
+</span><span class="n">favArtist1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"WWE"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Hank Trill"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"The Radio Dept"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist4</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Kanye West"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist5</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"SZA"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist6</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Chance the Rapper"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist7</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Gorillaz"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist8</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Guru"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist9</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Kendrick Lamar"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist10</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"A Tribe Called Quest"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist11</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"the pillows"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist12</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Free Nationals"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist13</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"De La Soul"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist14</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Digable Planets"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist15</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Terrace Martin"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist16</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"David Bowie"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist17</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Bodikhuu"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist18</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Akeem Ali"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist19</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Outkast"</span><span class="p">)</span><span class="w">
+</span><span class="n">favArtist20</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">get_artist_audio_features</span><span class="p">(</span><span class="n">artist</span><span class="o">=</span><span class="w"> </span><span class="s2">"Scooter"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Bind to singular data frame</span><span class="w">
+</span><span class="n">top20data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rbind</span><span class="p">(</span><span class="n">favArtist1</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist2</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist3</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist4</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist5</span><span class="p">,</span><span class="w"> 
+                   </span><span class="n">favArtist6</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist7</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist8</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist9</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist10</span><span class="p">,</span><span class="w"> 
+                   </span><span class="n">favArtist11</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist12</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist13</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist14</span><span class="p">,</span><span class="w"> 
+                   </span><span class="n">favArtist15</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist16</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist17</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist18</span><span class="p">,</span><span class="w"> 
+                   </span><span class="n">favArtist19</span><span class="p">,</span><span class="w"> </span><span class="n">favArtist20</span><span class="p">)</span><span class="w">
+
+
+</span><span class="c1">#Select only relevant columns</span><span class="w">
+</span><span class="n">abridgedTop20Data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+        </span><span class="n">select</span><span class="p">(</span><span class="n">top20data</span><span class="p">,</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s1">'artist_name'</span><span class="p">,</span><span class="w"> </span><span class="s1">'album_release_date'</span><span class="p">,</span><span class="w"> </span><span class="s1">'time_signature'</span><span class="p">,</span><span class="w"> </span><span class="s1">'duration_ms'</span><span class="p">,</span><span class="w"> </span><span class="s1">'danceability'</span><span class="p">,</span><span class="s1">'energy'</span><span class="p">,</span><span class="w"> 
+                                   </span><span class="s1">'valence'</span><span class="p">,</span><span class="w"> </span><span class="s1">'loudness'</span><span class="p">,</span><span class="s1">'speechiness'</span><span class="p">,</span><span class="w">
+                                   </span><span class="s1">'acousticness'</span><span class="p">,</span><span class="s1">'liveness'</span><span class="p">,</span><span class="s1">'instrumentalness'</span><span class="p">,</span><span class="w">
+                                   </span><span class="s1">'tempo'</span><span class="p">,</span><span class="s1">'explicit'</span><span class="p">,</span><span class="w"> </span><span class="s1">'key_mode'</span><span class="p">))</span><span class="w"> 
+
+</span><span class="c1">#Generate minutes column for later</span><span class="w">
+</span><span class="n">abridgedTop20Data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">abridgedTop20Data</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">mutate</span><span class="p">(</span><span class="n">duration_mins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">duration_ms</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">60000</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#write .csv  </span><span class="w">
+</span><span class="n">write.csv</span><span class="p">(</span><span class="n">abridgedTop20Data</span><span class="p">,</span><span class="w"> </span><span class="s2">"abridgedTop20Data.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">row.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">abridgedTop20Data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"abridgedTop20Data.csv"</span><span class="p">,</span><span class="w"> </span><span class="n">stringsAsFactors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>To further break down what’s happening here, the first thing we’re going
+to do is call the API.</p>
+
+<p>In order to receive your API access keys, you will need to make an app
+on developer.spotify.com, you can then use these calls to access
+Spotify’s API. After the script runs your ID and secret, it saves your
+access token as an object so that the other functions we run can call
+back to the access token so that it can self-validate.</p>
+
+<p>Below the API call, we’re asking spotifyr to grab the artist audio
+features of every artist that appeared in our list, we then use rbind to
+paste all of the resulting data frames together. The information in the
+data frames that spotifyr generates is very comprehensive, so I’m going
+to have to grab just the columns we need to produce the data we can use
+for analysis.</p>
+
+<p>For the purposes of this project, I want to avoid calling the API every
+time I want to rerun the scripts as it will time you out if you attempt
+to call the API too many times. So I recommend calling the API first,
+saving the abridged data to a .csv and then recall it to a new dataframe
+that the scripts below will use to carry out the rest of the analysis;
+as I’ve done above.</p>
+
+<h2 id="exploration">Exploration</h2>
+
+<p>Now, we’re going to take a further look at the data we’ll need to make
+our visualizations. Thankfully, Spotify’s data is pretty clean and
+well-formatted on its own, so no real cleaning is needed outside of
+outliers you’ll find here and there.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#For use with later plots </span><span class="w">
+</span><span class="n">meanTop20ArtistsData</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">abridgedTop20Data</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">artist_name</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarise</span><span class="p">(</span><span class="n">mean_danceability</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">danceability</span><span class="p">),</span><span class="w"> </span><span class="n">mean_energy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">energy</span><span class="p">),</span><span class="w"> 
+            </span><span class="n">mean_valence</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">valence</span><span class="p">),</span><span class="w"> </span><span class="n">mean_loudness</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">loudness</span><span class="p">),</span><span class="w"> 
+            </span><span class="n">mean_speechiness</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">speechiness</span><span class="p">),</span><span class="w"> 
+            </span><span class="n">mean_acousticness</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">acousticness</span><span class="p">),</span><span class="w"> 
+            </span><span class="n">mean_liveness</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">liveness</span><span class="p">),</span><span class="w"> 
+            </span><span class="n">mean_instrumentalness</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">instrumentalness</span><span class="p">),</span><span class="w"> 
+            </span><span class="n">mean_tempo</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">tempo</span><span class="p">),</span><span class="w"> </span><span class="n">mean_explicit</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">explicit</span><span class="p">),</span><span class="w"> </span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">())</span><span class="w">
+
+</span><span class="n">meanTop20ArtistsData</span><span class="p">[</span><span class="m">10</span><span class="p">,</span><span class="m">1</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Guru"</span><span class="w">
+
+</span><span class="n">meanTop20ArtistsData</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">merge</span><span class="p">(</span><span class="n">list_of_top_20_artists</span><span class="p">,</span><span class="w"> </span><span class="n">meanTop20ArtistsData</span><span class="p">,</span><span class="w"> </span><span class="n">by.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"artistName"</span><span class="p">,</span><span class="w"> </span><span class="n">by.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"artist_name"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Distributions of songs by artists </span><span class="w">
+</span><span class="n">song_distributions</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">abridgedTop20Data</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">artist_name</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarize</span><span class="p">(</span><span class="n">mean_song_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">duration_mins</span><span class="p">),</span><span class="w"> 
+            </span><span class="n">median_song_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">median</span><span class="p">(</span><span class="n">duration_mins</span><span class="p">),</span><span class="w">
+            </span><span class="n">sd_song_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sd</span><span class="p">(</span><span class="n">duration_mins</span><span class="p">),</span><span class="w">
+            </span><span class="n">min_song_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">min</span><span class="p">(</span><span class="n">duration_mins</span><span class="p">),</span><span class="w">
+            </span><span class="n">max_song_length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">duration_mins</span><span class="p">),</span><span class="w">
+            </span><span class="n">n_songs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">())</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I had all the columns in the abridged version of the Top 20 data set
+summarized to their mean, as it will make plotting for central tendency
+much more concise. For song distributions, I did the same thing for each
+measure of central tendency, so everything would be more to the point
+when plotting that data.</p>
+
+<h2 id="what-does-my-music-look-like">What does my music look like?</h2>
+
+<p>Now that I have my data, let’s make visualizations with it! I formulated
+some pretty interesting hypotheses that were corroborated through
+visualization. For example, see below.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Most frequently mentioned artists &amp; tracks</span><span class="w">
+</span><span class="n">list_of_top_20_artists</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">artistName</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_col</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bottom"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="w">
+    </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Top Artists by # of Times Played"</span><span class="p">,</span><span class="w">
+    </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"How many times were their songs played from start to finish?"</span><span class="p">,</span><span class="w">
+    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Artist Name"</span><span class="p">,</span><span class="w">
+    </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"n"</span><span class="w">
+  </span><span class="p">)</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot1-1.png" alt=""></p>
+
+<p>Here, we asking, “Who were the most frequently played artists in my
+streaming history?” The resulting plot gave me a great idea in that for
+the rest of this analysis, because WWE represents such a large number of
+my consumed music, that I’d omit that outlier to get a better view of my
+data.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">list_of_top_20_tracks</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">trackName</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">trackName</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">n</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_col</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">),</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="w">
+    </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Number of Track Spins by Artist"</span><span class="p">,</span><span class="w">
+    </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"How many times was a song played from start to finish?"</span><span class="p">,</span><span class="w">
+    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Track Name"</span><span class="p">,</span><span class="w">
+    </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Artist Name"</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"viridis"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bottom"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot2-1.png" alt=""></p>
+
+<p>This one is pretty straight forward, I’m asking of the data “How many
+times was a song played from start to finish?”. I clearly thought Hank
+Trill was the best thing since sliced bread, so as such, I’ve listed to
+“Propane Money 2” a total of 38 times.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Mean song distributions with Box plot </span><span class="w">
+</span><span class="n">song_distributions</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_song_length</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_boxplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Mean Song Lengths by Artists"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Average Mintues"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_y_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.5</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.title.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)))</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot3-1.png" alt=""></p>
+
+<p>Here, I wanted to get a general view of the song lengths data to check
+for outliers and things. Nothing too crazy in terms of the numbers.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Distribution Plots based on Top 20 </span><span class="w">
+</span><span class="n">song_distributions</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">median_song_length</span><span class="p">),</span><span class="w"> </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"density"</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.8</span><span class="p">,</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">seq</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.2</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_color_brewer</span><span class="p">(</span><span class="n">palette</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Set3"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="w">
+    </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Median Song Lengths for Top 20 Artists"</span><span class="p">,</span><span class="w">
+    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Song Length"</span><span class="p">,</span><span class="w">
+    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Density"</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot4-1.png" alt=""></p>
+
+<p>For this, I specifically took a look at the median song lengths and
+their density, again, nothing too crazy, I’m more so looking at the
+spread of the data presented to check for outliers. What’s presented
+here is consistent with the above chart, the median song length for my
+data is around 3.75 minutes.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">streamhist2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">streamhist</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">artistName</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">summarise</span><span class="p">(</span><span class="n">total_min</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">minutes</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">arrange</span><span class="p">(</span><span class="n">desc</span><span class="p">(</span><span class="n">total_min</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">slice</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">)</span><span class="w"> 
+
+</span><span class="n">streamhist2</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">ggplot</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">scale_fill_gradient</span><span class="p">(</span><span class="n">low</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"darkgrey"</span><span class="p">,</span><span class="w"> </span><span class="n">high</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"limegreen"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_bar</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">total_min</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">total_min</span><span class="p">),</span><span class="w"> </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"identity"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">labs</span><span class="p">(</span><span class="w">
+    </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Most Played Artists by the Minute"</span><span class="p">,</span><span class="w">
+    </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Includes both track times and podcasts"</span><span class="p">,</span><span class="w">
+    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Total Mins"</span><span class="p">,</span><span class="w">
+    </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Artist Name"</span><span class="p">,</span><span class="w">
+    </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="w">
+  </span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">),</span><span class="w"> </span><span class="n">plot.caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6.5</span><span class="p">),</span><span class="w"> </span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bottom"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot5-1.png" alt=""></p>
+
+<p>For this plot, I wanted to check out the most played artists by the
+minute, meaning for each artist, how long did I actually listen to their
+music. Interesting WWE here is very low, but that’s because they only
+have entrance music and for everytime I played something of theirs, it
+only last around 3:00 or so each play. Compared to “The Sessions” which
+is a podcast, that outlier checks out as I listen to those episodes from
+start to finish.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">song_distributions</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artist_name</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">max_song_length</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artist_name</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artist_name</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_label_repel</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">vjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.5</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Max Song Lengths by Artists"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Artist"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Song Minutes"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_blank</span><span class="p">(),</span><span class="w"> 
+        </span><span class="n">axis.title.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)),</span><span class="w"> 
+        </span><span class="n">axis.ticks.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_blank</span><span class="p">(),</span><span class="w"> </span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">)</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot6-1.png" alt=""></p>
+
+<p>Apparently, Scooter and Terrace Martin have songs/sets that are 40 - 80
+mins long, accounting for the outliers found above, which I found
+interesting. I didn’t even know Spotify had tracks that were that long.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">top20EnergyValencePlot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">meanTop20ArtistsData</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_valence</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_energy</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_text_repel</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">vjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">(</span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_size</span><span class="p">(</span><span class="n">range</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">12</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_vline</span><span class="p">(</span><span class="n">xintercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_hline</span><span class="p">(</span><span class="n">yintercept</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">limits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">limits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">annotate</span><span class="p">(</span><span class="s1">'text'</span><span class="p">,</span><span class="w"> </span><span class="m">0.25</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">0.95</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Angry"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">annotate</span><span class="p">(</span><span class="s1">'text'</span><span class="p">,</span><span class="w"> </span><span class="m">1.75</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">0.95</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Happy"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">annotate</span><span class="p">(</span><span class="s1">'text'</span><span class="p">,</span><span class="w"> </span><span class="m">1.75</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">0.05</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Peaceful"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">annotate</span><span class="p">(</span><span class="s1">'text'</span><span class="p">,</span><span class="w"> </span><span class="m">0.25</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="m">2</span><span class="p">,</span><span class="w"> </span><span class="m">0.05</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Depressing"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Valence"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Energy"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Emotional Quadrant For My Top 20 Artists"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Position based on energy and valence, size based on number of songs (Short Term)"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">),</span><span class="w"> </span><span class="n">plot.caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6.5</span><span class="p">),</span><span class="w"> </span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bottom"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">guides</span><span class="p">(</span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"none"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plot</span><span class="p">(</span><span class="n">top20EnergyValencePlot</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot7-1.png" alt=""></p>
+
+<p>This chart was made to show exactly where my music fell along the four
+emotional quadrants. For x, Energy is self-explanatory.</p>
+
+<p>However, for y, Spotify’s documentation defines Valence as: “A measure
+from 0.0 to 1.0 describing the musical positiveness conveyed by a track.
+Tracks with high valence sound more positive (e.g. happy, cheerful,
+euphoric), while tracks with low valence sound more negative (e.g. sad,
+depressed, angry).”</p>
+
+<p>So considering that, each of the four quadrants represents an emotional
+extreme, so we can see where exactly all of our music falls along those
+lines.</p>
+
+<p>Everything in the Top 20 of my most listened to tracks are pretty
+neutral, for the most part. Most of my artists are on the more happy or
+angry sounding side than not, and there’s a lot of energy present in my
+music. I guess I’m not the edge lord I thought I was. Hilariously,
+Scooter’s music was found the be the most angry thing on my list…</p>
+
+<p>So let’s try to answer some more questions.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">top20tempo_energyplot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">meanTop20ArtistsData</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_tempo</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_energy</span><span class="p">,</span><span class="w"> 
+                                   </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">),</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.5</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">limits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">90</span><span class="p">,</span><span class="w"> </span><span class="m">150</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">limits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">.45</span><span class="p">,</span><span class="w"> </span><span class="m">.75</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Tempo"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Energy"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_text_repel</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">vjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Top 20 Artists by Tempo &amp; Energy"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Are faster songs more energetic?"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plot</span><span class="p">(</span><span class="n">top20tempo_energyplot</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot8-1.png" alt=""></p>
+
+<p>Here, I’m looking to answer, does the catalog of the top 20 artists I
+listen have a body of work that is of a certain tempo and energy
+threshold? Can I reasonably say that there is a correlation between the
+two? Most the indie stuff that I listen to that’s high tempo does have
+good energy.</p>
+
+<p>Now, the Rap/Hip-Hop/RnB artists that I listen to are also about right.
+Considering that those genres of music tend to fall between the 90-120
+range as far as tempo goes. The artists that fall into that genre have
+music that’s high energy, but fall into the range I gave being below 115
+BPM.</p>
+
+<p>Next…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">top20dance_valplot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">meanTop20ArtistsData</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_danceability</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_valence</span><span class="p">,</span><span class="w"> 
+                                   </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">),</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.5</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">),</span><span class="w"> </span><span class="n">limits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">.4</span><span class="p">,</span><span class="w"> </span><span class="m">.85</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_text_repel</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">vjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Danceability"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Valence"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Top 20 Artists by Danceability &amp; Valence"</span><span class="p">,</span><span class="w">
+       </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Are more happier sounding songs danceable?'</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plot</span><span class="p">(</span><span class="n">top20dance_valplot</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot9-1.png" alt=""></p>
+
+<p>Here we’re looking at Danceability and Valence. Danceability can be
+described how easy is the artist’s music to dance to and is a number
+measured from 0 to 1. 0 is least, 1 is most.</p>
+
+<p>Of the artists featured here, nothing should be really surprising. The
+Radio Department, the pillows, and David Bowie aren’t what I’d call
+danceable. Fun to chill to, but not danceable music. Pretty much
+everything from 0.58 or so and up on the danceability scale is
+Rap/Hip-Hop/RnB.</p>
+
+<p>Also, heck yeah Guru, ATCQ and De La Soul are danceable, way to be spot
+on Spotify!</p>
+
+<p>Then we have…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">top20selplot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+  </span><span class="n">ggplot</span><span class="p">(</span><span class="n">meanTop20ArtistsData</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_speechiness</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_explicit</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean_loudness</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_text_repel</span><span class="p">(</span><span class="n">hjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">vjust</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">show.legend</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">artistName</span><span class="p">),</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.5</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Speechiness"</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Explicit"</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Loudness"</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Catalog Size"</span><span class="p">,</span><span class="w"> </span><span class="n">caption</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"smallest = Digable Planets"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Top 20 Artists by Speechiness, Explicitness and Loudness"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Are the more 'speechy' tracks for top artists inherently explicit and loud?"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">plot.title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">),</span><span class="w"> </span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bottom"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">plot</span><span class="p">(</span><span class="n">top20selplot</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/plot10-1.png" alt=""></p>
+
+<p>Here, we take a look at a plot that measures the Speechniness of music
+(that is how much verbal speech it contains).</p>
+
+<p>While acousticness, liveness, and instrumentalness aren’t talked about
+as much here, but they are important to talk about. The first measures
+if a given track is acoustic or not. Liveness measures if a track has
+the presence of an audience in the recording. While the last one
+predicts whether or not a track contains no vocals.</p>
+
+<p>All of these variables are measured from 0 to 1, which will be of
+importance later. Regarding speechiness, Spotify’s documentation
+describes it as: “The more exclusively speech-like the recording
+(e.g. talk show, audio book, poetry), the closer to 1.0 the attribute
+value. Values above 0.66 describe tracks that are probably made entirely
+of spoken words.</p>
+
+<p>Values between 0.33 and 0.66 describe tracks that may contain both music
+and speech, either in sections or layered, including such cases as rap
+music. Values below 0.33 most likely represent music and other
+non-speech-like tracks.”</p>
+
+<p>How Explicit (swears/curses) a given artist’s music is, is what’s being
+visualized here along with how loud their music is inherently. This is
+measured between 0 and 1 on the y axis, while values typically range
+between -60 and 0 db for Loudness and are measured through a given
+points color.</p>
+
+<p>According to this, you can imagine, most of the Rap/Hip-Hop/RnB artists
+have music that is the mostly Explicit, while also being speech-heavy
+and loud. Stereotypes be damned… but seriously, this all tracks as
+Thundercat and Nujabes make music for a more “chill” demographic and are
+reflected as such in the data. It’s funny to me how Kendrick Lamar,
+Chance, Akeem Ali and Hank Trill (being the highest) have music
+consisting of over 50% swears.</p>
+
+<h3 id="heatmap">Heatmap</h3>
+
+<p>Now for the heatmap I’m doing for this analysis, I stayed far, far away
+from base R’s syntax because using it took forever to format and it
+wasn’t all that pretty or customizable, so I used a package called
+pheatmap.</p>
+
+<p>The first thing I did here was make a copy of the data…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">meanTop20ArtistsData_copy</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">meanTop20ArtistsData</span><span class="p">)</span><span class="w">
+</span><span class="n">song_distributions_copy</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">song_distributions</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>…then I ascribed the names in column 1 to the row names of the data
+frame</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">row.names</span><span class="p">(</span><span class="n">meanTop20ArtistsData_copy</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">meanTop20ArtistsData_copy</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span><span class="n">row.names</span><span class="p">(</span><span class="n">song_distributions_copy</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">song_distributions_copy</span><span class="p">[,</span><span class="m">1</span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Next, I removed both categorical variables and columns where they’re
+numeric, but they don’t measure from 0 to 1. This is because as its a
+heatmap, all the values being measured need to equal from 0 to 1, or
+everything will be thrown off and it won’t make sense because nothing
+scales meaningfully. So to that end, the names and genres are removed,
+along with loudness, tempo, and “n” (which represents the size of an
+artist’s catalog).</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">meanTop20ArtistsData_copy</span><span class="o">$</span><span class="n">artistName</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">meanTop20ArtistsData_copy</span><span class="o">$</span><span class="n">genres</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">meanTop20ArtistsData_copy</span><span class="o">$</span><span class="n">mean_loudness</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">meanTop20ArtistsData_copy</span><span class="o">$</span><span class="n">mean_tempo</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">meanTop20ArtistsData_copy</span><span class="o">$</span><span class="n">n.x</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">meanTop20ArtistsData_copy</span><span class="o">$</span><span class="n">n.y</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+
+</span><span class="n">song_distributions_copy</span><span class="o">$</span><span class="n">artist_name</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">song_distributions_copy</span><span class="o">$</span><span class="n">n_songs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">song_distributions_copy</span><span class="o">$</span><span class="n">min_song_length</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">song_distributions_copy</span><span class="o">$</span><span class="n">max_song_length</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">song_distributions_copy</span><span class="o">$</span><span class="n">sd_song_length</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now, I’m going to rename the columns for readability’s sake, and turn
+the data frame into a matrix, because heatmap objects need to be based
+from numeric matrices in order to be usable.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Rename columns</span><span class="w">
+
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">meanTop20ArtistsData_copy</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"danceability"</span><span class="p">,</span><span class="w"> </span><span class="s2">"energy"</span><span class="p">,</span><span class="w"> </span><span class="s2">"valence"</span><span class="p">,</span><span class="w"> 
+                                         </span><span class="s2">"speechiness"</span><span class="p">,</span><span class="w"> </span><span class="s2">"acousticness"</span><span class="p">,</span><span class="w"> 
+                                         </span><span class="s2">"liveness"</span><span class="p">,</span><span class="w"> </span><span class="s2">"instrumentalness"</span><span class="p">,</span><span class="w"> 
+                                         </span><span class="s2">"explicit"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Turn data into matrix</span><span class="w">
+</span><span class="n">meanTop20ArtistsData_copy</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">meanTop20ArtistsData_copy</span><span class="p">)</span><span class="w">
+</span><span class="n">song_distributions_copy</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.matrix</span><span class="p">(</span><span class="n">song_distributions_copy</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now, I’ll make the heatmap in the codes below.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Make heatmap</span><span class="w">
+</span><span class="n">top20heatmap</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+  </span><span class="n">pheatmap</span><span class="p">(</span><span class="w">
+    </span><span class="n">meanTop20ArtistsData_copy</span><span class="p">,</span><span class="w">
+    </span><span class="n">cluster_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w">
+    </span><span class="n">clustering_distance_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"correlation"</span><span class="p">,</span><span class="w">
+    </span><span class="n">legend_breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0.5</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="p">),</span><span class="w">
+    </span><span class="n">legend_labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"0"</span><span class="p">,</span><span class="w"> </span><span class="s2">"0.5"</span><span class="p">,</span><span class="w"> </span><span class="s2">"1"</span><span class="p">),</span><span class="w">
+    </span><span class="n">cluster_cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">,</span><span class="w">
+    </span><span class="n">angle_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"315"</span><span class="p">,</span><span class="w">
+    </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colorRampPalette</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s2">"slategray3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="s2">"green2"</span><span class="p">))(</span><span class="m">100</span><span class="p">),</span><span class="w">
+    </span><span class="n">display_numbers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w">
+    </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Spotify Top 20 Artists Heatmap"</span><span class="w">
+  </span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">print</span><span class="p">(</span><span class="n">top20heatmap</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/heatmap2-1.png" alt=""></p>
+
+<p>Behold! Below I’m making another heat map that details the data as it’s
+being scaled before rendering it into the plot. Scaling aligns the
+values so that drastic fluctuations in the data set are toned down</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">top20heatmapscaled</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+  </span><span class="n">pheatmap</span><span class="p">(</span><span class="w">
+    </span><span class="n">meanTop20ArtistsData_copy</span><span class="p">,</span><span class="w">
+    </span><span class="n">cluster_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w">
+    </span><span class="n">clustering_distance_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"correlation"</span><span class="p">,</span><span class="w">
+    </span><span class="n">legend_breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w">
+    </span><span class="n">legend_labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"-2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w"> </span><span class="s2">"2"</span><span class="p">),</span><span class="w">
+    </span><span class="n">cluster_cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">,</span><span class="w">
+    </span><span class="n">angle_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"315"</span><span class="p">,</span><span class="w">
+    </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colorRampPalette</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s2">"slategray3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="s2">"green2"</span><span class="p">))(</span><span class="m">100</span><span class="p">),</span><span class="w">
+    </span><span class="n">display_numbers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w">
+    </span><span class="n">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"row"</span><span class="p">,</span><span class="w">
+    </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Spotify Top 20 Artists Heatmap (Short Term, Scaled)"</span><span class="w">
+  </span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">print</span><span class="p">(</span><span class="n">top20heatmapscaled</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/heatmap4-1.png" alt=""> As you can
+see from both heatmaps, they validate many of the assumptions I made in
+the previous plots. It also makes drawing useful insights more easy,
+because everything is visualized right in front of you, making
+comparisons easier.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">top20distributions</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+  </span><span class="n">pheatmap</span><span class="p">(</span><span class="w">
+    </span><span class="n">song_distributions_copy</span><span class="p">,</span><span class="w">
+    </span><span class="n">cluster_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w">
+    </span><span class="n">clustering_distance_rows</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"correlation"</span><span class="p">,</span><span class="w">
+    </span><span class="n">legend_breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">-2</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">2</span><span class="p">),</span><span class="w">
+    </span><span class="n">legend_labels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"-2"</span><span class="p">,</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w"> </span><span class="s2">"2"</span><span class="p">),</span><span class="w">
+    </span><span class="n">cluster_cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">F</span><span class="p">,</span><span class="w">
+    </span><span class="n">angle_col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"315"</span><span class="p">,</span><span class="w">
+    </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">colorRampPalette</span><span class="p">(</span><span class="nf">c</span><span class="p">(</span><span class="s2">"slategray3"</span><span class="p">,</span><span class="w"> </span><span class="s2">"white"</span><span class="p">,</span><span class="w"> </span><span class="s2">"green2"</span><span class="p">))(</span><span class="m">100</span><span class="p">),</span><span class="w">
+    </span><span class="n">display_numbers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">T</span><span class="p">,</span><span class="w">
+    </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Spotify Top 20 Artists Song Lengths"</span><span class="w">
+  </span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">print</span><span class="p">(</span><span class="n">top20distributions</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/top-artists-analysis/heatmap6-1.png" alt=""> For this
+third heatmap, I wanted to take the data of the song length
+distributions I made earlier to give us a good metric to gauge and make
+comparisons.</p>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>That does it for my Spotify Top 20 short-term Most Listened to Artists!
+Thank you reading, I hope you enjoyed reading this as much as I had fun
+making it.</p>
+
+<h1 id="extra">Extra</h1>
+<p>While you’re here, check out my Ultimate EuroDance Playlist, it’s cheesy, uplifting goodness! Perfect for your working or errand days.</p>
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1vCCfBAQxT9AiG7gKVd6NO?utm_source=generator" width="100%" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/misc/2023/05/04/Tableau-Visualizations-Sample.html" title="Tableau Visualization Showcase">Tableau Visualization Showcase</a><a class="next" href="/projects/2023/05/04/traffic_analysis.html" title="A Particular Group leads in DC Area Traffic Stops">A Particular Group leads in DC...</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/projects/2023/06/05/STAR_Breakdown.html" title="A Particular Group leads in DC Area Traffic Stops">Characteristics of STARs in Florida</a></li>
+<li><a class="post-link" href="/projects/2023/05/04/traffic_analysis.html" title="A Particular Group leads in DC Area Traffic Stops">A Particular Group leads in DC Area Traffic Stops</a></li>
+<li><a class="post-link" href="/misc/2023/07/17/python-test-script.html" title="A Particular Group leads in DC Area Traffic Stops">HR Data Cleaning — A Python test script</a></li>
+<li><a class="post-link" href="/projects/2023/07/19/youtube_analysis.html" title="A Particular Group leads in DC Area Traffic Stops">Youtube Top 20 Content Creators</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Bruce A. Lee <span class="copyleft">©</span> 2022-2024</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="https://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

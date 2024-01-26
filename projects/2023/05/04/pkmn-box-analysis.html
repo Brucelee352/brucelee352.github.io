@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>The Strongest of the Pocket Monsters! | Data Engineering Portfolio</title>
+<meta name="generator" content="Jekyll v4.3.2">
+<meta property="og:title" content="The Strongest of the Pocket Monsters!">
+<meta name="author" content="Bruce A. Lee">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="This is probably the nerdiest thing you’ll ever read about Pokémon.">
+<meta property="og:description" content="This is probably the nerdiest thing you’ll ever read about Pokémon.">
+<link rel="canonical" href="/projects/2023/05/04/pkmn-box-analysis.html">
+<meta property="og:url" content="/projects/2023/05/04/pkmn-box-analysis.html">
+<meta property="og:site_name" content="Data Engineering Portfolio">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-05-04T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="The Strongest of the Pocket Monsters!">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Bruce A. Lee"},"dateModified":"2023-05-04T00:00:00+00:00","datePublished":"2023-05-04T00:00:00+00:00","description":"This is probably the nerdiest thing you’ll ever read about Pokémon.","headline":"The Strongest of the Pocket Monsters!","mainEntityOfPage":{"@type":"WebPage","@id":"/projects/2023/05/04/pkmn-box-analysis.html"},"url":"/projects/2023/05/04/pkmn-box-analysis.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Data Engineering Portfolio">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #28B463;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: lowercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/">
+  <img class="site-favicon" title="Data Engineering Portfolio" src="" onerror="this.style.display='none'">
+  Data Engineering Portfolio
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/about/">ABOUT</a><a class="page-link" href="/resume/">RESUME</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('light' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<div id="click-to-top" class="click-to-top">
+  <i class="fa fa-arrow-up"></i>
+</div>
+<script>
+  (function () {
+    const clickToTop = document.getElementById('click-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        clickToTop.classList.add('show')
+      }else {
+        clickToTop.classList.remove('show')
+      }
+    });
+    clickToTop.addEventListener('click', () => {
+      window.smoothScrollTo(0);
+    });
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">The Strongest of the Pocket Monsters! </h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2023-05-04T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> May 04, 2023
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 58 mins</span>
+  </p>
+<div class="post-tags"><a class="post-tag" href="/tags.html#r">#r</a></div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <p>This is probably the nerdiest thing you’ll ever read about Pokémon.</p>
+
+<p>The beauty of this game is that fundamentally, it’s one of numbers. A
+bevy of formulas and calculations go into every nuance of what happens
+in-game. From stat modifiers, critical hits, how much damage each move
+does (which takes into account many variables based on stats) and even
+held items and their effects.</p>
+
+<p>It’s what makes it such a rich game, with a simple and great lore
+(especially for a game made for children!).</p>
+
+<p>As an avid player of the Pokémon franchise of games since childhood. I
+pondered: “what could I do to show off my skill in a domain that I could
+really sink my teeth into and relate with data-wise for this portfolio
+piece?”.</p>
+
+<p>Having played through the Gen 2 games (think Gold, Silver and Crystal)-I
+wanted to do a project that analyzed trends on the Pokémon in my storage
+boxes.</p>
+
+<p>As I journeyed around the Johto and Kanto regions, even back in the
+early days. I became entrenched in a never-ending journey.</p>
+
+<h2 id="starting-the-eda-process">Starting the EDA process</h2>
+
+<p>Before anything, make sure your working directory is set where you want
+to store all of your project’s data.</p>
+
+<p>You can do that with these functions:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">getwd</span><span class="p">()</span><span class="w"> </span><span class="c1">#Tells us where your working directory currently is</span><span class="w">
+
+</span><span class="n">and..</span><span class="w">
+
+</span><span class="n">setwd</span><span class="p">()</span><span class="w"> </span><span class="c1"># Tells R to set your working directory to a specific path</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then, for setup, we’ll need to run the needed libraries and turn off
+scientific notion.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+## ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+## ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+## ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+## ✔ readr   2.1.3      ✔ forcats 0.5.2 
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">options</span><span class="p">(</span><span class="n">scipen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">99</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>I’ll assign the .csv of my Pokémon Crystal box data to its own data set…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Data/CrystalBoxData.csv"</span><span class="p">,</span><span class="w">
+                       </span><span class="n">stringsAsFactors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># If you want, and I recommend this, use the code below to get rid of row names,</span><span class="w">
+</span><span class="c1"># CrystalBox$X &lt;- NULL</span><span class="w">
+</span></code></pre></div></div>
+
+<p>…we can then look at the data using these functions:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Look at the entire data set</span><span class="w">
+</span><span class="n">View</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># Look at the first few rows and their columns</span><span class="w">
+</span><span class="n">head</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">)</span><span class="w">
+
+</span><span class="c1"># This gives quick summary statistics for each column in the data </span><span class="w">
+</span><span class="n">summary</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The code below allows us to view the class for each column in the data
+set, and I’ll do so for the first 10 columns.</p>
+
+<p>This should give us an idea of what we’re working with, as each class of
+variable comes with its own set of rules.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">str</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">6</span><span class="p">])</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 'data.frame':    95 obs. of  6 variables:
+##  $ Sprite  : logi  NA NA NA NA NA NA ...
+##  $ Position: chr  "BOX1:01" "BOX1:02" "BOX1:03" "BOX1:04" ...
+##  $ Nickname: chr  "LUGIA" "SCIZOR" "MILTANK" "ABRA" ...
+##  $ Species : chr  "Lugia" "Scizor" "Miltank" "Abra" ...
+##  $ Nature  : chr  "Hardy" "Hardy" "Hardy" "Hardy" ...
+##  $ Gender  : chr  "-" "M" "F" "M" ...
+</code></pre></div></div>
+
+<hr>
+
+<p>The .csv that the data was sourced from does not include types for the
+various assortments of Pokémon listed, so it would serve well to include
+them, as those columns will helps us answer many interesting questions
+when analyzing the data. I’ve further elaborated on the need for this a
+little ways down.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="o">$</span><span class="n">Type1</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NA</span><span class="w">
+</span><span class="n">CrystalBox</span><span class="o">$</span><span class="n">Type2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NA</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Next, we’ll select specific columns and then rewrite into a new data
+set. Some of the columns in the original data set aren’t even applicable
+to the way some of the mechanics in generation 2 Pokémon games work.
+That, or they’re just not useful. So for the purpose of this script and
+analysis they can be removed.</p>
+
+<p>I’ll subset the needed rows using this script in dpylr:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+  </span><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">select</span><span class="p">(</span><span class="n">Species</span><span class="p">,</span><span class="w"> </span><span class="n">Gender</span><span class="p">,</span><span class="w"> </span><span class="n">HP_Type</span><span class="p">,</span><span class="w"> </span><span class="n">Type1</span><span class="p">,</span><span class="w"> </span><span class="n">Type2</span><span class="p">,</span><span class="w"> </span><span class="n">Move1</span><span class="p">,</span><span class="w"> </span><span class="n">Move2</span><span class="p">,</span><span class="w"> </span><span class="n">Move3</span><span class="p">,</span><span class="w"> </span><span class="n">Move4</span><span class="p">,</span><span class="w">  
+         </span><span class="n">HeldItem</span><span class="p">,</span><span class="w"> </span><span class="n">EXP</span><span class="p">,</span><span class="w"> </span><span class="n">Level</span><span class="p">,</span><span class="w"> </span><span class="n">HP</span><span class="p">,</span><span class="w"> </span><span class="n">ATK</span><span class="p">,</span><span class="w"> </span><span class="n">DEF</span><span class="p">,</span><span class="w"> </span><span class="n">SPA</span><span class="p">,</span><span class="w"> </span><span class="n">SPD</span><span class="p">,</span><span class="w"> </span><span class="n">SPE</span><span class="p">,</span><span class="w"> 
+         </span><span class="n">MetLoc</span><span class="p">,</span><span class="w"> </span><span class="n">MetLevel</span><span class="p">,</span><span class="w"> </span><span class="n">OT</span><span class="p">,</span><span class="w"> </span><span class="n">HP_IV</span><span class="p">,</span><span class="w"> </span><span class="n">ATK_IV</span><span class="p">,</span><span class="w"> </span><span class="n">DEF_IV</span><span class="p">,</span><span class="w"> </span><span class="n">SPD_IV</span><span class="p">,</span><span class="w"> 
+         </span><span class="n">SPE_IV</span><span class="p">,</span><span class="w"> </span><span class="n">HP_EV</span><span class="p">,</span><span class="w"> </span><span class="n">ATK_EV</span><span class="p">,</span><span class="w"> </span><span class="n">DEF_EV</span><span class="p">,</span><span class="w"> </span><span class="n">SPA_EV</span><span class="p">,</span><span class="w"> </span><span class="n">SPD_EV</span><span class="p">,</span><span class="w"> </span><span class="n">SPE_EV</span><span class="p">,</span><span class="w"> 
+         </span><span class="n">IsNicknamed</span><span class="p">,</span><span class="w"> </span><span class="n">IsShiny</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Once everything is completed, for this part, it’s time to write this
+into a .csv!</p>
+
+<hr>
+
+<p>We’ll now view the changed dataet, as you can see, its cut from 90 rows
+to 32</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">View</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Above, I have created two new columns; as some Pokémon have two types.</p>
+
+<p>Now you can either choose to export the current .csv to Excel and edit
+the data manually, or you use ’c(“Psychic”, “Bug”, etc.) to enter the
+types manually. However, for the 95 rows of different Pokémon available,
+doing that will take some time.</p>
+
+<p>So instead, I am using write.csv() to edit this offsite on Excel using
+the following functions below.</p>
+
+<p>It’s important to use row.names = FALSE, because when importing the
+edited dataset, an unwanted column usually called “X” will appear as a
+placeholder. While it’s simple to remove in the console, just do this
+step instead.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">write.csv</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CrystalBox</span><span class="p">,</span><span class="w">
+          </span><span class="s2">"Data/CrystalBoxData3.csv"</span><span class="p">,</span><span class="w">
+          </span><span class="n">row.names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>EDA may seem boring to many I’m sure, but it’s important to always do
+this when encountering a new dataset. Just to see what possible outliers
+or incongruities can exist in the data, before actually working with it.
+Plus, doing this step first and foremost can save everyone time later if
+done correctly.</p>
+
+<h2 id="digging-a-little-deeper">Digging a little deeper</h2>
+
+<p>Now that we have looked at our data, cleaned it, doused it in Pine-Sol
+and gave it a good scrub. We’ll reload tidyverse and take a look at some
+sample questions that we can use to answer some problems with our data,
+to gain insights into things.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">knitr</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Import data </span><span class="w">
+</span><span class="n">CrystalBox</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">read.csv</span><span class="p">(</span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Data/CrystalBoxData3.csv"</span><span class="p">,</span><span class="w"> 
+                       </span><span class="n">stringsAsFactors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<hr>
+
+<h3 id="what-does-the-view-from-the-top-look-like">What does the view from the top look like?</h3>
+
+<p>Lets run a summary to glean some insights.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Species</th>
+      <th style="text-align: left">Gender</th>
+      <th style="text-align: left">Type1</th>
+      <th style="text-align: left">Type2</th>
+      <th style="text-align: left">Move1</th>
+      <th style="text-align: left">Move2</th>
+      <th style="text-align: left">Move3</th>
+      <th style="text-align: left">Move4</th>
+      <th style="text-align: right">EXP</th>
+      <th style="text-align: right">Level</th>
+      <th style="text-align: left">HeldItem</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">Lugia</td>
+      <td style="text-align: left">-</td>
+      <td style="text-align: left">Psychic</td>
+      <td style="text-align: left">Flying</td>
+      <td style="text-align: left">Aeroblast</td>
+      <td style="text-align: left">Recover</td>
+      <td style="text-align: left">Safeguard</td>
+      <td style="text-align: left">Toxic</td>
+      <td style="text-align: right">1250000</td>
+      <td style="text-align: right">100</td>
+      <td style="text-align: left">Leftovers</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Scizor</td>
+      <td style="text-align: left">M</td>
+      <td style="text-align: left">Bug</td>
+      <td style="text-align: left">Steel</td>
+      <td style="text-align: left">Swords Dance</td>
+      <td style="text-align: left">Hidden Power</td>
+      <td style="text-align: left">Agility</td>
+      <td style="text-align: left">Baton Pass</td>
+      <td style="text-align: right">125000</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: left">Gold Berry</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Miltank</td>
+      <td style="text-align: left">F</td>
+      <td style="text-align: left">Normal</td>
+      <td style="text-align: left">NA</td>
+      <td style="text-align: left">Body Slam</td>
+      <td style="text-align: left">Rollout</td>
+      <td style="text-align: left">Defense Curl</td>
+      <td style="text-align: left">Milk Drink</td>
+      <td style="text-align: right">156250</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: left">King’s Rock</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Abra</td>
+      <td style="text-align: left">M</td>
+      <td style="text-align: left">Psychic</td>
+      <td style="text-align: left">NA</td>
+      <td style="text-align: left">Teleport</td>
+      <td style="text-align: left">(None)</td>
+      <td style="text-align: left">(None)</td>
+      <td style="text-align: left">(None)</td>
+      <td style="text-align: right">560</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: left">(None)</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Granbull</td>
+      <td style="text-align: left">M</td>
+      <td style="text-align: left">Normal</td>
+      <td style="text-align: left">NA</td>
+      <td style="text-align: left">Curse</td>
+      <td style="text-align: left">Shadow Ball</td>
+      <td style="text-align: left">Return</td>
+      <td style="text-align: left">Hidden Power</td>
+      <td style="text-align: right">100000</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: left">TwistedSpoon</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">Ditto</td>
+      <td style="text-align: left">-</td>
+      <td style="text-align: left">Normal</td>
+      <td style="text-align: left">NA</td>
+      <td style="text-align: left">Transform</td>
+      <td style="text-align: left">(None)</td>
+      <td style="text-align: left">(None)</td>
+      <td style="text-align: left">(None)</td>
+      <td style="text-align: right">1000</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: left">(None)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Columns 1-8 are very interesting, especially the gender and type
+columns, so I’ll run table() to investigate further</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+##  -  F  M 
+## 13 18 64
+</code></pre></div></div>
+
+<p>According to the data, I have 64 male Pokémon, 18 female Pokémon and 13
+genderless. As an aside, there exists a programming quirk in Gen 2 where
+stats have a bias towards male Pokémon.</p>
+
+<p>So next, let’s take a better look at the types of Pokémon we have.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 95 × 3
+##    Species  Type1   Type2 
+##    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt; 
+##  1 Lugia    Psychic Flying
+##  2 Scizor   Bug     Steel 
+##  3 Miltank  Normal  &lt;NA&gt;  
+##  4 Abra     Psychic &lt;NA&gt;  
+##  5 Granbull Normal  &lt;NA&gt;  
+##  6 Ditto    Normal  &lt;NA&gt;  
+##  7 Metapod  Bug     &lt;NA&gt;  
+##  8 Kakuna   Bug     &lt;NA&gt;  
+##  9 Unown    Psychic &lt;NA&gt;  
+## 10 Vulpix   Fire    &lt;NA&gt;  
+## # … with 85 more rows
+</code></pre></div></div>
+
+<p>I recommend assigning the above to a different dataset to view
+everything in detail.</p>
+
+<p>Apparently, I have an overwhelming amount of water types within my boxes
+at 21. As we can see here:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">Type1</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Water"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+ </span><span class="n">count</span><span class="p">(</span><span class="n">Type1</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   Type1  n
+## 1 Water 21
+</code></pre></div></div>
+
+<p>Most of my Pokémon that do have a second type are Flying, they’re likely
+to be legendary Pokémon.</p>
+
+<p>Most of the Pokémon I have are only of one type it seems judging by the
+amount of zeros in this table, as they account for the NAs that are
+being reported. In fact we can run the below to make sure…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="o">!</span><span class="n">complete.cases</span><span class="p">(</span><span class="n">Type1</span><span class="p">,</span><span class="w"> </span><span class="n">Type2</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">pull</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "Miltank"    "Abra"       "Granbull"   "Ditto"      "Metapod"   
+##  [6] "Kakuna"     "Unown"      "Vulpix"     "Sandshrew"  "Ampharos"  
+## [11] "Snorlax"    "Sentret"    "Koffing"    "Dratini"    "Suicune"   
+## [16] "Furret"     "Remoraid"   "Lickitung"  "Marill"     "Persian"   
+## [21] "Electabuzz" "Krabby"     "Hitmonlee"  "Alakazam"   "Dragonair" 
+## [26] "Raikou"     "Entei"      "Sudowoodo"  "Stantler"   "Seel"      
+## [31] "Arcanine"   "Ursaring"   "Magmar"     "Blissey"    "Meganium"  
+## [36] "Typhlosion" "Machamp"    "Togepi"     "Tauros"     "Vaporeon"  
+## [41] "Pinsir"     "Psyduck"    "Pikachu"    "Smeargle"   "Tangela"   
+## [46] "Seaking"    "Mewtwo"     "Donphan"    "Feraligatr" "Umbreon"   
+## [51] "Espeon"
+</code></pre></div></div>
+
+<p>The above gives us a list of Pokémon that do not have a 2nd type, but
+that won’t negatively affect what we need to do with our data as it’s
+commonplace in Pokémon for them to only have one Type.</p>
+
+<p>Lets take a look at EXP and Levels:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##       EXP              Level       
+##  Min.   :    100   Min.   :  5.00  
+##  1st Qu.:   3763   1st Qu.: 15.50  
+##  Median : 120500   Median : 50.00  
+##  Mean   : 121588   Mean   : 37.73  
+##  3rd Qu.: 146879   3rd Qu.: 50.00  
+##  Max.   :1250000   Max.   :100.00
+</code></pre></div></div>
+
+<p>That’s about right considering the volume of Pokémon in my boxes that
+are around level 50.</p>
+
+<p>Lets take a look at items:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## 
+##       (None)  Amulet Coin  Berry Juice Berserk Gene Bitter Berry   Black Belt 
+##           46            1            1            3            1            1 
+##  Brick Piece BrightPowder  Burnt Berry     Charcoal   Focus Band   Gold Berry 
+##            1            1            1            1            1            2 
+##   Hard Stone  King's Rock    Leftovers   Light Ball    Lucky Egg   Metal Coat 
+##            1            1            8            1            1            1 
+## Metal Powder Miracle Seed MiracleBerry Mystic Water     Pink Bow  Poison Barb 
+##            1            3            1            3            1            2 
+##   Quick Claw   Sacred Ash   Scope Lens  Silver Leaf SilverPowder   Smoke Ball 
+##            2            1            1            1            1            2 
+##    Soft Sand   Thick Club TwistedSpoon 
+##            1            1            1
+</code></pre></div></div>
+
+<p>It seems as though Leftovers is the most common item among my boxed
+Pokémon. A lot of the sets I’ve made were purpose-built for competitive
+battling and other nerdiness…so that’s about right.</p>
+
+<h1 id="stats">Stats</h1>
+
+<blockquote>
+  <p>Now lets take a look at the Pokémon’s stats. For ease of use, I’ll use
+tidyverse functions.</p>
+</blockquote>
+
+<p>For starters:</p>
+
+<blockquote>
+  <p>Which Pokémon has the highest Attack stat?</p>
+</blockquote>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">ATK</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">ATK</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">pull</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] "Ho-Oh"
+</code></pre></div></div>
+
+<p>This gives us Ho-Oh the Rainbow Pokémon!</p>
+
+<blockquote>
+  <p>Which Pokémon has the highest level?</p>
+</blockquote>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">Level</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"100"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">pull</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] "Lugia"  "Ho-Oh"  "Mewtwo"
+</code></pre></div></div>
+
+<p>We’re tied with Lugia, Ho-Oh and Mewtwo</p>
+
+<blockquote>
+  <p>Which Pokémon has the highest Stat totals among them?</p>
+</blockquote>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">summarise</span><span class="p">(</span><span class="n">total_stats</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">HP</span><span class="p">,</span><span class="w"> </span><span class="n">ATK</span><span class="p">,</span><span class="w"> </span><span class="n">DEF</span><span class="p">,</span><span class="w"> </span><span class="n">SPA</span><span class="p">,</span><span class="w"> </span><span class="n">SPD</span><span class="p">,</span><span class="w"> </span><span class="n">SPE</span><span class="p">))</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">total_stats</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">total_stats</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## # A tibble: 3 × 2
+##   Species total_stats
+##   &lt;chr&gt;         &lt;int&gt;
+## 1 Ho-Oh          2053
+## 2 Lugia          2053
+## 3 Mewtwo         2053
+</code></pre></div></div>
+
+<p>Again, we have a three way tie between Lugia, Ho-Oh and Mewtwo. All have
+the same base stat totals, so at maximum leveling (which is 100 and
+maximum StatEXP), they all have the same total stats.</p>
+
+<p>However, what do “base stat totals” and “StatEXP” mean? Let’s take a
+look.</p>
+
+<h2 id="a-quick-explanation-of-hidden-stats">A Quick Explanation of “Hidden Stats”</h2>
+
+<p>Its important to consider the following for this next section. <em>As a few
+columns in the data refer to these stats.</em></p>
+
+<p>For example, see below:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    Species HP_IV ATK_IV DEF_IV SPD_IV SPE_IV HP_EV ATK_EV DEF_EV SPA_EV SPD_EV
+## 1    Lugia    15     15     15     15     15 65535  65535  65535  65535  65535
+## 2   Scizor    15     13     13     11     15 65535  65535  65535  65535  65535
+## 3  Miltank    15     15     15     15     15     0      0      0      0      0
+## 4     Abra    10      7      4      6      7     0      0      0      0      0
+## 5 Granbull     7     12     15     13     15 65535  65535  65535      0      0
+## 6    Ditto     2      8     14      0      1     0      0      0      0      0
+##   SPE_EV
+## 1  65535
+## 2  65535
+## 3      0
+## 4      0
+## 5  65535
+## 6      0
+</code></pre></div></div>
+
+<p>The way Pokémon get stronger in the Gen 1 &amp; Gen 2 games is as they
+battle different Pokémon, their base stats get added to the winning
+Pokémon’s total individual stats. This is called StatEXP.</p>
+
+<p>This is referred to as “EVs” in the data, meaning “Effort Values” to
+maintain compatibility with newer games, Gen 3 and up.</p>
+
+<p>So for example, if my Pikachu knocks out a wild Raticate-then <strong>all of
+Raticate’s base stats are added to Pikachu’s StatEXP totals, making him
+stronger.</strong></p>
+
+<p>All Pokémon can max out each individual stat for a total of 393210,
+65535 for each stat.</p>
+
+<p><em>Needless to say, a lot of grinding is needed for getting the ideal
+stats you want and decisively winning in battle.</em></p>
+
+<hr>
+
+<h3 id="what-accounts-for-power">What Accounts for Power?</h3>
+
+<p>Now that we have some context, let’s to try and determine the best team
+I can come up with by seeing <strong><em>which Pokémon acquired the most
+StatEXP.</em></strong></p>
+
+<p>First, lets total up the EXP gained by each Pokémon…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="o">$</span><span class="n">Total_EV</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rowSums</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">[,</span><span class="m">26</span><span class="o">:</span><span class="m">31</span><span class="p">])</span><span class="w">
+</span></code></pre></div></div>
+
+<p>…then we’ll assign it to it’s own column in our main dataset</p>
+
+<p>Let’s quickly resort everything, as the data reads better this way in my
+opinion.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">select</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">31</span><span class="p">,</span><span class="w"> </span><span class="m">34</span><span class="p">,</span><span class="w"> </span><span class="m">32</span><span class="o">:</span><span class="m">33</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Then run the line below and it’ll give you…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">CrystalBox</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">Total_EV</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"393210"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">pull</span><span class="p">(</span><span class="n">Species</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##  [1] "Lugia"      "Scizor"     "Gyarados"   "Ho-Oh"      "Zapdos"    
+##  [6] "Forretress" "Raikou"     "Entei"      "Arcanine"   "Ursaring"  
+## [11] "Steelix"    "Machamp"    "Poliwrath"  "Vaporeon"   "Aerodactyl"
+## [16] "Rhydon"     "Charizard"  "Nidoking"   "Tyranitar"  "Smeargle"  
+## [21] "Moltres"    "Tentacruel" "Mewtwo"     "Gengar"     "Donphan"   
+## [26] "Feraligatr" "Umbreon"    "Espeon"
+</code></pre></div></div>
+
+<p>…the 28 different Pokémon that share the distinction of being trained to
+their utmost limits!</p>
+
+<p>I can also run the code below to get a more nuanced list of Pokémon that
+fit this critera using base R. I certainly recommend making this into
+it’s own dataset to view everything, plus we’ll need to use it a bit
+later.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StrongestMons</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">CrystalBox</span><span class="p">[</span><span class="n">which</span><span class="p">(</span><span class="n">CrystalBox</span><span class="o">$</span><span class="n">Total_EV</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nf">max</span><span class="p">(</span><span class="n">CrystalBox</span><span class="o">$</span><span class="n">Total_EV</span><span class="p">)),</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></code></pre></div></div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: left">Species</th>
+      <th style="text-align: left">Gender</th>
+      <th style="text-align: left">Type1</th>
+      <th style="text-align: left">Type2</th>
+      <th style="text-align: left">Move1</th>
+      <th style="text-align: left">Move2</th>
+      <th style="text-align: left">Move3</th>
+      <th style="text-align: left">Move4</th>
+      <th style="text-align: right">EXP</th>
+      <th style="text-align: right">Level</th>
+      <th style="text-align: left">HeldItem</th>
+      <th style="text-align: right">HP</th>
+      <th style="text-align: right">ATK</th>
+      <th style="text-align: right">DEF</th>
+      <th style="text-align: right">SPA</th>
+      <th style="text-align: right">SPD</th>
+      <th style="text-align: right">SPE</th>
+      <th style="text-align: left">MetLoc</th>
+      <th style="text-align: right">MetLevel</th>
+      <th style="text-align: left">OT</th>
+      <th style="text-align: right">HP_IV</th>
+      <th style="text-align: right">ATK_IV</th>
+      <th style="text-align: right">DEF_IV</th>
+      <th style="text-align: right">SPD_IV</th>
+      <th style="text-align: right">SPE_IV</th>
+      <th style="text-align: right">HP_EV</th>
+      <th style="text-align: right">ATK_EV</th>
+      <th style="text-align: right">DEF_EV</th>
+      <th style="text-align: right">SPA_EV</th>
+      <th style="text-align: right">SPD_EV</th>
+      <th style="text-align: right">SPE_EV</th>
+      <th style="text-align: right">Total_EV</th>
+      <th style="text-align: left">IsNicknamed</th>
+      <th style="text-align: left">IsShiny</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">Lugia</td>
+      <td style="text-align: left">-</td>
+      <td style="text-align: left">Psychic</td>
+      <td style="text-align: left">Flying</td>
+      <td style="text-align: left">Aeroblast</td>
+      <td style="text-align: left">Recover</td>
+      <td style="text-align: left">Safeguard</td>
+      <td style="text-align: left">Toxic</td>
+      <td style="text-align: right">1250000</td>
+      <td style="text-align: right">100</td>
+      <td style="text-align: left">Leftovers</td>
+      <td style="text-align: right">415</td>
+      <td style="text-align: right">278</td>
+      <td style="text-align: right">358</td>
+      <td style="text-align: right">278</td>
+      <td style="text-align: right">406</td>
+      <td style="text-align: right">318</td>
+      <td style="text-align: left">Whirl Islands</td>
+      <td style="text-align: right">60</td>
+      <td style="text-align: left">SILVER</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">393210</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">Scizor</td>
+      <td style="text-align: left">M</td>
+      <td style="text-align: left">Bug</td>
+      <td style="text-align: left">Steel</td>
+      <td style="text-align: left">Swords Dance</td>
+      <td style="text-align: left">Hidden Power</td>
+      <td style="text-align: left">Agility</td>
+      <td style="text-align: left">Baton Pass</td>
+      <td style="text-align: right">125000</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: left">Gold Berry</td>
+      <td style="text-align: right">176</td>
+      <td style="text-align: right">179</td>
+      <td style="text-align: right">149</td>
+      <td style="text-align: right">102</td>
+      <td style="text-align: right">127</td>
+      <td style="text-align: right">116</td>
+      <td style="text-align: left">National Park</td>
+      <td style="text-align: right">14</td>
+      <td style="text-align: left">SILVER</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">13</td>
+      <td style="text-align: right">13</td>
+      <td style="text-align: right">11</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">393210</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">12</td>
+      <td style="text-align: left">Gyarados</td>
+      <td style="text-align: left">M</td>
+      <td style="text-align: left">Water</td>
+      <td style="text-align: left">Flying</td>
+      <td style="text-align: left">Rain Dance</td>
+      <td style="text-align: left">Hidden Power</td>
+      <td style="text-align: left">Thunder</td>
+      <td style="text-align: left">Hydro Pump</td>
+      <td style="text-align: right">156250</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: left">Leftovers</td>
+      <td style="text-align: right">193</td>
+      <td style="text-align: right">173</td>
+      <td style="text-align: right">128</td>
+      <td style="text-align: right">111</td>
+      <td style="text-align: right">151</td>
+      <td style="text-align: right">132</td>
+      <td style="text-align: left">Lake of Rage</td>
+      <td style="text-align: right">40</td>
+      <td style="text-align: left">SILVER</td>
+      <td style="text-align: right">7</td>
+      <td style="text-align: right">12</td>
+      <td style="text-align: right">13</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">393210</td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">16</td>
+      <td style="text-align: left">Ho-Oh</td>
+      <td style="text-align: left">-</td>
+      <td style="text-align: left">Fire</td>
+      <td style="text-align: left">Flying</td>
+      <td style="text-align: left">Solar Beam</td>
+      <td style="text-align: left">Recover</td>
+      <td style="text-align: left">Sacred Fire</td>
+      <td style="text-align: left">Sunny Day</td>
+      <td style="text-align: right">1250000</td>
+      <td style="text-align: right">100</td>
+      <td style="text-align: left">Sacred Ash</td>
+      <td style="text-align: right">415</td>
+      <td style="text-align: right">358</td>
+      <td style="text-align: right">278</td>
+      <td style="text-align: right">318</td>
+      <td style="text-align: right">406</td>
+      <td style="text-align: right">278</td>
+      <td style="text-align: left">Tin Tower</td>
+      <td style="text-align: right">60</td>
+      <td style="text-align: left">SILVER</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">393210</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">29</td>
+      <td style="text-align: left">Zapdos</td>
+      <td style="text-align: left">-</td>
+      <td style="text-align: left">Electric</td>
+      <td style="text-align: left">Flying</td>
+      <td style="text-align: left">Thunderbolt</td>
+      <td style="text-align: left">Drill Peck</td>
+      <td style="text-align: left">Thunder Wave</td>
+      <td style="text-align: left">Reflect</td>
+      <td style="text-align: right">156250</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: left">BrightPowder</td>
+      <td style="text-align: right">196</td>
+      <td style="text-align: right">139</td>
+      <td style="text-align: right">136</td>
+      <td style="text-align: right">176</td>
+      <td style="text-align: right">141</td>
+      <td style="text-align: right">151</td>
+      <td style="text-align: left">(None)</td>
+      <td style="text-align: right">0</td>
+      <td style="text-align: left">RED</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">13</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">393210</td>
+      <td style="text-align: left">TRUE</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">30</td>
+      <td style="text-align: left">Forretress</td>
+      <td style="text-align: left">M</td>
+      <td style="text-align: left">Bug</td>
+      <td style="text-align: left">Steel</td>
+      <td style="text-align: left">Spikes</td>
+      <td style="text-align: left">Rapid Spin</td>
+      <td style="text-align: left">Toxic</td>
+      <td style="text-align: left">Giga Drain</td>
+      <td style="text-align: right">125000</td>
+      <td style="text-align: right">50</td>
+      <td style="text-align: left">Leftovers</td>
+      <td style="text-align: right">181</td>
+      <td style="text-align: right">141</td>
+      <td style="text-align: right">191</td>
+      <td style="text-align: right">111</td>
+      <td style="text-align: right">111</td>
+      <td style="text-align: right">91</td>
+      <td style="text-align: left">Route 36</td>
+      <td style="text-align: right">10</td>
+      <td style="text-align: left">GOLD</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">15</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">65535</td>
+      <td style="text-align: right">393210</td>
+      <td style="text-align: left">FALSE</td>
+      <td style="text-align: left">FALSE</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>As you can see above, all the Pokémon listed have Total Evs at 393210;
+making them obscenely powerful.</p>
+
+<p>So my group seems to be super strong, and this is very indicative that I
+put in the time into grinding, which I’m low key ashamed of.</p>
+
+<p>Needless to say, when I want to win a battle; I’ll need to send out a
+combination of those 28 Pokémon from Crystal to crush my opponent.</p>
+
+<p><strong><em>Ash Ketchum and PKMN Trainer Red never stood a chance.</em></strong></p>
+
+<hr>
+
+<h3 id="strongest-of-the-strong">Strongest of the Strong</h3>
+
+<blockquote>
+  <p>Now we’re going to find the answer to the question: <em>“which team can I
+put together of these 28 that can be considered the strongest based on
+our data?”</em></p>
+</blockquote>
+
+<p>Let’s start here:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StrongestMons</span><span class="o">$</span><span class="n">StatTotals</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rowSums</span><span class="p">(</span><span class="n">StrongestMons</span><span class="p">[,</span><span class="m">12</span><span class="o">:</span><span class="m">17</span><span class="p">])</span><span class="w">
+
+</span><span class="n">CrystalBox</span><span class="o">$</span><span class="n">StatTotals</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rowSums</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">[,</span><span class="m">12</span><span class="o">:</span><span class="m">17</span><span class="p">])</span><span class="w">
+</span></code></pre></div></div>
+
+<p>We’ll also do the same for our main dataset, as the visualizations
+coming up next will need to reference this specific column</p>
+
+<p>This gives us 2053 stats for each observation, which indicates that all
+three Pokémon have reached the same limits, however, before we get to
+the meat and potatos of things. We’ll take a brief look at how stats are
+calculated.</p>
+
+<h4 id="a-quick-primer-on-base-stats-bst">A quick primer on Base Stats (BST)</h4>
+
+<hr>
+
+<p><strong>These formulas below calculate base stats:</strong></p>
+
+<p><em>For Hit Points:</em> $Stat = floor((2 * B + I + E) * L / 100 + L + 10)$</p>
+
+<p><em>For all Stats:</em> $floor(floor((2 * B + I + E) * L / 100 + 5) * N)$</p>
+
+<p><em>For Gen 2 Effort Values:</em>
+$E = floor(min(255, ceiling(sqrt(StatEXP))) / 4)$</p>
+
+<p><strong>Legend:</strong></p>
+
+<blockquote>
+  <p>B = Base Stat</p>
+
+  <p>I = Individual Values, Gen 1 &amp; 2 only go up to 15, so multiply 15 by 2</p>
+
+  <p>E = Effort Values, see above for StatEXP explanation, the formula used
+here is different for the older system’s methods</p>
+
+  <p>L = Level</p>
+
+  <p>N = Nature, which doesn’t exist in Gens 1 &amp; 2, so N is = 1</p>
+</blockquote>
+
+<p><em>The most important thing to note about what’s listed above is that it
+gives context for why certain Pokémon excel in certain facets of battle
+than others.</em></p>
+
+<p>When it comes to Base Stats (otherwise known as BST), another awesome
+eccentricity of Pokémon is that <strong>every individual creature has
+strengths that can potentially put them head and shoulders above the
+rest</strong>. Especially when it comes to fulfilling certain roles on a team.</p>
+
+<hr>
+
+<p>This all builds up to answer the question: “Among all of my boxed
+Pokémon, which are the strongest?”</p>
+
+<p>Well, three Pokémon at level 100 qualify, as all their stats total to</p>
+<ol>
+  <li>Its safe to say that Lugia, Ho-Oh and Mewtwo are all tied for 1st
+because in Gens 1 &amp; 2; no other Pokémon have higher than 680 for their
+total base stats!</li>
+</ol>
+
+<p>Now lets see what measures up to the literal gods of Pocket Monsters!</p>
+
+<hr>
+
+<h3 id="the-definitive-answer">The Definitive Answer</h3>
+
+<p>Since we’ve already made our ‘StatTotals’ column above, now we’re going
+to use that to choose the six strongest Pokémon we’ve found and put them
+into one team:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StrongestTeam</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">StrongestMons</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">StatTotals</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">2053</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">top_n</span><span class="p">(</span><span class="m">6</span><span class="p">,</span><span class="n">StatTotals</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>That gives us, Zapdos, Raikou, Entei, Arcanine, Tyranitar and Moltres.
+However, something isn’t right…4/6 of those Pokémon are indeed legendary
+and while not as godly, are still in a different league to that of our
+mortal Pocket Monsters.</p>
+
+<p>So let’s do something about that.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StrongestMons</span><span class="o">$</span><span class="n">IsLegendary</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> 
+                                      </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w">
+                                      </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> 
+                                      </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> 
+                                      </span><span class="s2">"No"</span><span class="p">,</span><span class="w"> </span><span class="s2">"No"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The above line will tell us if a particular Pokémon is “legendary” or
+not as Legendary Pokémon tend to have base stat totals above 580 which
+are factored in the StatTotal column I made earlier</p>
+
+<p>So therefore, what if I wanted to select a team of the six strongest
+regular Pokémon I have with a StatTotal that nearly equals that of my
+legendaries?</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">StrongestTeam</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">StrongestMons</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">distinct</span><span class="p">(</span><span class="n">StatTotals</span><span class="p">,</span><span class="w"> </span><span class="n">.keep_all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"True"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+  </span><span class="n">filter</span><span class="p">(</span><span class="n">StatTotals</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">2053</span><span class="p">,</span><span class="w"> </span><span class="n">IsLegendary</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"No"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+    </span><span class="n">top_n</span><span class="p">(</span><span class="m">6</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="n">StatTotals</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This will give you an idea:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [[1]]
+## [1] "Gyarados"   "Arcanine"   "Charizard"  "Tyranitar"  "Feraligatr"
+## [6] "Umbreon"
+</code></pre></div></div>
+
+<p>When all the calculations are said and done. It appears that Gyarados,
+Arcanine, Charizard, Tyranitar, Feraligatr, and Umbreon seem like the
+most viable picks, sure to win me a championship or two.</p>
+
+<p><em>However</em>, an important nuance to consider here when looking at my
+Pokémon’s levels are the levels. At level 50, my code determines that
+the Pokémon listed are the strongest based on the BST I’ve set in the
+criteria.</p>
+
+<p>Levels are an important thing to distinguish in this regard, because it
+determines the unrealized potential of the other gained stats of each
+mon.</p>
+
+<p>The cool thing here is that due to all of our Pokémon’s stats being
+maxed out, <strong>they’ll still be every bit as strong relative to their
+stats at Level 100, as they would be at Level 50.</strong> This doesn’t change
+in games even as recent as Generation 8’s.</p>
+
+<p>In fact if Gen 2 had an endgame boss that wasn’t Pkmn Trainer Red (…!),
+I could see him using this team.</p>
+
+<p>…</p>
+
+<h1 id="example-data-visualizationassetsimagess">Example Data Visualization/assets/images/s</h1>
+
+<blockquote>
+  <p>This section is going to outline all of the visualizations I can think
+of that can give further context to the data we have on hand. While
+also giving insight to the line of thinking needed to ascertain what
+visualization method is best suited for a given use case.</p>
+</blockquote>
+
+<h2 id="one-variable-discrete-variables">One variable, discrete variables</h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gender</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OT</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+   </span><span class="n">geom_bar</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+   </span><span class="n">xlim</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+   </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Count"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+   </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"1st Type"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+   </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Gender of Pokémon by Type &amp; Original Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+   </span><span class="n">theme_light</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+   </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">Type1</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-30-1.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HeldItem</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OT</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+         </span><span class="n">geom_bar</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Held Items by Sex &amp; Original Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Count"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Item"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">Gender</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-30-2.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gender</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OT</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_bar</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"# of Pokémon by Sex and Original Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Sex"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Count"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-30-3.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#One variable, continuous</span><span class="w">
+
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gender</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"stack"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Count of Pokémon by Level, Original Trainer &amp; Gender"</span><span class="p">,</span><span class="w"> 
+          </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"From Levels 0 to 100"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Count"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">90</span><span class="p">),</span><span class="w">
+        </span><span class="n">axis.text.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">cols</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">vars</span><span class="p">(</span><span class="n">OT</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-30-4.png" alt=""><!-- --></p>
+
+<p>…</p>
+
+<h2 id="two-variable-plots">Two variable plots</h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Ver. 1</span><span class="w">
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OT</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EXP</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_count</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Level of Pokémon by Original Trainer"</span><span class="p">,</span><span class="w"> 
+          </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"w/ Experience Points"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Original Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_minimal</span><span class="p">()</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-31-1.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Ver. 2 — Using Facet Wrap</span><span class="w">
+</span><span class="n">gender.labs</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Genderless"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Male"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Female"</span><span class="p">)</span><span class="w">
+</span><span class="nf">names</span><span class="p">(</span><span class="n">gender.labs</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Genderless"</span><span class="p">,</span><span class="w"> </span><span class="s2">"M"</span><span class="p">,</span><span class="w"> </span><span class="s2">"F"</span><span class="p">)</span><span class="w">
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OT</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">EXP</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_count</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Level of Pokémon by Original Trainer"</span><span class="p">,</span><span class="w"> 
+          </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"w/ Experience Points"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Level"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Original Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_linedraw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">Gender</span><span class="w"> </span><span class="o">~</span><span class="w"> </span><span class="n">.</span><span class="p">,</span><span class="w"> </span><span class="n">labeller</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">labeller</span><span class="p">(</span><span class="n">Gender</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">gender.labs</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-31-2.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">..density..</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OT</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_density</span><span class="p">(</span><span class="n">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"gaussian"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Boxed Pokémon Levels &amp; Density by Original Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Level"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Density"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_light</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-31-3.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StatTotals</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">after_stat</span><span class="p">(</span><span class="n">density</span><span class="p">),</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">OT</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">6</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_density</span><span class="p">(</span><span class="n">kernel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"gaussian"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.title.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">,</span><span class="w"> 
+          </span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)),</span><span class="w">
+        </span><span class="n">axis.title.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">,</span><span class="w"> 
+            </span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Boxed Pokémon Total Stats &amp; Density by Original Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Trainer"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Total Stats"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Density"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_light</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-31-4.png" alt=""><!-- --></p>
+
+<p>…</p>
+
+<h2 id="sample-violin-plot-with-quantiles">Sample violin plot, with quantiles.</h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">StatTotals</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_violin</span><span class="p">(</span><span class="n">draw_quantiles</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0.25</span><span class="p">,</span><span class="w"> </span><span class="m">0.50</span><span class="p">,</span><span class="w"> </span><span class="m">0.75</span><span class="p">),</span><span class="w"> </span><span class="n">trim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlim</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="m">100</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"StatTotals"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Stat Totals by Level"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">coord_flip</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-32-1.png" alt=""><!-- --></p>
+
+<p>…</p>
+
+<h2 id="line-graphs-showing-correlation-between-hit-points-and-offensive-stats-by-level">Line graphs showing correlation between Hit points and offensive stats by level</h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HP</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ATK</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_line</span><span class="p">(</span><span class="n">linewidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"sky blue"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Hit Points"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Attack"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scales</span><span class="o">::</span><span class="n">pretty_breaks</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_y_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scales</span><span class="o">::</span><span class="n">pretty_breaks</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Hit Points by Attack stat and Level"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">),</span><span class="w">
+        </span><span class="n">axis.text.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">),</span><span class="w">
+        </span><span class="n">axis.title.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">,</span><span class="w"> 
+          </span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)),</span><span class="w">
+        </span><span class="n">axis.title.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">,</span><span class="w"> 
+            </span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)),</span><span class="w">
+        </span><span class="n">axis.line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_line</span><span class="p">(</span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">,</span><span class="w"> 
+        </span><span class="n">linewidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">linetype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"solid"</span><span class="p">))</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-33-1.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">HP</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPA</span><span class="p">,</span><span class="w"> </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Level</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_line</span><span class="p">(</span><span class="n">linewidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.75</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"red"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Hit Points"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Special Attack"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scales</span><span class="o">::</span><span class="n">pretty_breaks</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">20</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_y_continuous</span><span class="p">(</span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scales</span><span class="o">::</span><span class="n">pretty_breaks</span><span class="p">(</span><span class="n">n</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">15</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Hit Points by Special Attack stat and Level"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">),</span><span class="w">
+        </span><span class="n">axis.text.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">),</span><span class="w">
+        </span><span class="n">axis.title.x</span><span class="w"> </span><span class="o">=</span><span class="w"> 
+          </span><span class="n">element_text</span><span class="w">
+            </span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">,</span><span class="w"> </span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)),</span><span class="w">
+        </span><span class="n">axis.title.y</span><span class="w"> </span><span class="o">=</span><span class="w"> 
+          </span><span class="n">element_text</span><span class="w">
+            </span><span class="p">(</span><span class="n">face</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bold"</span><span class="p">,</span><span class="w"> </span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">)),</span><span class="w">
+        </span><span class="n">axis.line</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_line</span><span class="p">(</span><span class="n">colour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">,</span><span class="w"> 
+                                 </span><span class="n">linewidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> </span><span class="n">linetype</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"solid"</span><span class="p">))</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-33-2.png" alt=""><!-- --></p>
+
+<p>…</p>
+
+<h3 id="different-graphs-showing-correlation-between-offensive-stats-and-speed">Different graphs showing correlation between offensive stats and speed</h3>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ATK</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPE</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gender</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Attack and Speed by Type"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Attack"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Speed"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">),</span><span class="w">
+        </span><span class="n">axis.text.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_jitter</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_continuous</span><span class="p">(</span><span class="n">type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"viridis"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_smooth</span><span class="p">(</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="p">,</span><span class="w"> </span><span class="n">se</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `geom_smooth()` using formula = 'y ~ x'
+</code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-34-1.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPA</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPE</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Gender</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_jitter</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Special Attack"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Speed"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Speed by Special Attack Stats and Gender"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_smooth</span><span class="p">(</span><span class="n">method</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lm</span><span class="p">,</span><span class="w"> </span><span class="n">se</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">),</span><span class="w">
+        </span><span class="n">axis.text.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">)</span><span class="w">
+  </span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## `geom_smooth()` using formula = 'y ~ x'
+</code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-34-2.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Attack and Speed density plot</span><span class="w">
+</span><span class="n">ggplot</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ATK</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SPE</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ggtitle</span><span class="p">(</span><span class="s2">"Density of Attack by Speed Stats"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">xlab</span><span class="p">(</span><span class="s2">"Attack"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">ylab</span><span class="p">(</span><span class="s2">"Speed"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">stat_density_2d</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">..density..</span><span class="p">),</span><span class="w"> </span><span class="n">geom</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"raster"</span><span class="p">,</span><span class="w"> </span><span class="n">contour</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_distiller</span><span class="p">(</span><span class="n">palette</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">4</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">-1</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_x_continuous</span><span class="p">(</span><span class="n">expand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_y_continuous</span><span class="p">(</span><span class="n">expand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="m">0</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="w">
+    </span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'none'</span><span class="p">,</span><span class="w">
+    </span><span class="n">axis.title.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="w">
+      </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">8</span><span class="p">,</span><span class="w">
+      </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w">
+      </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w">
+      </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w">
+    </span><span class="p">)),</span><span class="w">
+    </span><span class="n">axis.title.y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">margin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">margin</span><span class="p">(</span><span class="w">
+      </span><span class="n">t</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w">
+      </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">,</span><span class="w">
+      </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w">
+      </span><span class="n">l</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="w">
+    </span><span class="p">)),</span><span class="w">
+  </span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-34-3.png" alt=""><!-- --></p>
+
+<hr>
+
+<h3 id="heatmap">Heatmap</h3>
+
+<p>I’ll admit, making a heatmap using base R was a lot more difficult than
+I realized. So much has to go into properly formatting whatever you’re
+putting in the x axis if your data isn’t properly aggregated. If you’re
+looking to make more nuanced heatmaps(), I recommend heatmap2() and
+pheatmap().</p>
+
+<p>Firstly, you have to make sure all the variables you’re putting into the
+heatmap are numeric, due to the design of how the chart works. So if you
+have variables that are non-numeric like character-based columns that
+you want to have accounted for, you’ll need to make counts for each
+instance and then coalesce them into the main data set you want to
+chart. I digress.</p>
+
+<hr>
+
+<p>Here we go!</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Subset main dataset</span><span class="w">
+</span><span class="n">CrystalBoxHM</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">subset</span><span class="p">(</span><span class="n">CrystalBox</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">3</span><span class="o">:</span><span class="m">4</span><span class="p">,</span><span class="m">9</span><span class="o">:</span><span class="m">10</span><span class="p">,</span><span class="m">12</span><span class="o">:</span><span class="m">17</span><span class="p">,</span><span class="m">19</span><span class="p">,</span><span class="m">21</span><span class="o">:</span><span class="m">31</span><span class="p">)])</span><span class="w">
+ 
+</span><span class="c1"># Edit the source data set for use with the heatmap, as heatmaps can only be used with matrices containing</span><span class="w">
+</span><span class="c1"># numeric variables</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="c1">#Replace NAs with blank spaces for sum functions below</span><span class="w">
+
+</span><span class="n">CrystalBoxHM</span><span class="p">[,</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+   </span><span class="n">replace</span><span class="p">(</span><span class="n">CrystalBoxHM</span><span class="o">$</span><span class="n">Type2</span><span class="p">,</span><span class="nf">is.na</span><span class="p">(</span><span class="n">CrystalBoxHM</span><span class="o">$</span><span class="n">Type2</span><span class="p">),</span><span class="s2">""</span><span class="p">)</span><span class="w">
+
+ 
+ </span><span class="c1">#Make Type columns</span><span class="w">
+
+</span><span class="n">CrystalBoxHM2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">unique</span><span class="p">(</span><span class="w"> </span><span class="n">CrystalBoxHM</span><span class="p">[</span><span class="w"> </span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="p">)</span><span class="w">
+</span><span class="n">CrystalBoxHM2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.data.frame</span><span class="p">(</span><span class="n">CrystalBoxHM2</span><span class="p">)</span><span class="w">
+ 
+</span><span class="n">CrystalBoxHM2</span><span class="o">$</span><span class="n">Type2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NA</span><span class="w">
+</span><span class="n">colnames</span><span class="p">(</span><span class="n">CrystalBoxHM2</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Type1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Type2"</span><span class="p">)</span><span class="w">
+</span><span class="n">CrystalBoxHM2</span><span class="o">$</span><span class="n">Type2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CrystalBoxHM2</span><span class="o">$</span><span class="n">Type1</span><span class="w">  </span><span class="c1">#Run first</span><span class="w">
+
+</span><span class="n">CrystalBoxHM2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">CrystalBoxHM2</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">add_row</span><span class="p">(</span><span class="n">Type1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Flying"</span><span class="p">)</span><span class="w">
+</span><span class="n">CrystalBoxHM2</span><span class="o">$</span><span class="n">Type2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CrystalBoxHM2</span><span class="o">$</span><span class="n">Type1</span><span class="w"> </span><span class="c1">#Run again</span><span class="w">
+ 
+</span><span class="c1">#See above, since the main data set doesn't account for Flying types in Type 1 as they're no pure Flying types in all of Pokémon. </span><span class="w">
+ 
+</span><span class="c1">#Make counts of Type 1 &amp; 2 columns</span><span class="w">
+ 
+</span><span class="n">CrystalBoxHM2</span><span class="o">$</span><span class="n">Type1_Count</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">sapply</span><span class="p">(</span><span class="n">CrystalBoxHM2</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"> 
+     </span><span class="nf">sum</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">CrystalBoxHM</span><span class="p">[,</span><span class="m">1</span><span class="p">]))</span><span class="w">
+ 
+</span><span class="n">CrystalBoxHM2</span><span class="o">$</span><span class="n">Type2_Count</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+   </span><span class="n">sapply</span><span class="p">(</span><span class="n">CrystalBoxHM2</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"> 
+     </span><span class="nf">sum</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">CrystalBoxHM</span><span class="p">[,</span><span class="m">2</span><span class="p">]))</span><span class="w">
+ 
+</span><span class="c1">#Edit row names for heatmap</span><span class="w">
+
+</span><span class="n">row.names</span><span class="p">(</span><span class="n">CrystalBoxHM2</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="s2">"Psychic"</span><span class="p">,</span><span class="w">  </span><span class="s2">"Bug"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Normal"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Fire"</span><span class="p">,</span><span class="w"> 
+                                    </span><span class="s2">"Ground"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Water"</span><span class="p">,</span><span class="w">  </span><span class="s2">"Electric"</span><span class="p">,</span><span class="w"> 
+                                    </span><span class="s2">"Poison"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Dragon"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Ice"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Dark"</span><span class="p">,</span><span class="w"> 
+                                    </span><span class="s2">"Fighting"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Rock"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Steel"</span><span class="p">,</span><span class="w">  </span><span class="s2">"Grass"</span><span class="p">,</span><span class="w"> 
+                                    </span><span class="s2">"Ghost"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Flying"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Make other columns for the matrix that the heatmap will be based on...</span><span class="w">
+ 
+ 
+</span><span class="c1">#Make Type counts for the other data set we subsetted originally: </span><span class="w">
+ 
+</span><span class="n">CrystalBoxHM</span><span class="o">$</span><span class="n">Type1_Count</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">sapply</span><span class="p">(</span><span class="n">CrystalBoxHM</span><span class="p">[,</span><span class="m">1</span><span class="p">],</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"> 
+     </span><span class="nf">sum</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">CrystalBoxHM</span><span class="p">[,</span><span class="m">1</span><span class="p">]))</span><span class="w">
+ 
+ 
+</span><span class="n">CrystalBoxHM</span><span class="o">$</span><span class="n">Type2_Count</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+   </span><span class="n">sapply</span><span class="p">(</span><span class="n">CrystalBoxHM</span><span class="p">[,</span><span class="m">2</span><span class="p">],</span><span class="w"> </span><span class="k">function</span><span class="p">(</span><span class="n">string</span><span class="p">)</span><span class="w"> 
+     </span><span class="nf">sum</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">CrystalBoxHM</span><span class="p">[,</span><span class="m">2</span><span class="p">]))</span><span class="w">
+
+</span><span class="c1">#Splitting data, merging new datasets, summarizing and subsetting:  </span><span class="w">
+ 
+</span><span class="n">Type1_meanEXP</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">CrystalBoxHM</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">Type1</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">summarize</span><span class="p">(</span><span class="n">mean_EXP</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mean</span><span class="p">(</span><span class="n">EXP</span><span class="p">))</span><span class="w">
+ 
+</span><span class="n">Type1_meanEXP</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">Type1_meanEXP</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">remove_rownames</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+   </span><span class="n">column_to_rownames</span><span class="p">(</span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Type1"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">  </span><span class="n">as.data.frame</span><span class="p">()</span><span class="w">
+ 
+</span><span class="n">meanEXP2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">merge</span><span class="p">(</span><span class="n">CrystalBoxHM2</span><span class="p">,</span><span class="w"> </span><span class="n">Type1_meanEXP</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+ 
+</span><span class="n">meanEXP2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">meanEXP2</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">remove_rownames</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> 
+   </span><span class="n">column_to_rownames</span><span class="p">(</span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Row.names"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">  </span><span class="n">as.data.frame</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">#Note above that we must change the row names to the types that will display in the heatmap, because remember, heatmaps can only be used with dataset that contain columns with only numeric properties. Row names are not affected by this. </span><span class="w">
+ 
+</span><span class="c1">#Merge and null unneeded columns </span><span class="w">
+ 
+</span><span class="n">meanEXP2</span><span class="p">[,</span><span class="m">1</span><span class="o">:</span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+ 
+</span><span class="c1">#New data with all the means we need</span><span class="w">
+
+</span><span class="n">all_means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">CrystalBoxHM</span><span class="p">,</span><span class="w"> </span><span class="n">select</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">Type1</span><span class="o">:</span><span class="n">Type2</span><span class="p">,</span><span class="w"> </span><span class="n">Level</span><span class="p">,</span><span class="w"> </span><span class="n">HP</span><span class="o">:</span><span class="n">SPE</span><span class="p">))</span><span class="w">
+
+</span><span class="n">all_means</span><span class="p">[,</span><span class="w"> </span><span class="m">10</span><span class="o">:</span><span class="m">16</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">colMeans</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">all_means</span><span class="p">[,</span><span class="w"> </span><span class="m">3</span><span class="o">:</span><span class="m">9</span><span class="p">])</span><span class="w">
+ 
+</span><span class="n">all_means</span><span class="p">[,</span><span class="w"> </span><span class="m">3</span><span class="o">:</span><span class="m">9</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+
+</span><span class="c1">#Rename rows to proper averages: </span><span class="w">
+ 
+</span><span class="n">all_means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">all_means</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+   </span><span class="n">rename</span><span class="p">(</span><span class="w">
+     </span><span class="n">Level_Avg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V10</span><span class="p">,</span><span class="w">
+     </span><span class="n">HP_Avg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V11</span><span class="p">,</span><span class="w">
+     </span><span class="n">ATK_Avg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V12</span><span class="p">,</span><span class="w">
+     </span><span class="n">DEF_Avg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V13</span><span class="p">,</span><span class="w">
+     </span><span class="n">SPA_Avg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V14</span><span class="p">,</span><span class="w">
+     </span><span class="n">SPD_Avg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V15</span><span class="p">,</span><span class="w">
+     </span><span class="n">SPE_Avg</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">V16</span><span class="w">
+   </span><span class="p">)</span><span class="w">
+ 
+</span><span class="c1">#Re-summarise all the means in our group</span><span class="w">
+ 
+</span><span class="n">all_means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">all_means</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">group_by</span><span class="p">(</span><span class="n">Type1</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">summarise_all</span><span class="p">(</span><span class="n">mean</span><span class="p">)</span><span class="w">
+ 
+</span><span class="n">all_means</span><span class="p">[,</span><span class="w"> </span><span class="m">2</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+ 
+</span><span class="n">all_means</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">all_means</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">remove_rownames</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">column_to_rownames</span><span class="p">(</span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Type1"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">  </span><span class="n">as.data.frame</span><span class="p">()</span><span class="w">
+
+</span><span class="c1">#Merge everything and fix row names: </span><span class="w">
+ 
+</span><span class="n">meanEXP2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">merge</span><span class="p">(</span><span class="n">meanEXP2</span><span class="p">,</span><span class="w"> </span><span class="n">all_means</span><span class="p">,</span><span class="w">  </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="n">all</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+
+
+</span><span class="n">meanEXP2</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+   </span><span class="n">meanEXP2</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">remove_rownames</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">column_to_rownames</span><span class="p">(</span><span class="n">var</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Row.names"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+   </span><span class="n">as.data.frame</span><span class="p">()</span><span class="w"> 
+   
+</span><span class="n">CrystalBoxHM3</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">meanEXP2</span><span class="w"> </span><span class="c1">#I renamed the merged dataset to maintain consistency. </span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#The heatmap itself</span><span class="w">
+ 
+</span><span class="n">par</span><span class="p">(</span><span class="n">cex.main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.85</span><span class="p">)</span><span class="w">
+
+</span><span class="n">heatmap</span><span class="p">(</span><span class="n">as.matrix</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CrystalBoxHM3</span><span class="p">),</span><span class="w"> </span><span class="n">scale</span><span class="o">=</span><span class="s2">"col"</span><span class="p">,</span><span class="w"> 
+         </span><span class="n">margins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="m">6</span><span class="p">),</span><span class="w">
+         </span><span class="n">Colv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">NA</span><span class="p">,</span><span class="w">
+         </span><span class="n">na.rm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">,</span><span class="w">
+         </span><span class="n">main</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Aggregations by Type"</span><span class="p">,</span><span class="w">
+         </span><span class="n">xlab</span><span class="o">=</span><span class="w"> </span><span class="s2">"Aggregates"</span><span class="p">,</span><span class="w"> 
+         </span><span class="n">ylab</span><span class="o">=</span><span class="w"> </span><span class="s2">"Type"</span><span class="p">,</span><span class="w">
+         </span><span class="n">cexCol</span><span class="o">=</span><span class="m">.75</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">cm.colors</span><span class="p">(</span><span class="m">256</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/pkmn_plots/unnamed-chunk-37-1.png" alt=""><!-- --></p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Note how I edited the code to remove the column dendrogram from the chart. </span><span class="w">
+</span></code></pre></div></div>
+
+<h1 id="outro">Outro</h1>
+
+<p>When it comes to the intricate details of Pokémon, you’ll start to
+unravel many layers to a game that seems rather innocuous on the
+outside.</p>
+
+<p>Frankly, when I started to delve deeper and deconstruct one of my
+all-time favorite games in this manner; it took a good amount of
+self-reflection. Data is certainly something I find passion in doing
+well, but sometimes when it comes to games—–the fun comes in the mystery
+that comes with discovering novel things, and joy that is found in the
+experience you have in the present moment.</p>
+
+<p>While the fun of my childhood self playing Pokémon will always be seeped
+in nostalgia, through finding novel experiences via my pursuits in data
+and uncovering useful insights—I hope that can give me a similar feeling
+in my adult life.</p>
+
+<p>I’ll always appreciate what Satoshi Tajiri gave me and millions of other
+youth worldwide.</p>
+
+<p><strong><em>Thank you for reading,</em></strong> <strong><em>Bruce A. Lee</em></strong></p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/projects/2023/05/04/traffic_analysis.html" title="A Particular Group leads in DC Area Traffic Stops">A Particular Group leads in DC...</a><a class="next" href="/projects/2023/06/05/STAR_Breakdown.html" title="Characteristics of STARs in Florida">Characteristics of STARs in Florida</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/misc/2023/05/04/Tableau-Visualizations-Sample.html" title="Characteristics of STARs in Florida">Tableau Visualization Showcase</a></li>
+<li><a class="post-link" href="/projects/2023/05/04/traffic_analysis.html" title="Characteristics of STARs in Florida">A Particular Group leads in DC Area Traffic Stops</a></li>
+<li><a class="post-link" href="/2023/01/31/read-me.html" title="Characteristics of STARs in Florida">Read Me!</a></li>
+<li><a class="post-link" href="/projects/2023/07/19/Using_ETL_with_Rental_Store_Data.html" title="Characteristics of STARs in Florida">ETL using Rental Store Data? An excursion with SQL and Python</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Bruce A. Lee <span class="copyleft">©</span> 2022-2024</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="https://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

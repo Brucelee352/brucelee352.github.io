@@ -1,0 +1,1522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
+<!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>A Particular Group leads in DC Area Traffic Stops | Data Engineering Portfolio</title>
+<meta name="generator" content="Jekyll v4.3.2">
+<meta property="og:title" content="A Particular Group leads in DC Area Traffic Stops">
+<meta name="author" content="Bruce A. Lee">
+<meta property="og:locale" content="en_US">
+<meta name="description" content="This is a project based on a tutorial my friend Carlos made to help me learn R initally. I took the content and expanded on it to make the plots you’ll see below. Much of the syntax is tidyverse, so this should serve as a good primer of things to do when getting acclimated to the language. The data set I’m using here is one based on traffic violations through the D/C and surrounding area.">
+<meta property="og:description" content="This is a project based on a tutorial my friend Carlos made to help me learn R initally. I took the content and expanded on it to make the plots you’ll see below. Much of the syntax is tidyverse, so this should serve as a good primer of things to do when getting acclimated to the language. The data set I’m using here is one based on traffic violations through the D/C and surrounding area.">
+<link rel="canonical" href="/projects/2023/05/04/traffic_analysis.html">
+<meta property="og:url" content="/projects/2023/05/04/traffic_analysis.html">
+<meta property="og:site_name" content="Data Engineering Portfolio">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2023-05-04T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta property="twitter:title" content="A Particular Group leads in DC Area Traffic Stops">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Bruce A. Lee"},"dateModified":"2023-05-04T00:00:00+00:00","datePublished":"2023-05-04T00:00:00+00:00","description":"This is a project based on a tutorial my friend Carlos made to help me learn R initally. I took the content and expanded on it to make the plots you’ll see below. Much of the syntax is tidyverse, so this should serve as a good primer of things to do when getting acclimated to the language. The data set I’m using here is one based on traffic violations through the D/C and surrounding area.","headline":"A Particular Group leads in DC Area Traffic Stops","mainEntityOfPage":{"@type":"WebPage","@id":"/projects/2023/05/04/traffic_analysis.html"},"url":"/projects/2023/05/04/traffic_analysis.html"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="icon" href="">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-noto-sans@0.0.72/index.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <script src="/assets/js/main.js"></script><link type="application/atom+xml" rel="alternate" href="/feed.xml" title="Data Engineering Portfolio">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js"></script>
+<!-- and it's easy to individually load additional languages -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/languages/go.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+// Init highlight js
+document.addEventListener('DOMContentLoaded', function(event) {
+  var els = document.querySelectorAll('pre code')
+
+  function addLangData(block) {
+    var outer = block.parentElement.parentElement.parentElement;
+    var lang = block.getAttribute('data-lang');
+    for (var i = 0; i < outer.classList.length; i++) {
+      var cls = outer.classList[i];
+      if (cls.startsWith('language-')) {
+        lang = cls;
+        break;
+      }
+    }
+    if (!lang) {
+      cls = block.getAttribute('class');
+      lang = cls ? cls.replace('hljs ', '') : '';
+    }
+    if (lang.startsWith('language-')) {
+      lang = lang.substr(9);
+    }
+    block.setAttribute('class', 'hljs ' + lang);
+    block.parentNode.setAttribute('data-lang', lang);
+  }
+
+  function addBadge(block) {
+    var enabled = ('true' || 'true').toLowerCase();
+    if (enabled == 'true') {
+      var pre = block.parentElement;
+      pre.classList.add('badge');
+    }
+  }
+
+  function handle(block) {
+    addLangData(block);
+    addBadge(block)
+    hljs.highlightBlock(block);
+  }
+
+  for (var i = 0; i < els.length; i++) {
+    var el = els[i];
+    handle(el);
+  }
+});
+</script>
+
+<style>
+  /* code language badge */
+  pre.badge::before {
+    content: attr(data-lang);
+    color: #fff;
+    background-color: #28B463;
+    padding: 0 .5em;
+    border-radius: 0 2px;
+    text-transform: lowercase;
+    text-align: center;
+    min-width: 32px;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+  }
+
+  /* fix wrong badge display for firefox browser */
+  code > table pre::before {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<header class="site-header " role="banner">
+
+  <div class="wrapper">
+    <div class="site-header-inner">
+<span class="site-brand"><a class="site-brand-inner" rel="author" href="/">
+  <img class="site-favicon" title="Data Engineering Portfolio" src="" onerror="this.style.display='none'">
+  Data Engineering Portfolio
+</a>
+</span><nav class="site-nav">
+          <input type="checkbox" id="nav-trigger" class="nav-trigger">
+          <label for="nav-trigger">
+            <span class="menu-icon">
+              <svg viewbox="0 0 18 15" width="18px" height="15px">
+                <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"></path>
+              </svg>
+            </span>
+          </label>
+
+          <div class="trigger">
+<a class="page-link" href="/about/">ABOUT</a><a class="page-link" href="/resume/">RESUME</a>
+
+
+
+
+
+
+
+
+
+<span class="page-link">
+
+
+
+<div id="google_translate_element" style="display: none;">
+</div>
+
+<span class="ct-language">
+  <ul class="list-unstyled ct-language-dropdown">
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="en">
+          
+          <img src="https://cdn.countryflags.com/thumbs/united-states-of-america/flag-400.png" title="English">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="fr">
+          
+          <img src="https://cdn.countryflags.com/thumbs/france/flag-400.png" title="French">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="zh-CN">
+          
+          <img src="https://cdn.countryflags.com/thumbs/china/flag-400.png" title="Chinese(Simple)">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ja">
+          
+          <img src="https://cdn.countryflags.com/thumbs/japan/flag-400.png" title="Japanese">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ko">
+          
+          <img src="https://cdn.countryflags.com/thumbs/south-korea/flag-400.png" title="Korean">
+          
+        </a>
+      </li>
+    
+      <li>
+        <a href="#" class="lang-select" data-lang="ru">
+          
+          <img src="https://cdn.countryflags.com/thumbs/russia/flag-400.png" title="Russian">
+          
+        </a>
+      </li>
+    
+  </ul>
+</span>
+
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    autoDisplay: false,
+    layout: google.translate.TranslateElement.InlineLayout.VERTICAL
+  }, 'google_translate_element');
+
+  // Links to cross-origin destinations are unsafe
+  var gll = document.getElementsByClassName('goog-logo-link')[0];
+  if (gll) {
+    gll.setAttribute('rel', 'noopener');
+  }
+
+  function restoreLang() {
+    var iframe = document.getElementsByClassName('goog-te-banner-frame')[0];
+    if (!iframe) return;
+
+    var innerDoc = iframe.contentDocument || iframe.contentWindow.document;
+    var restore_el = innerDoc.getElementsByTagName("button");
+
+    for (var i = 0; i < restore_el.length; i++) {
+      if (restore_el[i].id.indexOf("restore") >= 0) {
+        restore_el[i].click();
+        var close_el = innerDoc.getElementsByClassName("goog-close-link");
+        close_el[0].click();
+        return;
+      }
+    }
+  }
+
+  function triggerHtmlEvent(element, eventName) {
+    var event;
+    if (document.createEvent) {
+      event = document.createEvent('HTMLEvents');
+      event.initEvent(eventName, true, true);
+      element.dispatchEvent(event);
+    } else {
+      event = document.createEventObject();
+      event.eventType = eventName;
+      element.fireEvent('on' + event.eventType, event);
+    }
+  }
+
+  var googleCombo = document.querySelector("select.goog-te-combo");
+  var langSelect = document.querySelector('.ct-language');
+  langSelect.addEventListener('click', function(event) {
+    if (!event.target) {
+      return;
+    }
+
+    var selected = document.querySelector('.ct-language .ct-language-selected');
+    if (selected) {
+      selected.classList.remove('ct-language-selected');
+    }
+
+    var target = event.target;
+    while (target && target !== langSelect ) {
+      if (target.matches('.lang-select')) {
+        break;
+      }
+      target = target.parentElement;
+    }
+
+    if (target && target.matches('.lang-select')) {
+      var lang = target.getAttribute('data-lang');
+      if (googleCombo.value == lang) {
+        restoreLang();
+      } else {
+        target.parentElement.classList.add('ct-language-selected');
+        googleCombo.value = lang;
+        triggerHtmlEvent(googleCombo, 'change');
+      }
+    }
+
+    event.preventDefault();
+  });
+}
+</script>
+
+<script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</span>
+</div>
+        </nav>
+</div>
+  </div>
+</header>
+
+<script>
+  function initHeader() {
+    var lastScrollY = getScrollPos().y;
+    var documentElement = document.documentElement;
+
+    function storeScrollData() {
+      var y = getScrollPos().y;var scrollStatus = "";
+
+      if (y <= 0) {
+        scrollStatus = "top";
+      } else if ((window.innerHeight + y) >= document.body.offsetHeight) {
+        scrollStatus = "bottom";
+      } else {
+        var isScrollDown = (y - lastScrollY > 0) ? true : false;
+        scrollStatus = isScrollDown ? "down" : "up";
+      }
+
+      lastScrollY = y;
+      documentElement.setAttribute("data-scroll-status", scrollStatus);
+    }
+
+    window.addEventListener('scroll', function(e) {
+      storeScrollData();
+    });
+
+    storeScrollData();
+  }
+  document.addEventListener('DOMContentLoaded', initHeader);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+  function hashLocate(hashValue) {
+    hashValue = hashValue.replace(/^.*#h-/, '');
+    hashValue = decodeURIComponent(hashValue);
+    var element = document.getElementById(hashValue);
+
+    if (!element) {
+      return;
+    }
+
+    var header = document.querySelector('header.site-header');
+    var headerRect = header.getBoundingClientRect();
+    var headerTop = Math.floor(headerRect.top);
+    var headerHeight = Math.floor(headerRect.height);
+    var scrollPos = getScrollPos();
+    var offsetY = element.offsetTop - (headerTop + headerHeight + 20);
+
+    if (offsetY == scrollPos.y) {
+      return;
+    }
+
+    if (headerTop == 0  && offsetY > scrollPos.y) {
+      offsetY += headerHeight + 2;
+    } else if (headerTop < 0  && offsetY < scrollPos.y) {
+      offsetY -= headerHeight - 2;
+    }
+
+    smoothScrollTo(offsetY);
+  }
+
+  // The first event occurred
+  window.addEventListener('load', function(event) {
+    if (window.location.hash) {
+      hashLocate(window.location.hash);
+    }
+  });
+
+  // The first event occurred
+  window.addEventListener('click', function(event) {
+    if (event.target.tagName.toLowerCase() == 'a') {
+      hashLocate(event.target.getAttribute('href'));
+    }
+  });
+</script>
+<div class="theme-toggle">
+  <input type="checkbox" id="theme-switch">
+  <label for="theme-switch">
+    <div class="toggle"></div>
+    <div class="names">
+      <p class="light">Light</p>
+      <p class="dark">Dark</p>
+    </div>
+  </label>
+</div>
+
+
+
+
+<script>
+  (function() {
+    var sw = document.getElementById('theme-switch');
+    var html = document.getElementsByTagName('html')[0];
+    var nightModeOption = ('light' || 'auto').toLowerCase();
+    var storage = nightModeOption === 'manual'
+        ? localStorage
+        : sessionStorage;
+    var themeData = loadThemeData();
+
+    function saveThemeData(data) {
+      storage.setItem('theme', JSON.stringify(data));
+    }
+
+    function loadThemeData() {
+      var data = storage.getItem('theme');
+      try {
+        data = JSON.parse(data ? data : '');
+      } catch(e) {
+        data = { nightShift: undefined, autoToggleAt: 0 };
+        saveThemeData(data);
+      }
+      return data;
+    }
+
+    function handleThemeToggle(nightShift) {
+      themeData.nightShift = nightShift;
+      saveThemeData(themeData);
+      html.dataset.theme = nightShift ? 'dark' : 'light';
+      setTimeout(function() {
+        sw.checked = nightShift ? true : false;
+      }, 50);
+    }
+
+    function autoThemeToggle() {
+      // Next time point of theme toggle
+      var now = new Date();
+      var toggleAt = new Date();
+      var hours = now.getHours();
+      var nightShift = hours >= 19 || hours <=7;
+
+      if (nightShift) {
+        if (hours > 7) {
+          toggleAt.setDate(toggleAt.getDate() + 1);
+        }
+        toggleAt.setHours(7);
+      } else {
+        toggleAt.setHours(19);
+      }
+
+      toggleAt.setMinutes(0);
+      toggleAt.setSeconds(0);
+      toggleAt.setMilliseconds(0)
+
+      var delay = toggleAt.getTime() - now.getTime();
+
+      // auto toggle theme mode
+      setTimeout(function() {
+        handleThemeToggle(!nightShift);
+      }, delay);
+
+      return {
+        nightShift: nightShift,
+        toggleAt: toggleAt.getTime()
+      };
+    }
+
+    // Listen the theme toggle event
+    sw.addEventListener('change', function(event) {
+      handleThemeToggle(event.target.checked);
+    });
+
+    if (nightModeOption == 'auto') {
+      var data = autoThemeToggle();
+
+      // Toggle theme by local setting
+      if (data.toggleAt > themeData.autoToggleAt) {
+        themeData.autoToggleAt = data.toggleAt;
+        handleThemeToggle(data.nightShift);
+      } else {
+        handleThemeToggle(themeData.nightShift);
+      }
+    } else if (nightModeOption == 'manual') {
+      handleThemeToggle(themeData.nightShift);
+    } else {
+      var nightShift = themeData.nightShift;
+      if (nightShift === undefined) {
+        nightShift = nightModeOption === 'on';
+      }
+      handleThemeToggle(nightShift);
+    }
+  })();
+</script>
+<div id="click-to-top" class="click-to-top">
+  <i class="fa fa-arrow-up"></i>
+</div>
+<script>
+  (function () {
+    const clickToTop = document.getElementById('click-to-top');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 100) {
+        clickToTop.classList.add('show')
+      }else {
+        clickToTop.classList.remove('show')
+      }
+    });
+    clickToTop.addEventListener('click', () => {
+      window.smoothScrollTo(0);
+    });
+  })();
+</script>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <div class="framework">
+  <section class="main">
+
+     <div class="post">
+  <section>
+
+
+
+
+
+
+
+
+
+<header class="post-header">
+  <h1 class="post-title p-name" itemprop="name headline">A Particular Group leads in DC Area Traffic Stops</h1>
+  <h2 class="post-subtitle"></h2>
+
+  <p class="post-meta">
+    <time class="dt-published" datetime="2023-05-04T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> May 04, 2023
+    </time>
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 28 mins</span>
+  </p>
+<div class="post-tags"><a class="post-tag" href="/tags.html#r">#r</a></div></header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+    <div class="post-content e-content" itemprop="articleBody">
+
+      <p>This is a project based on a tutorial my friend Carlos made to
+help me learn R initally. I took the content and expanded on it to make
+the plots you’ll see below. Much of the syntax is tidyverse, so this
+should serve as a good primer of things to do when getting acclimated to
+the language. The data set I’m using here is one based on traffic
+violations through the D/C and surrounding area.</p>
+
+<h2 id="loading-our-libraries">Loading our libraries</h2>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">lubridate</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">plotly</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">sf</span><span class="p">)</span><span class="w">
+</span><span class="n">library</span><span class="p">(</span><span class="n">ggrepel</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>As I mentioned, we’ll be primarily using Tidyverse, along with
+lubridate, mapview and sf for working with coordinate data.</p>
+
+<h2 id="exploration">Exploration</h2>
+
+<p>First, we’ll import our data</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">traffic</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">
+  </span><span class="n">read.csv</span><span class="p">(</span><span class="s2">"/Users/bruce/Documents/Old R Projects/bRuce/Data/select_traffic2.csv"</span><span class="w">
+           </span><span class="p">,</span><span class="w">
+           </span><span class="n">stringsAsFactors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>‘stringsAsFactors’ makes the column names not inherit the spaces present
+in the original dataset</p>
+
+<p>Before we get started with cleaning, let’s do some preliminary
+exploration with our data to get a grasp on what we’re working with.</p>
+
+<p>Below will output the first 20 rows, while summary includes measures of
+central tendency for evaluating our data.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">head</span><span class="p">(</span><span class="n">traffic</span><span class="p">[</span><span class="m">1</span><span class="o">:</span><span class="m">20</span><span class="p">,])</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##   X                                SeqID Date.Of.Stop Agency                                       SubAgency Latitude Longitude Accident
+## 1 1 81ebccdf-77d5-4cf1-93d7-bd6eb03ae6a1    4/12/2018    MCP                     3rd District, Silver Spring 38.99958 -76.99601       No
+## 2 2 d2584fc9-dc7d-4d2a-ab28-68a6b6930688   11/10/2016    MCP                           4th District, Wheaton 39.05532 -77.05016       No
+## 3 3 36426586-974b-416e-b778-d894beb5e936    1/31/2018    MCP                          2nd District, Bethesda 39.05342 -77.08926       No
+## 4 4 a453cf70-5fc4-46ed-b902-099b15153342    12/8/2015    MCP 6th District, Gaithersburg / Montgomery Village 39.14160 -77.22586       No
+## 5 5 49d2065b-c652-45ac-b4a3-87dcab0be193    9/14/2016    MCP                           4th District, Wheaton 39.05448 -77.05079       No
+## 6 6 3dd0f0c6-dd0e-458d-b11c-9cd13e3caa54    5/15/2016    MCP                          2nd District, Bethesda 38.98801 -77.09504       No
+##   Belts Personal.Injury Property.Damage Fatal HAZMAT Alcohol State        VehicleType Year Violation.Type Contributed.To.Accident     Race
+## 1    No              No              No    No     No      No    MD    02 - Automobile 2010        Warning                   FALSE    BLACK
+## 2    No              No              No    No     No      No    MD    02 - Automobile 2010       Citation                   FALSE    BLACK
+## 3    No              No              No    No     No      No    MD    02 - Automobile 1999        Warning                   FALSE    OTHER
+## 4    No              No              No    No     No      No    MD    02 - Automobile 2004        Warning                   FALSE HISPANIC
+## 5    No              No              No    No     No      No    MD 03 - Station Wagon 2012        Warning                   FALSE    BLACK
+## 6    No              No              No    No     No      No    VA    02 - Automobile 2003        Warning                   FALSE    WHITE
+##   Gender DL.State         Arrest.Type                           Geolocation
+## 1      M       MD   A - Marked Patrol                 (38.99958, -76.99601)
+## 2      M       MD   A - Marked Patrol         (39.05532, -77.0501583333333)
+## 3      F       MD   A - Marked Patrol        (39.053425, -77.0892583333333)
+## 4      M       MD   A - Marked Patrol (39.1415966666667, -77.2258616666667)
+## 5      M       MD B - Unmarked Patrol         (39.0544816666667, -77.05079)
+## 6      F       MD   A - Marked Patrol (38.9880133333333, -77.0950366666667)
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">summary</span><span class="p">(</span><span class="n">traffic</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##        X            SeqID           Date.Of.Stop          Agency           SubAgency            Latitude       Longitude     
+##  Min.   :    1   Length:50000       Length:50000       Length:50000       Length:50000       Min.   : 0.00   Min.   :-94.61  
+##  1st Qu.:12501   Class :character   Class :character   Class :character   Class :character   1st Qu.:39.02   1st Qu.:-77.19  
+##  Median :25001   Mode  :character   Mode  :character   Mode  :character   Mode  :character   Median :39.06   Median :-77.08  
+##  Mean   :25001                                                                               Mean   :36.28   Mean   :-71.59  
+##  3rd Qu.:37500                                                                               3rd Qu.:39.13   3rd Qu.:-77.03  
+##  Max.   :50000                                                                               Max.   :39.70   Max.   :  0.00  
+##                                                                                                                              
+##    Accident            Belts           Personal.Injury    Property.Damage       Fatal              HAZMAT            Alcohol         
+##  Length:50000       Length:50000       Length:50000       Length:50000       Length:50000       Length:50000       Length:50000      
+##  Class :character   Class :character   Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                                                      
+##                                                                                                                                      
+##                                                                                                                                      
+##                                                                                                                                      
+##     State           VehicleType             Year      Violation.Type     Contributed.To.Accident     Race              Gender         
+##  Length:50000       Length:50000       Min.   :   0   Length:50000       Mode :logical           Length:50000       Length:50000      
+##  Class :character   Class :character   1st Qu.:2002   Class :character   FALSE:48822             Class :character   Class :character  
+##  Mode  :character   Mode  :character   Median :2007   Mode  :character   TRUE :1178              Mode  :character   Mode  :character  
+##                                        Mean   :2006                                                                                   
+##                                        3rd Qu.:2011                                                                                   
+##                                        Max.   :9999                                                                                   
+##                                        NA's   :358                                                                                    
+##    DL.State         Arrest.Type        Geolocation       
+##  Length:50000       Length:50000       Length:50000      
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+##                                                          
+## 
+</code></pre></div></div>
+
+<p>In the code above, we want to run summary, because this will allow us to
+get a good bird’s eye view on the data to see if there are outliers
+present and possible maligned data.</p>
+
+<p>Now that I’ve viewed everything, to get started with the cleaning
+process, I’m going to get rid of all columns and transform others to get
+the data to a more workable state.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">traffic</span><span class="o">$</span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">traffic</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">na.exclude</span><span class="p">(</span><span class="n">object</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">traffic</span><span class="p">)</span><span class="w">
+</span><span class="n">accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">traffic</span><span class="p">,</span><span class="w"> </span><span class="n">traffic</span><span class="o">$</span><span class="n">Accident</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">)</span><span class="w">
+</span><span class="n">sapply</span><span class="p">(</span><span class="n">accidents</span><span class="p">,</span><span class="w"> </span><span class="n">class</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##                   SeqID            Date.Of.Stop                  Agency               SubAgency                Latitude 
+##             "character"             "character"             "character"             "character"               "numeric" 
+##               Longitude                Accident                   Belts         Personal.Injury         Property.Damage 
+##               "numeric"             "character"             "character"             "character"             "character" 
+##                   Fatal                  HAZMAT                 Alcohol                   State             VehicleType 
+##             "character"             "character"             "character"             "character"             "character" 
+##                    Year          Violation.Type Contributed.To.Accident                    Race                  Gender 
+##               "integer"             "character"               "logical"             "character"             "character" 
+##                DL.State             Arrest.Type             Geolocation 
+##             "character"             "character"             "character"
+</code></pre></div></div>
+
+<p>The first call Gets rid of the useless ‘x’ column, then I’m removing NA
+rows from data set. After, I’m using sapply to see which classes my
+columns in the datasets are, lapply can work as well, this will come
+into play later.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accidents</span><span class="o">$</span><span class="n">Vehicle.Year</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">accidents</span><span class="o">$</span><span class="n">Year</span><span class="w">
+</span><span class="n">accidents</span><span class="o">$</span><span class="n">Year</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w"> 
+</span><span class="n">accidents</span><span class="o">$</span><span class="n">Vehicle.Year</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">as.numeric</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Vehicle.Year</span><span class="p">)</span><span class="w">
+</span><span class="n">accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">accidents</span><span class="p">[,</span><span class="nf">c</span><span class="p">(</span><span class="m">1</span><span class="o">:</span><span class="m">14</span><span class="p">,</span><span class="m">23</span><span class="p">,</span><span class="m">15</span><span class="o">:</span><span class="m">22</span><span class="p">)]</span><span class="w">
+</span></code></pre></div></div>
+
+<p>The above is needed for next steps, I’m changing the column name and
+type, then reordering everything for neatness sake.</p>
+
+<p>Now, i’m going to make a basic histogram which helps me to visual
+outliers and other anomalys.</p>
+
+<p><img src="/assets/images/traffic_stops/hist-1.png" alt=""></p>
+
+<p>Strangely enough, there’s an outlier ‘0’ that’s throwing off the data,
+so when I run the below, it should tell me where to find it. I’m also
+checking for number of rows with 0 within “Vehicle Year”. After, I’m
+checking for NAs, rerunning summary stats, and then identifying and
+eliminating outliers.</p>
+
+<p>Lastly, I’ll rerun the histograms to verify numbers</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">sum</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Vehicle.Year</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'0'</span><span class="p">,</span><span class="w"> </span><span class="n">na.rm</span><span class="o">=</span><span class="kc">TRUE</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 1
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">sum</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">accidents</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 0
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">summary</span><span class="p">(</span><span class="n">accidents</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##     SeqID           Date.Of.Stop          Agency           SubAgency            Latitude       Longitude        Accident        
+##  Length:1178        Length:1178        Length:1178        Length:1178        Min.   : 0.00   Min.   :-77.42   Length:1178       
+##  Class :character   Class :character   Class :character   Class :character   1st Qu.:39.01   1st Qu.:-77.16   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Median :39.06   Median :-77.07   Mode  :character  
+##                                                                              Mean   :34.96   Mean   :-68.99                     
+##                                                                              3rd Qu.:39.11   3rd Qu.:-77.02                     
+##                                                                              Max.   :39.33   Max.   :  0.00                     
+##     Belts           Personal.Injury    Property.Damage       Fatal              HAZMAT            Alcohol             State          
+##  Length:1178        Length:1178        Length:1178        Length:1178        Length:1178        Length:1178        Length:1178       
+##  Class :character   Class :character   Class :character   Class :character   Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+##                                                                                                                                      
+##                                                                                                                                      
+##                                                                                                                                      
+##   Vehicle.Year  VehicleType        Violation.Type     Contributed.To.Accident     Race              Gender            DL.State        
+##  Min.   :   0   Length:1178        Length:1178        Mode:logical            Length:1178        Length:1178        Length:1178       
+##  1st Qu.:2002   Class :character   Class :character   TRUE:1178               Class :character   Class :character   Class :character  
+##  Median :2007   Mode  :character   Mode  :character                           Mode  :character   Mode  :character   Mode  :character  
+##  Mean   :2017                                                                                                                         
+##  3rd Qu.:2012                                                                                                                         
+##  Max.   :9999                                                                                                                         
+##  Arrest.Type        Geolocation       
+##  Length:1178        Length:1178       
+##  Class :character   Class :character  
+##  Mode  :character   Mode  :character  
+##                                       
+##                                       
+## 
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">sum</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Vehicle.Year</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'0'</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] 1
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accidents</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">filter</span><span class="p">(</span><span class="n">Vehicle.Year</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"0"</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">pull</span><span class="p">(</span><span class="n">SeqID</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>## [1] "4b24280c-6171-4d6f-b327-cf00fa5c306a"
+</code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">accidents</span><span class="p">[</span><span class="n">accidents</span><span class="o">$</span><span class="n">Vehicle.Year</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m">0</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w">     
+</span><span class="n">hist</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accidents</span><span class="o">$</span><span class="n">Vehicle.Year</span><span class="p">,</span><span class="w"> </span><span class="n">breaks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000</span><span class="p">,</span><span class="w"> 
+     </span><span class="n">xlab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Vehicle Year"</span><span class="p">,</span><span class="w"> </span><span class="n">ylab</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"n"</span><span class="p">,</span><span class="w"> </span><span class="n">xlim</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="m">1940</span><span class="p">,</span><span class="m">2019</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/clean3-1.png" alt=""></p>
+
+<p>There, I’ve gotten rid of all the outliers that would have thrown a
+wrench in our analysis, next, I’ll make a new column for “Month of Stop”
+for the histogram below.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accidents</span><span class="o">$</span><span class="n">Date.Of.Stop</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mdy</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Date.Of.Stop</span><span class="p">)</span><span class="w">
+</span><span class="n">accidents</span><span class="o">$</span><span class="n">Month.of.Stop</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">month</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Date.Of.Stop</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>This will be useful for my analysis later. Now let’s visualize the
+histogram not using base R which can’t do counts for some reason…</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accidents</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">ggplot</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Month.of.Stop</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">after_stat</span><span class="p">(</span><span class="n">count</span><span class="p">)),</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">)</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/hist2-1.png" alt=""></p>
+
+<p>The histogram above tells us that the most accidents on record for this
+dataset occurred in December, this can verify that</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accidents</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w"> </span><span class="n">count</span><span class="p">(</span><span class="n">Month.of.Stop</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##    Month.of.Stop   n
+## 1              1  97
+## 2              2  92
+## 3              3  85
+## 4              4  82
+## 5              5 114
+## 6              6 108
+## 7              7 101
+## 8              8  88
+## 9              9  79
+## 10            10 112
+## 11            11 102
+## 12            12 117
+</code></pre></div></div>
+
+<h2 id="recoding-our-variables">Recoding our variables</h2>
+
+<p>One of the most important pieces of cleaning data comes into play when
+we need our data to fit our method of analysis in certain ways. For
+example, recoding a variable into binary enables a data column to be
+‘numeric’ as opposed to ‘character’ which opens up particular ways to
+analyze everything. See below:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Accidents </span><span class="w">
+</span><span class="n">accidents</span><span class="o">$</span><span class="n">Accident</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Accident</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Fatalities </span><span class="w">
+</span><span class="n">accidents</span><span class="o">$</span><span class="n">Fatal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Fatal</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Alcohol related accidents</span><span class="w">
+</span><span class="n">accidents</span><span class="o">$</span><span class="n">Alcohol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ifelse</span><span class="p">(</span><span class="n">accidents</span><span class="o">$</span><span class="n">Alcohol</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">"Yes"</span><span class="p">,</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">,</span><span class="m">0</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Summarize each by month of accident: </span><span class="w">
+</span><span class="n">Num_Accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">accidents</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">Month.of.Stop</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarise</span><span class="p">(</span><span class="n">sum_Accidents</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">Accident</span><span class="p">))</span><span class="w">
+
+</span><span class="n">Num_Fatal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">accidents</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">Month.of.Stop</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarise</span><span class="p">(</span><span class="n">sum_Fatal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">Fatal</span><span class="p">))</span><span class="w">
+
+</span><span class="n">Num_Alcohol</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">accidents</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">group_by</span><span class="p">(</span><span class="n">Month.of.Stop</span><span class="p">)</span><span class="w"> </span><span class="o">%&gt;%</span><span class="w">
+  </span><span class="n">summarise</span><span class="p">(</span><span class="n">sum_Alcohol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">sum</span><span class="p">(</span><span class="n">Alcohol</span><span class="p">))</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Now that we have our summarised columns, I’ll merge them into one
+dataset:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Join variables using merge()</span><span class="w">
+
+</span><span class="n">agg_accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">merge</span><span class="p">(</span><span class="n">Num_Accidents</span><span class="p">,</span><span class="w"> </span><span class="n">Num_Alcohol</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Month.of.Stop"</span><span class="p">)</span><span class="w">
+</span><span class="n">agg_accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">merge</span><span class="p">(</span><span class="n">agg_accidents</span><span class="p">,</span><span class="w"> </span><span class="n">Num_Fatal</span><span class="p">,</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Month.of.Stop"</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Rename month column </span><span class="w">
+</span><span class="n">agg_accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">rename</span><span class="p">(</span><span class="n">agg_accidents</span><span class="p">,</span><span class="w"> </span><span class="n">month</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Month.of.Stop</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Make new month column</span><span class="w">
+</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">month</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.factor</span><span class="p">(</span><span class="nb">month.name</span><span class="p">)</span><span class="w">
+</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">month</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">factor</span><span class="p">(</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">month</span><span class="p">,</span><span class="w"> </span><span class="n">levels</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">month.name</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Rename columns </span><span class="w">
+</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w">  </span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">sum_Accidents</span><span class="w">
+</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">fatal</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">sum_Fatal</span><span class="w">
+</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">alcohol</span><span class="w"> </span><span class="o">&lt;-</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">sum_Alcohol</span><span class="w">
+
+</span><span class="c1">#Remove redundant columns </span><span class="w">
+</span><span class="n">agg_accidents</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">agg_accidents</span><span class="p">[,</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="m">2</span><span class="o">:</span><span class="m">4</span><span class="p">)]</span><span class="w">
+
+</span><span class="c1">#Factorize the last two columns for plotting</span><span class="w">
+</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">alcohol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">as.factor</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">alcohol</span><span class="p">)</span><span class="w">
+</span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">fatal</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">as.factor</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">agg_accidents</span><span class="o">$</span><span class="n">fatal</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Below is a sample plot I used made with the aggregated data:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">accidentplot</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> 
+     </span><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">agg_accidents</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">accidents</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">month</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">alcohol</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+     </span><span class="n">geom_point</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+     </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Accidents by Month and Type"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"n"</span><span class="p">,</span><span class="w">
+        </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Month"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+   </span><span class="n">theme_bw</span><span class="p">()</span><span class="w">
+
+</span><span class="n">print</span><span class="p">(</span><span class="n">accidentplot</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/accident%20plot-1.png" alt=""></p>
+
+<p>However, if I were to print the ‘agg_accidents’ data, you’ll see that
+this doesn’t give us much to work off of.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">print</span><span class="p">(</span><span class="n">agg_accidents</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>##        month accidents fatal alcohol
+## 1    January        97     0       0
+## 2   February        92     0       0
+## 3      March        85     0       0
+## 4      April        82     0       0
+## 5        May       114     1       1
+## 6       June       108     0       0
+## 7       July       101     0       0
+## 8     August        88     0       0
+## 9  September        79     1       0
+## 10   October       112     0       0
+## 11  November       102     0       0
+## 12  December       117     0       1
+</code></pre></div></div>
+
+<p>Considering this, I’m going to take the original data set and re-work it
+so that I can get more meaning visualization from the data.</p>
+
+<h2 id="another-approach">Another Approach</h2>
+
+<p>I noticed that the data contains coordinate data, so I’m going to use
+that to plot a map giving us some more detailed information.</p>
+
+<p>First, I’m going to repeating some of my previous cleaning steps, then
+recode what I find useful.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#Repeating some cleaning steps from before and removing outliers:</span><span class="w">
+</span><span class="n">traffic</span><span class="o">$</span><span class="n">X</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="kc">NULL</span><span class="w">
+</span><span class="n">traffic</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">na.exclude</span><span class="p">(</span><span class="n">object</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">traffic</span><span class="p">)</span><span class="w">
+</span><span class="n">traffic</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">traffic</span><span class="p">[</span><span class="n">traffic</span><span class="o">$</span><span class="n">Latitude</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m">0.00</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span><span class="n">traffic</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">traffic</span><span class="p">[</span><span class="n">traffic</span><span class="o">$</span><span class="n">Longitude</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="m">0.00</span><span class="p">,</span><span class="w"> </span><span class="p">]</span><span class="w"> 
+</span><span class="n">traffic</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">traffic</span><span class="p">[</span><span class="n">with</span><span class="p">(</span><span class="n">traffic</span><span class="p">,</span><span class="w"> </span><span class="o">!</span><span class="p">((</span><span class="n">Year</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="m">0</span><span class="o">:</span><span class="m">1931</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">(</span><span class="n">Year</span><span class="w"> </span><span class="o">%in%</span><span class="w"> </span><span class="m">2024</span><span class="o">:</span><span class="m">9999</span><span class="p">))),</span><span class="w"> </span><span class="p">]</span><span class="w">
+
+
+</span><span class="c1">#Remove null entries from coordinates: </span><span class="w">
+</span><span class="n">geo_traffic</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">subset</span><span class="p">(</span><span class="n">traffic</span><span class="p">)</span><span class="w">
+
+</span><span class="c1">#Recode dates</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">Date.Of.Stop</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">mdy</span><span class="p">(</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">Date.Of.Stop</span><span class="p">)</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">Date.Of.Stop</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">as.POSIXct</span><span class="p">(</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">Date.Of.Stop</span><span class="p">)</span><span class="w">
+
+
+</span><span class="c1">#Editing out a couple of problematic strings by removing unneeded characters </span><span class="w">
+</span><span class="n">geo_traffic</span><span class="p">[,</span><span class="m">15</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">str_sub</span><span class="p">(</span><span class="n">geo_traffic</span><span class="p">[,</span><span class="m">15</span><span class="p">],</span><span class="w"> </span><span class="m">6</span><span class="p">,</span><span class="w"> </span><span class="m">-1</span><span class="p">)</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="p">[,</span><span class="m">22</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">str_sub</span><span class="p">(</span><span class="n">geo_traffic</span><span class="p">[,</span><span class="m">22</span><span class="p">],</span><span class="w"> </span><span class="m">5</span><span class="p">,</span><span class="w"> </span><span class="m">-1</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p>…</p>
+
+<p>Here’s a few examples of some visualizations I made using Tableau, to
+really a good look at our cleaned data!</p>
+
+<iframe align="center" width="700" height="700" src="https://public.tableau.com/shared/6GGTC25Z7?:display_count=n&amp;:origin=viz_share_link"></iframe>
+
+<p>So now that we have a representation of what happens in the DC area, as
+far as traffic stops go, as well as definitive confirmation that our
+data is in order. What are some questions we can ask of the data, using
+ggplot2?</p>
+
+<p>…</p>
+
+<h2 id="plots">Plots</h2>
+
+<p>Here, I want to ask as many questions of the data as I possible can, so
+the first thing I’m going to ask here to tell the story of this
+agencies’ police departments is, “How many traffic stops did each race
+have by year?”</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geo_traffic</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date.Of.Stop</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Race</span><span class="p">,</span><span class="w"> </span><span class="n">col</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">I</span><span class="p">(</span><span class="s2">"black"</span><span class="p">)),</span><span class="w">  
+                 </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"bin"</span><span class="p">,</span><span class="w"> </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5000000</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> 
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Traffic Stops by Year and Race"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"For DC and the Surrounding Area"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"n"</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/plot1-1.png" alt=""></p>
+
+<p>This chart offers a more nuanced look at how each race described in the
+data committed traffic stops by counts and Year; as the previous one
+represented totals for each year.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geo_traffic</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_freqpoly</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date.Of.Stop</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Race</span><span class="p">),</span><span class="w"> 
+                </span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1</span><span class="p">,</span><span class="w"> 
+                </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.8</span><span class="p">,</span><span class="w"> 
+                </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">5000000</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count of Traffic Stops by Race"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"For DC and the Surrounding Area"</span><span class="p">,</span><span class="w">
+       </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Race"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">axis.text.x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">element_text</span><span class="p">(</span><span class="n">angle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">90</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+        </span><span class="n">theme_bw</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/plot2-1.png" alt=""></p>
+
+<p>This chart captures the kinds of Vehicles used in the violations
+perpetrators committed over a given time period.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geo_traffic</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">VehicleType</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Violation.Type</span><span class="p">),</span><span class="w"> </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"count"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Vehicle Types by Violation"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Vehicle Type"</span><span class="p">,</span><span class="w"> </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Chart captures data for violations around the DC Area"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Violation Type"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_bw</span><span class="p">()</span><span class="w"> 
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/plot3-1.png" alt=""></p>
+
+<p>Here, we detail the type of arrest, their counts, gender and what kind
+of violation was committed.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geo_traffic</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">aes</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arrest.Type</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Violation.Type</span><span class="p">),</span><span class="w"> </span><span class="n">stat</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"count"</span><span class="p">,</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">30</span><span class="p">,</span><span class="w"> </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Arrest Types by Gender and Violation"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">""</span><span class="p">,</span><span class="w"> </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Chart captures data for violations around the DC Area"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Violation Type"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_bw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">.</span><span class="o">~</span><span class="n">Gender</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/plot4-1.png" alt=""></p>
+
+<p>This plot below tells us the amount of accidents that occurred over the
+given time period.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geo_traffic</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date.Of.Stop</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Accident</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_freqpoly</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.8</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.7</span><span class="p">,</span><span class="w"> </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000000</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Number of Accidents in Traffic Stops"</span><span class="p">,</span><span class="w"> </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Few Accidents Occured Over an 8 Year Period in the DC Area"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_bw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme</span><span class="p">(</span><span class="n">legend.position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"none"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_wrap</span><span class="p">(</span><span class="n">.</span><span class="o">~</span><span class="n">Accident</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/plot5-1.png" alt=""></p>
+
+<p>In this chart, we look at the number of fatal accidents. Thankfully,
+people in the DC area are relatively safe drivers according to our data.</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geo_traffic</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date.Of.Stop</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Fatal</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_freqpoly</span><span class="p">(</span><span class="n">size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.8</span><span class="p">,</span><span class="w"> </span><span class="n">alpha</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">.7</span><span class="p">,</span><span class="w"> </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">1000000</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count of Fatal Accidents in DC Area"</span><span class="p">,</span><span class="w"> </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"No Fatalities Occured Over an 8 Year Period"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_bw</span><span class="p">()</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/plot6-1.png" alt=""></p>
+
+<p>Before I plot this one, I’m recoding the names of the Sub Agencies
+before plotting so that they’ll look better. Lastly, this plot shows up
+the number of arrests made by each police department within the Agency
+by Year:</p>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="p">[</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'1st District, Rockville'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Rockville"</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="p">[</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'2nd District, Bethesda'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Bethesda"</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="p">[</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'3rd District, Silver Spring'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Silver Spring"</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="p">[</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'4th District, Wheaton'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Wheaton"</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="p">[</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'5th District, Germantown'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Germantown"</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="p">[</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'6th District, Gaithersburg / Montgomery Village'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"Gaithersburg / Montgomery Village"</span><span class="w">
+</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="p">[</span><span class="n">geo_traffic</span><span class="o">$</span><span class="n">SubAgency</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s1">'Headquarters and Special Operations'</span><span class="p">]</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="s2">"HQ and Spec Ops"</span><span class="w">
+</span></code></pre></div></div>
+
+<div class="language-r highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ggplot</span><span class="p">(</span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">geo_traffic</span><span class="p">,</span><span class="w"> </span><span class="n">aes</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Date.Of.Stop</span><span class="p">,</span><span class="w"> </span><span class="n">fill</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">SubAgency</span><span class="p">))</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">geom_histogram</span><span class="p">(</span><span class="n">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"black"</span><span class="p">,</span><span class="w"> </span><span class="n">bins</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">50</span><span class="p">,</span><span class="w"> </span><span class="n">binwidth</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">10000000</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">labs</span><span class="p">(</span><span class="n">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Number of Arrests by Sub Agency"</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Year"</span><span class="p">,</span><span class="w"> 
+       </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Count"</span><span class="p">,</span><span class="w"> </span><span class="n">subtitle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Chart captures data for arrests made by MCP"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">scale_fill_discrete</span><span class="p">(</span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"Name"</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">theme_bw</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w">
+  </span><span class="n">facet_grid</span><span class="p">(</span><span class="n">.</span><span class="o">~</span><span class="n">SubAgency</span><span class="p">)</span><span class="w">
+</span></code></pre></div></div>
+
+<p><img src="/assets/images/traffic_stops/agency%20arrests-1.png" alt=""></p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>This analysis illustrated a very detailed picture of how traffic stops
+play out within the Washington DC and surrounding areas. We saw that
+thankfully, while they are indeed numerous, people are relatively safe
+drivers. We alas learned that whites committed the most traffic
+violations over the 8 year period that our data captured. While by
+number, Native Americas had the least and were likely the least
+represented.</p>
+
+<p>Visualizations can be fun because looking at data in spreadsheet form
+can be boring, imagine trying to explain all those number to others
+without a story or picture to accompany your words! The funny thing is
+that I feel like i’ve yet to scratch the surface of what ggplot2 can do.</p>
+
+<p>As always thank you for reading!</p>
+
+
+    </div>
+
+</article>
+<div class="post-nav">
+<a class="previous" href="/projects/2023/05/04/spotify_analysis.html" title="Spotify Usage Breakdown">Spotify Usage Breakdown</a><a class="next" href="/projects/2023/05/04/pkmn-box-analysis.html" title="The Strongest of the Pocket Monsters! ">The Strongest of the Pocket Monsters!...</a>
+</div>
+<div class="post-related">
+      <div>Related Articles</div>
+      <ul>
+        <li><a class="post-link" href="/projects/2023/05/04/spotify_analysis.html" title="The Strongest of the Pocket Monsters! ">Spotify Usage Breakdown</a></li>
+<li><a class="post-link" href="/projects/2023/07/19/youtube_analysis.html" title="The Strongest of the Pocket Monsters! ">Youtube Top 20 Content Creators</a></li>
+<li><a class="post-link" href="/projects/2023/05/04/pkmn-box-analysis.html" title="The Strongest of the Pocket Monsters! ">The Strongest of the Pocket Monsters! </a></li>
+<li><a class="post-link" href="/misc/2023/05/04/Tableau-Visualizations-Sample.html" title="The Strongest of the Pocket Monsters! ">Tableau Visualization Showcase</a></li>
+</ul>
+    </div>
+<div class="post-comments"></div></section>
+</div>
+
+
+  </section>
+  <section class="sidebar" style="margin-left: 15px;">
+    <!-- Get sidebar items --><style type="text/css" media="screen">
+.post-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+</style>
+
+<div class="post-menu">
+  <div class="post-menu-title">TOC</div>
+  <div class="post-menu-content"></div>
+</div>
+
+<script>
+  function generateContent() {
+    var menu = document.querySelector(".post-menu");
+    var menuContent =  menu.querySelector(".post-menu-content");
+    var headings = document.querySelector(".post-content").querySelectorAll("h2, h3, h4, h5, h6");
+
+    // Hide menu when no headings
+    if (headings.length === 0) {
+      return menu.style.display = "none";
+    }
+
+    // Generate post menu
+    var menuHTML = '';
+    for (var i = 0; i < headings.length; i++) {
+      var h = headings[i];
+      menuHTML += (
+        '<li class="h-' + h.tagName.toLowerCase() + '">'
+        + '<a href="#h-' + h.getAttribute('id') + '">' + h.textContent + '</a></li>');
+    }
+
+    menuContent.innerHTML = '<ul>' + menuHTML + '</ul>';
+
+    // The header element
+    var header = document.querySelector('header.site-header');
+
+    function doMenuCollapse(index, over_items) {
+      var items = menuContent.firstChild.children;
+
+      if (over_items == undefined) {
+        over_items = 20;
+      }
+
+      if (items.length < over_items) {
+        return;
+      }
+
+      var activeItem = items[index];
+      var beginItem = activeItem
+      var endItem = activeItem
+      var beginIndex = index;
+      var endIndex = index + 1;
+      while (beginIndex >= 0
+        && !items[beginIndex].classList.contains('h-h2')) {
+        beginIndex -= 1;
+      }
+      while (endIndex < items.length
+        && !items[endIndex].classList.contains('h-h2')) {
+        endIndex += 1;
+      }
+      for (var i = 0; i < beginIndex; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+      for (var i = beginIndex + 1; i < endIndex; i++) {
+        item = items[i]
+        // if (!item.classList.contains('h-h2')) {
+          item.style.display = '';
+        // }
+      }
+      for (var i = endIndex; i < items.length; i++) {
+        item = items[i]
+        if (!item.classList.contains('h-h2')) {
+          item.style.display = 'none';
+        }
+      }
+    }
+
+    // Init menu collapsed
+    doMenuCollapse(-1);
+
+    // Active the menu item
+    window.addEventListener('scroll', function (event) {
+      var lastActive = menuContent.querySelector('.active');
+      var changed = true;
+      var activeIndex = -1;
+      for (var i = headings.length - 1; i >= 0; i--) {
+        var h = headings[i];
+        var headingRect = h.getBoundingClientRect();
+        var headerRect = header.getBoundingClientRect();
+        var headerTop = Math.floor(headerRect.top);
+        var headerHeight = Math.floor(headerRect.height);
+        var headerHeight = headerTop + headerHeight + 20;
+        if (headingRect.top <= headerHeight) {
+          var id = 'h-' + h.getAttribute('id');
+          var a = menuContent.querySelector('a[href="#' + id  + '"]');
+          var curActive = a.parentNode;
+          if (curActive) {
+            curActive.classList.add('active');
+            activeIndex = i;
+          }
+          if (lastActive == curActive) {
+            changed = false;
+          }
+          break;
+        }
+      }
+      if (changed) {
+        if (lastActive) {
+          lastActive.classList.remove('active');
+        }
+        doMenuCollapse(activeIndex);
+      }
+      event.preventDefault();
+    });
+  }
+  generateContent();
+</script>
+</section>
+</div>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+    <div class="site-footer-inner">
+<div>Bruce A. Lee <span class="copyleft">©</span> 2022-2024</div>
+      <div>Powered by <a title="Jekyll is a simple, blog-aware, static site
+      generator." href="https://jekyllrb.com/">Jekyll</a> &amp; <a title="Yat, yet
+      another theme." href="https://github.com/jeffreytse/jekyll-theme-yat">Yat Theme</a>.</div>
+      <div class="footer-col rss-subscribe">Subscribe <a href="/feed.xml">via RSS</a>
+</div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
