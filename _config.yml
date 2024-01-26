@@ -97,7 +97,7 @@ defaults:
    home:
      heading: "Bruce A. Lee"
      subheading: "Data Engineer"
-     banner: /assets/images/banners/home2.jpeg
+     banner: /assets/images/banners/home2.jpg
    
 
 # Excerpt size setting
