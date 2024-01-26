@@ -657,7 +657,7 @@ function googleTranslateElementInit() {
   (function() {
     var sw = document.getElementById('theme-switch');
     var html = document.getElementsByTagName('html')[0];
-    var nightModeOption = ('light' || 'auto').toLowerCase();
+    var nightModeOption = ('dark' || 'auto').toLowerCase();
     var storage = nightModeOption === 'manual'
         ? localStorage
         : sessionStorage;
