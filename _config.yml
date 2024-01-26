@@ -80,7 +80,7 @@ code_badge:
 # it will be always kept on every visit (i.e. no matter
 # the browser is closed or not)
 #
-night_mode: "light"
+night_mode: "dark"
 
 
 # If you want to link only specific pages in your header, uncomment
