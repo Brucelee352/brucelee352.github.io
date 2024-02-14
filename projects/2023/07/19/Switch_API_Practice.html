@@ -7,22 +7,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="google-translate-customization" content="108d9124921d80c3-80e20d618ff053c8-g4f02ec6f3dba68b7-c">
 <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Tableau Visualization Showcase | Data Engineering Portfolio</title>
+<title>Looking at the Switch: API Practice | Data Engineering Portfolio</title>
 <meta name="generator" content="Jekyll v4.3.2">
-<meta property="og:title" content="Tableau Visualization Showcase">
+<meta property="og:title" content="Looking at the Switch: API Practice">
 <meta name="author" content="Bruce A. Lee">
 <meta property="og:locale" content="en_US">
-<meta name="description" content="Here’s some samples from my Tableau Public page, which can be found here.">
-<meta property="og:description" content="Here’s some samples from my Tableau Public page, which can be found here.">
-<link rel="canonical" href="/misc/2023/05/04/Tableau-Visualizations-Sample.html">
-<meta property="og:url" content="/misc/2023/05/04/Tableau-Visualizations-Sample.html">
+<meta name="description" content="Introduction">
+<meta property="og:description" content="Introduction">
+<link rel="canonical" href="/projects/2023/07/19/Switch_API_Practice.html">
+<meta property="og:url" content="/projects/2023/07/19/Switch_API_Practice.html">
 <meta property="og:site_name" content="Data Engineering Portfolio">
 <meta property="og:type" content="article">
-<meta property="article:published_time" content="2023-05-04T00:00:00+00:00">
+<meta property="article:published_time" content="2023-07-19T00:00:00+00:00">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="Tableau Visualization Showcase">
+<meta property="twitter:title" content="Looking at the Switch: API Practice">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Bruce A. Lee"},"dateModified":"2023-05-04T00:00:00+00:00","datePublished":"2023-05-04T00:00:00+00:00","description":"Here’s some samples from my Tableau Public page, which can be found here.","headline":"Tableau Visualization Showcase","mainEntityOfPage":{"@type":"WebPage","@id":"/misc/2023/05/04/Tableau-Visualizations-Sample.html"},"url":"/misc/2023/05/04/Tableau-Visualizations-Sample.html"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Bruce A. Lee"},"dateModified":"2023-07-19T00:00:00+00:00","datePublished":"2023-07-19T00:00:00+00:00","description":"Introduction","headline":"Looking at the Switch: API Practice","mainEntityOfPage":{"@type":"WebPage","@id":"/projects/2023/07/19/Switch_API_Practice.html"},"url":"/projects/2023/07/19/Switch_API_Practice.html"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="icon" href="">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -782,11 +782,11 @@ function googleTranslateElementInit() {
 
 
 <header class="post-header">
-  <h1 class="post-title p-name" itemprop="name headline">Tableau Visualization Showcase</h1>
+  <h1 class="post-title p-name" itemprop="name headline">Looking at the Switch: API Practice</h1>
   <h2 class="post-subtitle"></h2>
 
   <p class="post-meta">
-    <time class="dt-published" datetime="2023-05-04T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> May 04, 2023
+    <time class="dt-published" datetime="2023-07-19T00:00:00+00:00" itemprop="datePublished"><i class="fa fa-calendar"></i> Jul 19, 2023
     </time>
 
     
@@ -823,46 +823,132 @@ function googleTranslateElementInit() {
 
 
 
-    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 1 min</span>
+    <span class="post-reading-time left-vsplit"><i class="fa fa-clock-o"></i> About 5 mins</span>
   </p>
-<div class="post-tags"><a class="post-tag" href="/tags.html#tableau">#tableau</a></div></header>
+<div class="post-tags"><a class="post-tag" href="/tags.html#python">#python</a></div></header>
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
     <div class="post-content e-content" itemprop="articleBody">
 
-      <p>Here’s some samples from my Tableau Public page, <a href="https://public.tableau.com/app/profile/bruce.lee6309">which can be found here.</a></p>
+      <h2 id="introduction">Introduction</h2>
 
-<h2 id="mcp-traffic-stops-in-the-dc-area">MCP Traffic Stops in the DC Area:</h2>
-
-<p>This graphic showcases traffic stops among the various demographics that live in Washington DC and the surrounding area.</p>
-
-<iframe align="center" width="680" height="680" src="https://public.tableau.com/shared/X5B5KD774?:display_count=n&amp;:origin=viz_share_link"></iframe>
+<p>In this script, I’m calling an API that houses data for Nintendo Switch titles, so the resulting data frame can be used in other applications. Specifically, I thought it would be interesting to work with the dates contained in the data to visualize everything in a time series.</p>
 
 <p>…</p>
 
-<h2 id="world-food-programme-global-commodity-analysis">World Food Programme Global Commodity Analysis</h2>
+<h3 id="setup--extracting-the-data">Setup &amp; Extracting the data</h3>
 
-<p>Global Food Prices data from the World Food Programme. See caption in the graphic for more information.</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Import appropriate packages:
+</span><span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="n">numpy</span> <span class="k">as</span> <span class="n">np</span>
+<span class="kn">import</span> <span class="n">datetime</span>
 
-<iframe align="center" width="680" height="680" src="https://public.tableau.com/views/WFPGlobalCommodityAnalysis/Map?:language=en-US&amp;:display_count=n&amp;:origin=viz_share_link"></iframe>
+<span class="c1">#Set URL object for API 
+</span><span class="n">url</span> <span class="o">=</span> <span class="p">(</span><span class="s">'https://api.sampleapis.com/switch/games'</span><span class="p">)</span>
+
+<span class="c1"># Get API Request
+</span><span class="n">res</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>The first thing I’ll do here is import then needed packages, set the URL as an object to reference later and make a request to the API to pull that raw data into an object.</p>
 
 <p>…</p>
 
+<h3 id="working-with-the-json">Working with the JSON</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Render API response to JSON
+</span><span class="n">json</span> <span class="o">=</span> <span class="n">res</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span>
+
+<span class="c1"># Parse JSON to data frame
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">json_normalize</span><span class="p">(</span><span class="n">json</span><span class="p">,</span> 
+                         <span class="n">sep</span><span class="o">=</span><span class="s">' -&gt; '</span><span class="p">,</span>
+                         <span class="n">max_level</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="p">.</span><span class="n">columns</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nf">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">].</span><span class="nf">dropna</span><span class="p">().</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>  
+        <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">].</span><span class="nf">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s">', '</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">if</span> <span class="n">x</span> <span class="k">else</span> <span class="bp">None</span><span class="p">)</span>
+
+<span class="c1"># Rename columns
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">.</span><span class="nf">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s">'name'</span><span class="p">:</span> <span class="s">'title'</span><span class="p">,</span> <span class="s">'releaseDates -&gt; Japan'</span><span class="p">:</span> <span class="s">'JP_releaseDate'</span><span class="p">,</span> <span class="s">'releaseDates -&gt; NorthAmerica'</span><span class="p">:</span> <span class="s">'US_releaseDate'</span><span class="p">,</span> 
+                            <span class="s">'releaseDates -&gt; Europe'</span><span class="p">:</span> <span class="s">'EU_releaseDate'</span><span class="p">,</span> <span class="s">'releaseDates -&gt; Australia'</span><span class="p">:</span> <span class="s">'AUS_releaseDate'</span><span class="p">})</span>
+</code></pre></div></div>
+
+<p>Here in this snippet, I then call the JSON package to convert the raw data into JSON, which I’m storing as its own object. I then normalize everything, and then apply a loop that grabs the first entry in the lists within the JSON to output only the data contained in the JSON, with no other characters.</p>
+
+<p>Afterwards, I renamed the outputted columns for readabilities sake.</p>
+
+<p>…</p>
+
+<h3 id="dates-i-dont-say-that-because-its-valentines-day">Dates, I don’t say that because its Valentine’s Day</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Specify date columns as an object
+</span><span class="n">date_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s">"JP_releaseDate"</span><span class="p">,</span> <span class="s">"US_releaseDate"</span><span class="p">,</span> <span class="s">"EU_releaseDate"</span><span class="p">,</span> <span class="s">"AUS_releaseDate"</span><span class="p">]</span>
+
+<span class="c1"># Specify non-date values and then replace them with NaNs and actual formatted dates 
+</span><span class="n">non_date_values</span> <span class="o">=</span> <span class="p">[</span><span class="s">'Unreleased'</span><span class="p">,</span> <span class="s">'TBA'</span><span class="p">,</span> <span class="s">'2020'</span><span class="p">,</span> <span class="s">'Q3 2020'</span><span class="p">]</span>
+
+<span class="n">data</span><span class="p">[</span><span class="n">date_cols</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">date_cols</span><span class="p">].</span><span class="nf">replace</span><span class="p">(</span><span class="n">non_date_values</span><span class="p">,</span> <span class="n">np</span><span class="p">.</span><span class="n">nan</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">date_cols</span><span class="p">:</span>
+    <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="nf">to_datetime</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s">'coerce'</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s">'%B %d, %Y'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>So here I wanted to clean up the dates a bit, and to do that I ascribed the date columns as their own object. Then I had Python identify the non-date values contained in the data set, so as to replace them all with NaNs and they would be read by Python as NULL.</p>
+
+<p>Lastly, another loop uses Pandas datetime to coerce the dates into a singular format.</p>
+
+<hr>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Check data     
+</span><span class="n">data</span><span class="p">.</span><span class="nf">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+    
+<span class="c1"># A function to check if a value is a date or NaN
+</span><span class="k">def</span> <span class="nf">is_date_or_nan</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="p">.</span><span class="nf">isna</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">pd</span><span class="p">.</span><span class="nf">to_datetime</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s">'%Y-%m-%d'</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">except</span> <span class="nb">ValueError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">False</span>
+
+<span class="c1"># Check for dates in each column
+</span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">date_cols</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">].</span><span class="nf">apply</span><span class="p">(</span><span class="n">is_date_or_nan</span><span class="p">).</span><span class="nf">all</span><span class="p">():</span>
+        <span class="nf">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s"> doesn't only have dates in it"</span><span class="p">)</span>
+        <span class="k">break</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"All specified columns contain only dates or NaN"</span><span class="p">)</span>
+    
+<span class="c1"># Write data to csv: 
+</span><span class="n">data</span><span class="p">.</span><span class="nf">to_csv</span><span class="p">(</span><span class="s">"C:/Users/bruce/Documents/Python/switch_games.csv"</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>From there, I check the data using ‘head’ to read the first ten columns to check for consistency of formatting. Then I employ a function to check if a value is an actual date or a NULL value. I then iterate over the dataset using that function to check if each columns is uniform in content.</p>
+
+<p>Lastly, I wrote the resulting data set to a .csv, which can be used into Tableau, Looker, PowerBI or your favorite BI tool of choice to visualize everything and glean insight fron the data.</p>
+
+<hr>
+
+<h3 id="outro">Outro</h3>
+
+<p>Theres a good amount you can do and not all ETL scripts are alike, yet they all mostly carry out similar functionalities and this is no different. With that said, the Nintendo Switch carries an impressive array of games, consider checking it out.</p>
 
 
     </div>
 
 </article>
 <div class="post-nav">
-<a class="previous" href="/2023/01/31/read-me.html" title="Read Me!">Read Me!</a><a class="next" href="/projects/2023/05/04/spotify_analysis.html" title="Spotify Usage Breakdown">Spotify Usage Breakdown</a>
+<a class="previous" href="/projects/2023/07/19/Using_ETL_with_Rental_Store_Data.html" title="ETL using Rental Store Data? An excursion with SQL and Python">ETL using Rental Store Data? An...</a><a class="next" href="/misc/2023/08/23/sql_samples.html" title="SQL Query Showcase">SQL Query Showcase</a>
 </div>
 <div class="post-related">
       <div>Related Articles</div>
       <ul>
-        <li><a class="post-link" href="/misc/2023/05/04/Tableau-Visualizations-Sample.html" title="Spotify Usage Breakdown">Tableau Visualization Showcase</a></li>
-<li><a class="post-link" href="/projects/2023/07/19/Switch_API_Practice.html" title="Spotify Usage Breakdown">Looking at the Switch: API Practice</a></li>
-<li><a class="post-link" href="/projects/2023/06/05/STAR_Breakdown.html" title="Spotify Usage Breakdown">Characteristics of STARs in Florida</a></li>
-<li><a class="post-link" href="/projects/2024/02/14/Discogs_API_Call.html" title="Spotify Usage Breakdown">Checking out the Discogs API: API Practice 2</a></li>
+        <li><a class="post-link" href="/misc/2023/07/17/python-test-script.html" title="SQL Query Showcase">HR Data Cleaning — A Python test script</a></li>
+<li><a class="post-link" href="/misc/2023/05/04/Tableau-Visualizations-Sample.html" title="SQL Query Showcase">Tableau Visualization Showcase</a></li>
+<li><a class="post-link" href="/projects/2023/05/04/spotify_analysis.html" title="SQL Query Showcase">Spotify Usage Breakdown</a></li>
+<li><a class="post-link" href="/projects/2023/05/04/traffic_analysis.html" title="SQL Query Showcase">A Particular Group leads in DC Area Traffic Stops</a></li>
 </ul>
     </div>
 <div class="post-comments"></div></section>
