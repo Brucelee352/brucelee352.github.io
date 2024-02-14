@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Looking at the Switch: API Practice" 
-date: "2023-07-19"
+date: "2024-07-14"
 categories: projects
 tags: [python]
 ---
