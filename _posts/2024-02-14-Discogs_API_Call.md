@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Checking out the Discogs API — API Practice 2" 
+title:  "Checking out the Discogs API: API Practice 2" 
 date: "2024-02-14"
 categories: projects
 tags: [python]
@@ -12,7 +12,7 @@ For this project, I'm calling the Discogs API to create a DF of any album I want
 
 If its desired to do an entire artist's discography, it would be possible to save multiple URLs to their own objects, source the data using the code below, and then concatenate all the resulting dataframes together using a loop to iterate over them. 
 
----
+...
 
 ### Setup 
 
@@ -96,6 +96,7 @@ Then the API equivalent of that same album on their site is here: https://api.di
 
 All you do is switch 'www.' to 'api.', turn 'master' into its plural form 'masters' and then give the album ID which is the sequence of numbers at the end without the descriptor. 
 
+### Write data to .csv 
 
 ```python
 # Comment out, change file name and then re-run 
@@ -104,8 +105,11 @@ All you do is switch 'www.' to 'api.', turn 'master' into its plural form 'maste
 
 Lastly, all you need to do is write the data to .csv using the line above. The resulting .csv you can use for other projects. 
 
+...
+
 ## Outtro
 
 That's all there is to it! I'm working on thinking about how I can further expand on this script to do more involved work in the ETL process but this here is just a proof of concept. 
 
-Thank you for reading! 
+Thank you for reading!
+
