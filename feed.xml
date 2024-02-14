@@ -1,4 +1,101 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2024-01-26T21:50:09+00:00</updated><id>/feed.xml</id><title type="html">Data Engineering Portfolio</title><subtitle>Collection of Data Engineering projects </subtitle><author><name>Bruce A. Lee</name></author><entry><title type="html">SQL Query Showcase</title><link href="/misc/2023/08/23/sql_samples.html" rel="alternate" type="text/html" title="SQL Query Showcase" /><published>2023-08-23T00:00:00+00:00</published><updated>2023-08-23T00:00:00+00:00</updated><id>/misc/2023/08/23/sql_samples</id><content type="html" xml:base="/misc/2023/08/23/sql_samples.html">&lt;h3 id=&quot;introduction&quot;&gt;Introduction:&lt;/h3&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2024-02-14T15:55:38+00:00</updated><id>/feed.xml</id><title type="html">Data Engineering Portfolio</title><subtitle>Collection of Data Engineering projects </subtitle><author><name>Bruce A. Lee</name></author><entry><title type="html">Checking out the Discogs API — API Practice 2</title><link href="/projects/2024/02/14/Discogs_API_Call.html" rel="alternate" type="text/html" title="Checking out the Discogs API — API Practice 2" /><published>2024-02-14T00:00:00+00:00</published><updated>2024-02-14T00:00:00+00:00</updated><id>/projects/2024/02/14/Discogs_API_Call</id><content type="html" xml:base="/projects/2024/02/14/Discogs_API_Call.html">&lt;h2 id=&quot;introduction-polars--discogs-api&quot;&gt;Introduction: Polars &amp;amp; Discogs API&lt;/h2&gt;
+
+&lt;p&gt;For this project, I’m calling the Discogs API to create a DF of any album I want within Discog’s album catalog so that I can make it into a data frame. Any album can be called by any artist, but be mindful of the name of the artist and file’s name when saving to .csv&lt;/p&gt;
+
+&lt;p&gt;If its desired to do an entire artist’s discography, it would be possible to save multiple URLs to their own objects, source the data using the code below, and then concatenate all the resulting dataframes together using a loop to iterate over them.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;setup&quot;&gt;Setup&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Import libraries: 
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;requests&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dt&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;polars&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pl&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Set URL object and user agent
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;https://api.discogs.com/masters/45947&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;user_agent&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;API-call-Practice/1.0 (************@gmail.com)&quot;&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# You can generate your own API token here: https://www.discogs.com/settings/developers
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;auth_token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;***********************************&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;headers&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;User-Agent&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;oauth_token&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;auth_token&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;req&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;Some APIs need authentication in order to enable calls to be made to their servers, so in the above lines, I’m establishing an ID and name for the project that I’m calling the API from via the “User Agent,” along with a “token” which serves as the secret/password for identification purposes.&lt;/p&gt;
+
+&lt;p&gt;The URL in the snippet takes you to the Discogs developers page where you can generate a free-use token and sign up for their services if you’re doing more involved work, like creating an app or service.&lt;/p&gt;
+
+&lt;h3 id=&quot;sourcing-the-data&quot;&gt;Sourcing the Data&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Checks if API call is successful
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Success!&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;Error!&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;flat_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;track&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;tracklist&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;extra_artists_names&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;, &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;artist&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;name&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;artist&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;track&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;extraartists&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]))&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;track_info&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;master_id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;album_title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;track_title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;track&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;title&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;track_position&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;track&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;position&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;track_duration&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;track&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;duration&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;extra_artists&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;extra_artists_names&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&quot;year&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;year&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;flat_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;track_info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        
+&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;DataFrame&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;flat_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;       
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This code snippet is what’s “extracting” the data from the API using the credentials I specified above. The first line checks and tells me if the API connection was established or not, printing a statement if success or otherwise.&lt;/p&gt;
+
+&lt;p&gt;From there, I make an empty list for the data to go in, I then establish a for loop to iterate over the sections of the JSON that house the “tracklist” data.&lt;/p&gt;
+
+&lt;p&gt;I then create another object called “track_info” that pulls the needed columns and flattens them, then appends the track_info object into the empty “flat_data” list I made eariler. From there, I use Polars to make that list into an actual data frame.&lt;/p&gt;
+
+&lt;p&gt;…&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Comment out if using on other albums. Change the name in the pl.lit call to the correct artist 
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;with_columns&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;lit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;A Tribe Called Quest&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;alias&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;artist&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;select&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;master_id&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;album_title&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;track_title&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+                &lt;span class=&quot;s&quot;&gt;&apos;track_position&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;track_duration&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;artist&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;extra_artists&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&apos;year&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Print data frame to check data: 
+&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;When I thought of this ETL script, though a little basic, I wanted for it to be able to be reused for other artists as well. Essentially, any artist you find on the Discogs page can have their data pulled in the same manner as I did ‘A Tribe Called Quest’ using this script. You’ll just need their API url.&lt;/p&gt;
+
+&lt;p&gt;I learned that if the album Midnight Maraders was here: https://www.discogs.com/master/45947-A-Tribe-Called-Quest-Midnight-Marauders&lt;/p&gt;
+
+&lt;p&gt;Then the API equivalent of that same album on their site is here: https://api.discogs.com/masters/45947&lt;/p&gt;
+
+&lt;p&gt;All you do is switch ‘www.’ to ‘api.’, turn ‘master’ into its plural form ‘masters’ and then give the album ID which is the sequence of numbers at the end without the descriptor.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Comment out, change file name and then re-run 
+#df.write_csv(&quot;c:\\Users\\xxxxx\\Documents\\atcq_artist_data.csv&quot;, separator= &apos;,&apos;)
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Lastly, all you need to do is write the data to .csv using the line above. The resulting .csv you can use for other projects.&lt;/p&gt;
+
+&lt;h2 id=&quot;outtro&quot;&gt;Outtro&lt;/h2&gt;
+
+&lt;p&gt;That’s all there is to it! I’m working on thinking about how I can further expand on this script to do more involved work in the ETL process but this here is just a proof of concept.&lt;/p&gt;
+
+&lt;p&gt;Thank you for reading!&lt;/p&gt;</content><author><name>Bruce A. Lee</name></author><category term="projects" /><category term="python" /><summary type="html">Introduction: Polars &amp;amp; Discogs API</summary></entry><entry><title type="html">SQL Query Showcase</title><link href="/misc/2023/08/23/sql_samples.html" rel="alternate" type="text/html" title="SQL Query Showcase" /><published>2023-08-23T00:00:00+00:00</published><updated>2023-08-23T00:00:00+00:00</updated><id>/misc/2023/08/23/sql_samples</id><content type="html" xml:base="/misc/2023/08/23/sql_samples.html">&lt;h3 id=&quot;introduction&quot;&gt;Introduction:&lt;/h3&gt;
 
 &lt;p&gt;This is a showcase of sample SQL queries that I made for practice in learning the language. The sources listed before each query link to the direct place the content came from, unless noted otherwise. Each heading represents a concept of SQL that I touched on.&lt;/p&gt;
 
@@ -1022,7 +1119,7 @@ Name: trending_date, Length: 40949, dtype: datetime64[ns]
 &lt;span class=&quot;n&quot;&gt;plt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;show&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/images/output_12_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;</content><author><name>Bruce A. Lee</name></author><category term="projects" /><category term="python" /><summary type="html">Introduction: Hello! In this project, I’m breaking down the top content creators on Youtube over 2017-2018. The very first thing i’ll do is load the libraries I’m going to use:</summary></entry><entry><title type="html">ETL using Rental Store Data? An excursion with SQL and Python</title><link href="/projects/2023/07/19/Using_ETL_with_Rental_Store_Data.html" rel="alternate" type="text/html" title="ETL using Rental Store Data? An excursion with SQL and Python" /><published>2023-07-19T00:00:00+00:00</published><updated>2023-07-19T00:00:00+00:00</updated><id>/projects/2023/07/19/Using_ETL_with_Rental_Store_Data</id><content type="html" xml:base="/projects/2023/07/19/Using_ETL_with_Rental_Store_Data.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/output_12_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;</content><author><name>Bruce A. Lee</name></author><category term="projects" /><category term="python" /><summary type="html">Introduction: Hello! In this project, I’m breaking down the top content creators on Youtube over 2017-2018. The very first thing i’ll do is load the libraries I’m going to use:</summary></entry><entry><title type="html">ETL using Rental Store Data? An excursion with SQL and Python</title><link href="/projects/2023/07/19/Using_ETL_with_Rental_Store_Data-Copy.html" rel="alternate" type="text/html" title="ETL using Rental Store Data? An excursion with SQL and Python" /><published>2023-07-19T00:00:00+00:00</published><updated>2023-07-19T00:00:00+00:00</updated><id>/projects/2023/07/19/Using_ETL_with_Rental_Store_Data%20-%20Copy</id><content type="html" xml:base="/projects/2023/07/19/Using_ETL_with_Rental_Store_Data-Copy.html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 
 &lt;p&gt;Hello! I made this script to demonstrate what an ETL process looks like using my local PostgreSQL database, Python, some SQL and a schema with sample data from a DVD rental store. I’d say this is a look into days gone by with what used to be the main form of media in the world.&lt;/p&gt;
 
@@ -5642,14 +5739,4 @@ in my adult life.&lt;/p&gt;
 &lt;p&gt;I’ll always appreciate what Satoshi Tajiri gave me and millions of other
 youth worldwide.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;em&gt;Thank you for reading,&lt;/em&gt;&lt;/strong&gt; &lt;strong&gt;&lt;em&gt;Bruce A. Lee&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</content><author><name>Bruce A. Lee</name></author><category term="projects" /><category term="r" /><summary type="html">This is probably the nerdiest thing you’ll ever read about Pokémon.</summary></entry><entry><title type="html">Read Me!</title><link href="/2023/01/31/read-me.html" rel="alternate" type="text/html" title="Read Me!" /><published>2023-01-31T00:00:00+00:00</published><updated>2023-01-31T00:00:00+00:00</updated><id>/2023/01/31/read-me</id><content type="html" xml:base="/2023/01/31/read-me.html">&lt;h2 id=&quot;hello&quot;&gt;Hello!&lt;/h2&gt;
-
-&lt;p&gt;Welcome! This is my data portfolio. If you happened to wander here, I thank you for your consideration of myself and my experiences. This website is a collection of projects and information meant to definitivly prove that I in fact know how to do Data Analysis.&lt;/p&gt;
-
-&lt;p&gt;I want to thank everyone that I was able to learn from along the way that helped me get to even the point where I was able to make this website, let alone do data things. I take so much pride in what I do, I hope that comes through with my work here.&lt;/p&gt;
-
-&lt;p&gt;I recommend that you check out my &lt;a href=&quot;https://brucelee352.github.io/about/&quot;&gt;about page&lt;/a&gt;, if you’re interested in learning more on myself.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Thank you and kindest regards,&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Bruce A. Lee&lt;/strong&gt;&lt;/p&gt;</content><author><name>Bruce A. Lee</name></author><summary type="html">Hello!</summary></entry></feed>
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Thank you for reading,&lt;/em&gt;&lt;/strong&gt; &lt;strong&gt;&lt;em&gt;Bruce A. Lee&lt;/em&gt;&lt;/strong&gt;&lt;/p&gt;</content><author><name>Bruce A. Lee</name></author><category term="projects" /><category term="r" /><summary type="html">This is probably the nerdiest thing you’ll ever read about Pokémon.</summary></entry></feed>
