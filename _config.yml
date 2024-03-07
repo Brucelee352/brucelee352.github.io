@@ -96,7 +96,7 @@ header_pages:
 defaults:
    home:
      heading: "Bruce A. Lee"
-     subheading: "Portfolio"
+     subheading: "Data Professional"
      banner: /assets/images/banners/home3.jpg
    
 

@@ -20,7 +20,7 @@ My communication style stirs people into action, and I like to ask intentional q
 With that said, I love to unravel how a business works, so that I can improve it through process refinement and iteration. When it comes to understanding a business, I look for certain outcomes that are important to growing the org, through asking my stakeholders what metrics are essential so that I can make data as accessible as possible. Especially for downstream consumers. 
 
 
-### How to reach me 
+### Ways to reach me: 
 
 <a href="mailto:brucelee352@gmail.com">Send Email</a>
 
