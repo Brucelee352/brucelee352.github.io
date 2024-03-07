@@ -21,7 +21,7 @@
 title: "Data Portfolio"
 email: brucelee352@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  A collection of data works, done for personal learning and freelancing work. 
+  Collection of Data Works 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
