@@ -18,10 +18,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: "Data Engineering Portfolio"
+title: "Data Portfolio"
 email: brucelee352@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  Collection of Data Engineering projects 
+  A collection of data works, done for personal learning and freelancing work. 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
@@ -80,7 +80,7 @@ code_badge:
 # it will be always kept on every visit (i.e. no matter
 # the browser is closed or not)
 #
-night_mode: "dark"
+night_mode: "auto"
 
 
 # If you want to link only specific pages in your header, uncomment
@@ -96,7 +96,7 @@ header_pages:
 defaults:
    home:
      heading: "Bruce A. Lee"
-     subheading: "Data Engineer"
+     subheading: "Portfolio"
      banner: /assets/images/banners/home3.jpg
    
 
