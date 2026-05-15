@@ -35,6 +35,7 @@ plugins:
   - jekyll-sitemap
   - jekyll-seo-tag
   - jekyll-paginate
+  - jekyll-remote-theme
 
 # Copyright setting
 current year: {currentYear}
