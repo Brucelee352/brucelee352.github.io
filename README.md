@@ -1,11 +1,11 @@
-# Bruce Lee's Data Portfolio, brucelee352.github.io — Version 2 
+# brucelee352.github.io — Version 2 
 
 ## Overview
 Hey guys, 
 
-Welcome to my data portfolio! 
+Welcome to my project repo! 
 
-Thank you to everyone who has lent a helping hand!
+This lives here as a collection of legacy projects meant to help supplement my data portfolio.
 
 Thank you,
 Bruce 
