@@ -27,7 +27,6 @@ url: "" # the base hostname & protocol for your site, e.g. http://example.com
 
 
 # Build settings
-theme: jekyll-theme-yat
 remote_theme: "jeffreytse/jekyll-theme-yat"
 plugins:
   - jekyll-feed
@@ -38,13 +37,9 @@ plugins:
   - jekyll-remote-theme
 
 # Copyright setting
-current year: {currentYear}
 author: Bruce A. Lee
-copyright: (c) - ©
+copyright: "Bruce A. Lee (cleft) 2022-2026"
 copyleft: (cleft)
-sound recording copyright: (p) - ℗
-# Copyright 
-copyright: "{author} (cleft) 2022-{currentYear}"
 
 # Yat date format
 # refer to https://shopify.github.io/liquid/filters/date/ if you want to customize this
@@ -60,6 +55,10 @@ content_width: "960px"
 # If you want to generate website sitemap, you can set true
 sitemap: true
 
+
+# Suppress Sass deprecation warnings from remote theme dependencies
+sass:
+  quiet_deps: true
 
 # Code badge setting
 # You can enable or disable the code badge and so on
